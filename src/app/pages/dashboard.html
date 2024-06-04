@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nick Carpinito - Garden</title>
+  <meta name="description" content="Garden Air Quaity Stats" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.lineicons.com/2.0/LineIcons.css">
+  <link rel="stylesheet" href="styles/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" type="image/x-icon" href="https://www.arweave.net/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo?ext=jpg" />
+</head>
+
+<body>
+  <canvas id="myChart"></canvas>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const now = new Date();
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1); 
+      fetch('https://sensecap.seeed.cc/openapi/list_telemetry_data?device_eui=2CF7F1C0435002C3', {
+    headers: {
+      'Authorization': 'Basic ' + btoa('6WHM2EWGZM4KRHC8:379C422DB2E34DD68F4DF06F307DF00D8B909CABC19047E48811FD99C3C33747')
+    }
+  })
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+      const data = response.data.list;
+      const labels = [];
+      const temperatureData = [];
+      const humidityData = [];
+      const CO2Data = [];
+
+      let index = 0;
+      for (const item of data) {
+        for (let index = 0; index < data[1][0].length; index++) {
+        const temperature = data[1][0][index][0];
+        const temp = data[1][0][index]
+        const humidity = data[1][1][index][0];
+        const CO2 = data[1][2][index][0];
+        const timestamp = new Date(temp[1]).toLocaleString('en-US', { timeZone: 'America/Chicago' });
+        const label = timestamp;
+        labels.push(label);
+        temperatureData.push(temperature);
+        humidityData.push(humidity);
+        CO2Data.push(CO2);
+      }}
+
+
+      createChart(labels, temperatureData, humidityData, CO2Data);
+    })
+    .catch(error => console.error(error));
+
+  function createChart(labels, temperatureData, humidityData, CO2Data) {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Temperature (F)',
+            data: temperatureData,
+            fill: false,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+          },
+          {
+            label: 'Humidity (%)',
+            data: humidityData,
+            fill: false,
+            borderColor: 'rgb(54, 162, 235)',
+            tension: 0.1
+          },
+          {
+            label: 'CO2 (ppm)',
+            data: CO2Data,
+            fill: false,
+            borderColor: 'rgb(255, 206, 86)',
+            tension: 0.1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+});
+  </script>
+</body>
+</html>

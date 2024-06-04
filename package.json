@@ -1,0 +1,19 @@
+{
+  "name": "meta-light",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build-css": "sass src/app/styles/scss:src/app/styles --no-source-map"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "sass": "^1.77.4"
+  }
+}
