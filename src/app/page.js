@@ -46,10 +46,7 @@ const Home = () => {
       <Head>
         <title>Nick Carpinito</title>
         <meta name="description" content="A Web3 Researcher and BD Lead."/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;1,400&display=swap" rel="stylesheet"/>
-        <link rel="stylesheet" href="https://cdn.lineicons.com/2.0/LineIcons.css"/>
-        {/* Forked from https://github.com/alexcalia/alexCaliaPortfolio */}
+        {/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
       </Head>
       <body>
         <div id="home" className="visuallyHidden"></div>
