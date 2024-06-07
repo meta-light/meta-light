@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import "../app/styles/styles.css";
 import "../app/styles/LineIcons.css";
 
-export default function Dashboard() { // will not work until I purchase another year of service
+export default function garden() { // will not work until I purchase another year of service
   const sensecapKey = process.env.SENSECAP_API_KEY;
   useEffect(() => {
     const now = new Date();

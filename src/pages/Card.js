@@ -2,7 +2,7 @@ import Head from 'next/head';
 import '../app/styles/styles.css'
 import '../app/styles/LineIcons.css'
 
-export default function Card() {
+export default function card() {
     const UNDERDOG_API_KEY = process.env.UNDERDOG_API_KEY;
     console.log(UNDERDOG_API_KEY);
 
