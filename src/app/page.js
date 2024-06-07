@@ -43,11 +43,7 @@ const Home = () => {
 
   return (
     <>
-      <Head>
-        <title>Nick Carpinito</title>
-        <meta name="description" content="A Web3 Researcher and BD Lead."/>
-        {/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
-      </Head>
+      <Head><title>Nick Carpinito</title><meta name="description" content="A Web3 Researcher and BD Lead."/></Head>{/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
       <body>
         <div id="home" className="visuallyHidden"></div>
         <div className="menuButton" id="menuButton" tabIndex="0"><div className="linesContainer"></div></div>
@@ -60,13 +56,10 @@ const Home = () => {
               <li className="worksNav"><a href="#works" className="navItem"><i className="lni lni-briefcase"></i><span className="navItemName">EXPERIENCE</span></a></li>
               <li className="skillsNav"><a href="#skills" className="navItem"><i className="lni lni-code-alt"></i><span className="navItemName">SKILLS</span></a></li>
               <li className="contactNav"><a href="#contact" className="navItem"><i className="lni lni-phone"></i><span className="navItemName">CONTACT</span></a></li>
-              {/* <li className="contactNav"><a href="dashboard.html" className="navItem"><i className="lni lni-tree"></i><span className="navItemName">GARDEN</span></a></li> */}
-              {/* <li className="contactNav"><a href="card.html" className="navItem"><i className="lni lni-postcard"></i><span className="navItemName">MY CARD</span></a></li> */}
             </ul>
           </nav>
           <div className="scrollDown" id="scrollDown"></div>
         </aside>
-
         <div className="outerWrapper"> 
           <div className="innerWrapper">
             <header>
@@ -97,7 +90,6 @@ const Home = () => {
                   <p>I’m Nick, a Web3 Research and Ecosystem Lead focused on <span>DePIN & Decentralized Compute</span>. I’ve spent the past 4 years working in Web3 tracking the emergence of the DePIN/DeVIN sectors and thier affects in legacy industries whom are ripe for disruption. I have experience with non-technical roles <span>(Business Development, Partnerships, Research & DD)</span> as well as technical roles <span>(Development, Compute Infrastructure, Analytics)</span>, and I am deeply committed to contributing to the advancement of Web3 technology and its potential to revolutionize the way we interact with the digital world in a more open, transparent, and free way.</p>
                 </article>
               </section>
-
               <section className="worksSection" id="works">
                 <div className="sectionHead">
                   <span>TAKE A LOOK AT MY</span>
@@ -115,7 +107,6 @@ const Home = () => {
                       </ul>
                     </div>
                   </article>
-
                   <article className="workBox">
                     <div className="workImageContainer"><img src="home/ud.png" alt="Unleashing DePIN."/></div>
                     <div className="workDescribeContainer">
@@ -124,24 +115,6 @@ const Home = () => {
                       <ul><li>My role includes oversight of business development, onboarding, partnerships and product management for the Unleashing DePIN brand.</li></ul>
                     </div>
                   </article>
-
-                  {/* <article className="workBox">
-                    <div className="workImageContainer"><img src="home/carpcap.png" alt="CarpCap"/></div>
-                    <div className="workDescribeContainer">
-                      <h3>Founder @ Carp Capital</h3>
-                       <br/>
-                      <h4><span className="techStack">Venture Capital</span>, <span className="techStack">Portfolio Management</span>, <span className="techStack">Research</span></h4>
-                      <ul>
-                        <li>Supporting founders and projects that disrupt incumbent offerings through distributed networks.</li>
-                        <li>MOST ARE WHALES, WE ARE CARP</li>
-                      </ul>
-                      <div className="workLinks">
-                        <a href="https://carpcap.id" className="liveLink" target="_blank" rel="noopener noreferrer">Website</a>
-                        <a href="https://carpcap.id/#research" className="liveLink" target="_blank" rel="noopener noreferrer">Research</a>
-                      </div>
-                    </div>
-                  </article> */}
-
                   <article className="workBox">
                     <div className="workImageContainer">
                       <img src="home/cc.png" alt="UARK"/>
@@ -157,7 +130,6 @@ const Home = () => {
                       </ul>
                     </div>
                   </article>
-
                   <article className="workBox">
                     <div className="workImageContainer">
                       <img src="home/mycdoc.png" alt="Mycelium Testbed"/>
@@ -192,7 +164,6 @@ const Home = () => {
                   </article>
                 </div>
               </section>
-
               <section className="skillsSection" id="skills">
                 <div className="sectionHead"><span>CHECK OUT MY</span><h2>SKILLS</h2></div>
                 <div className="skillsContainer sectionContainer">
@@ -207,7 +178,6 @@ const Home = () => {
                   </ul>
                 </div>
               </section>
-
               <section className="contactSection" id="contact">
                 <div className="sectionHead"><span>SAY HELLO</span><h2>CONTACT</h2></div>
                 <div className="contactContainer sectionContainer">
@@ -223,7 +193,7 @@ const Home = () => {
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossOrigin="anonymous"></script>
       </body>
-  </>
+    </>
   );
 }
 

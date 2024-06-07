@@ -10,8 +10,22 @@
     "build-css": "sass src/app/styles/scss:src/app/styles --no-source-map"
   },
   "dependencies": {
+    "@project-serum/sol-wallet-adapter": "^0.2.6",
+    "@pubkeyapp/wallet-adapter-mantine-ui": "^2.0.1",
+    "@solana/spl-token": "^0.3.8",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.34",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
+    "@solana/web3.js": "^1.78.4",
+    "bottleneck": "^2.19.5",
+    "eslint": "8.48.0",
+    "eslint-config-next": "13.4.19",
+    "fs": "^0.0.1-security",
+    "helius-sdk": "^1.3.3",
     "jquery": "^3.7.1",
     "next": "14.2.3",
+    "p-ratelimit": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
     "sass": "^1.77.4"
