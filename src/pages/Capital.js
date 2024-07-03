@@ -35,8 +35,8 @@ export default function capital() {
 								</section>
 								{/* <section>
 									<h4>CarpCap Ecosystem</h4>
-									<div class="table-wrapper">
-										<table class="alt">
+									<div className="table-wrapper">
+										<table className="alt">
 											<thead>
 												<tr>
 													<th>Category</th>
@@ -70,7 +70,7 @@ export default function capital() {
 								</section> */}
 							</article>
 							<article id="research">
-								<h2 class="major">research</h2>
+								<h2 className="major">research</h2>
 								<p><a href="https://carpinito.id/assets/mycelium-testbed.pdf/"><strong>Mycelium Testbed: A Comprehensive Platform for DePIN</strong></a></p>
 								<p><a href="docs/memos/shdwdrive.pdf"><strong>shdwDrive Investment Memo</strong></a></p>
 								<p><a href="docs/memos/eclipse.pdf"><strong>Eclipse Investment Memo</strong></a></p>
@@ -78,34 +78,30 @@ export default function capital() {
 								<p><a href="docs/memos/helium-mobile.pdf"><strong>Helium Mobile Investment Memo</strong></a></p>
 							</article>
 							<article id="ecosystem">
-								<h2 class="major">Ecosystem</h2>
+								<h2 className="major">Ecosystem</h2>
 								<img src="capital/mycelium.png" alt="" width="35%" style={{display: 'center'}}/>
 								<img src="capital/sov-white.png" alt="" width="25%"/>
 								<img src="capital/ud.png" alt="" width="25%"/>
 							</article>
 							<article id="team">
-								<h2 class="major">team</h2>
+								<h2 className="major">team</h2>
 								<img src="capital/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo.jpg" alt="" width="25%"/>
 								<p><strong>Nick Carpinito (Meta Light)</strong></p>
 								<p>Head of Ecosystem - Mycelium Networks</p>								
 							</article>
 					</div>
 					<footer id="footer">
-						<p class="copyright">&copy; Carp Capital</p>
+						<p className="copyright">&copy; Carp Capital</p>
 						<br/>
-						<ul class="icons">
-							<li><a href="https://twitter.com/0xMetaLight/" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="https://www.linkedin.com/in/nick-carpinito/" class="icon brands fa-linkedin in"><span class="label">LinkedIn</span></a></li>
-							<li><a href="https://medium.com/@meta-light" class="icon brands fa-medium m"><span class="label">Medium</span></a></li>
-							<li><a href="https://github.com/meta-light" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						<ul className="icons">
+							<li><a href="https://twitter.com/0xMetaLight/" className="icon brands fa-twitter"><span className="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/nick-carpinito/" className="icon brands fa-linkedin in"><span className="label">LinkedIn</span></a></li>
+							<li><a href="https://medium.com/@meta-light" className="icon brands fa-medium m"><span className="label">Medium</span></a></li>
+							<li><a href="https://github.com/meta-light" className="icon brands fa-github"><span className="label">GitHub</span></a></li>
 						</ul>
 					</footer>
 			</div>
             <div id="bg"/>
-            <Script src="/capital/scripts/jquery.min.js" strategy="beforeInteractive"/>
-            <Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive"/>
-            <Script src="/capital/scripts/breakpoints.min.js" strategy="beforeInteractive"/>
-            <Script src="/capital/scripts/util.js" strategy="beforeInteractive"/>
             <Script src="/capital/scripts/main.js" strategy="afterInteractive"/>
         </>
     );

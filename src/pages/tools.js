@@ -3,6 +3,38 @@ import React, { useState } from 'react';
 import '../styles/tailwind.css';
 
 export default function Home() {
+
+
+  //wallet test code: 
+
+//   import { Connection, Wallet, clusterApiUrl, WalletAdapter } from '@solana/wallet-adapter-base';
+// import { getPhantomWallet } from '@solana/wallet-adapter-wallets';
+
+// const connection = new Connection(clusterApiUrl('mainnet-beta'));
+  
+// const wallet = getPhantomWallet();
+  
+// wallet.connect();
+  
+// const disconnectWallet = wallet.disconnect();
+
+// const isWalletConnected =  wallet.connected;
+
+      //remove duplicates in txt file
+    // const fs = require('fs');
+    function removeDuplicatesAndSave(inputFilePath, outputFilePath) {
+        try {
+            const content = fs.readFileSync(inputFilePath, 'utf-8');
+            const uniqueContent = Array.from(new Set(content.split('\n'))).join('\n');
+            fs.writeFileSync(outputFilePath, uniqueContent, 'utf-8');
+            console.log('File processed and saved as:', outputFilePath);
+        } catch (error) {
+            console.error('Error processing the file:', error);
+        }
+    }
+    // removeDuplicatesAndSave('input.txt', 'final.txt');
+
+
   const [groupValue, setGroupValue] = useState('');
   const handleSubmit = () => {getAssetsByGroup(groupValue);};
   const handleInputChange = (event) => {setGroupValue(event.target.value);};
