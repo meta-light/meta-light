@@ -4,6 +4,7 @@ import Head from 'next/head';
 import './styles/styles.css';
 import './styles/scss/styles.scss';
 import './styles/LineIcons.css';
+import Image from 'next/image';
 
 const Home = () => {
   useEffect(() => {
@@ -41,6 +42,10 @@ const Home = () => {
     loadJQuery();
   }, []);
 
+  const customLoader = ({ src }) => {
+    return `${src}`;
+  };
+
   return (
     <>
       <Head><title>Nick Carpinito</title><meta name="description" content="A Web3 Researcher and BD Lead."/></Head>{/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
@@ -63,7 +68,9 @@ const Home = () => {
         <div className="outerWrapper"> 
           <div className="innerWrapper">
             <header>
-              <div className="heroImageContainer"><img src="/home/dewi-cat.gif"/></div>
+              <div className="heroImageContainer">
+                <Image loader={customLoader} src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500} />
+              </div>
               <div className="heroDescription">
                 <p className="greeting">Howdy! I'm</p>
                 <h1><span>Nick Carpinito</span></h1>
@@ -97,7 +104,9 @@ const Home = () => {
                 </div>
                 <div className="worksContainer sectionContainer">
                   <article className="workBox">
-                    <div className="workImageContainer"><img src="home/roof.png" alt="Mycelium Networks."/></div>
+                    <div className="workImageContainer">
+                      <Image loader={customLoader} src="/home/roof.png" alt="Mycelium Networks" width={500} height={500} layout="intrinsic"/>
+                    </div>
                     <div className="workDescribeContainer">
                     <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><br/>
                       <h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Web3</span></h4>
@@ -108,7 +117,9 @@ const Home = () => {
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer"><img src="home/ud.png" alt="Unleashing DePIN."/></div>
+                    <div className="workImageContainer">
+                      <Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/>
+                    </div>
                     <div className="workDescribeContainer">
                       <h3>Head of Partnerships @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><br/>
                       <h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
@@ -117,7 +128,7 @@ const Home = () => {
                   </article>
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <img src="home/cc.png" alt="UARK"/>
+                      <Image loader={customLoader} src="/home/cc.png" alt="UARK" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Blockchain @ University of Arkansas</h3><br/>
@@ -132,7 +143,7 @@ const Home = () => {
                   </article>
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <img src="home/mycdoc.png" alt="Mycelium Testbed"/>
+                      <Image loader={customLoader} src="/home/mycdoc.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Research & Experiments</h3><br/>
@@ -149,7 +160,7 @@ const Home = () => {
 
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <img src="home/coldfront.png" alt="SolCV"/>
+                      <Image loader={customLoader} src="/home/coldfront.png" alt="SolCV" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Development Projects</h3>
@@ -168,13 +179,13 @@ const Home = () => {
                 <div className="sectionHead"><span>CHECK OUT MY</span><h2>SKILLS</h2></div>
                 <div className="skillsContainer sectionContainer">
                   <ul className="skillsGrid">
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/html5-2474813-2056052.png?f=webp&w=256"/><p>HTML/CSS</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/github-1521488-1288230.png?f=webp&w=256"/><p>Git</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/linux-3049927-2538320.png?f=webp&w=256"/><p>Linux</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/virtual-machine-7971609-6469375.png?f=webp&w=256"/><p>DePIN</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/npm-1768027-1502201.png?f=webp&w=256"/><p>NPM & Yarn</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/sol-5382327-4498199.png?f=webp&w=256"/><p>web3.js</p></div></li>
-                    <li><div className="itemContainer"><img src="https://cdn.iconscout.com/icon/free/png-256/analytics-2235201-1872857.png?f=webp&w=256"/><p>Dune & Flipside</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/html5-2474813-2056052.png?f=webp&w=256" alt="HTML/CSS" width={256} height={256} /><p>HTML/CSS</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/github-1521488-1288230.png?f=webp&w=256" alt="Git" width={256} height={256} /><p>Git</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/linux-3049927-2538320.png?f=webp&w=256" alt="Linux" width={256} height={256} /><p>Linux</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/premium/png-256-thumb/virtual-machine-7971609-6469375.png?f=webp&w=256" alt="DePIN" width={256} height={256} /><p>DePIN</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/npm-1768027-1502201.png?f=webp&w=256" alt="NPM & Yarn" width={256} height={256} /><p>NPM & Yarn</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/sol-5382327-4498199.png?f=webp&w=256" alt="web3.js" width={256} height={256} /><p>web3.js</p></div></li>
+                    <li><div className="itemContainer"><Image loader={customLoader} src="https://cdn.iconscout.com/icon/free/png-256/analytics-2235201-1872857.png?f=webp&w=256" alt="Dune & Flipside" width={256} height={256} /><p>Dune & Flipside</p></div></li>
                   </ul>
                 </div>
               </section>

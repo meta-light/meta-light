@@ -5,13 +5,12 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { GlowWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter} from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
-import { MetaplexProvider } from "../components/nft/MetaplexProvider";
-import { MintNFTs } from "../components/nft/MintNFTs";
-import "@solana/wallet-adapter-react-ui/styles.css";
 import dynamic from 'next/dynamic';
-// import keyStrokes from '../public/images/Key Strokes.jpeg'
 import yT from '../../public/nft/images/promo3.png'
 import Image from 'next/image';
+
+const MetaplexProvider = dynamic(() => import("../components/nft/MetaplexProvider"), { ssr: false });
+const MintNFTs = dynamic(() => import("../components/nft/MintNFTs"), { ssr: false });
 
 function LaunchTime() {
   const [timeRemaining, setTimeRemaining] = useState(1703742648); // Replace with your actual start date
@@ -39,8 +38,6 @@ function LaunchTime() {
     </div>
   );
 }
-
-
 
 export default function Home() {
   const [network, setNetwork] = useState(WalletAdapterNetwork.Devnet);
@@ -79,6 +76,10 @@ export default function Home() {
     import('@solana/wallet-adapter-react-ui', { ssr: false }).then((mod) => mod.WalletMultiButton)
   );
 
+  const customLoader = ({ src }) => {
+    return `${src}`;
+  };
+
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
@@ -94,7 +95,7 @@ export default function Home() {
           <h2 style={{ color: 'white', position: 'absolute', left: '50%', top: '16%', transform: 'translate(-50%, -50%)', fontSize: '3vh', textShadow: '2px 2px black', fontFamily: 'Goldman, sans-serif' }}>NFT Collection Name</h2>
           
           <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
-            <Image src={yT} alt="Your Image" width="500vh" height="400vh" style={{ border: "2px solid black", borderRadius: "2vh" }} />
+            <Image loader={customLoader} src={yT} alt="Your Image" width="500vh" height="400vh" style={{ border: "2px solid black", borderRadius: "2vh" }} />
           </div>
           {/* <h2 style={{ color: 'white', position: 'absolute', left: '50%', top: '68%', transform: 'translate(-50%, -50%)', fontSize: '3vh', textShadow: '1px 1px black', fontFamily: 'Goldman, sans-serif' }}>Mint: 0/2000</h2> */}
 {/* 
