@@ -10,6 +10,7 @@
     "build-css": "sass src/app/styles/scss:src/app/styles --no-source-map"
   },
   "dependencies": {
+    "@jup-ag/core": "^4.0.0-beta.21",
     "@metaplex-foundation/js": "^0.17.5",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@pubkeyapp/wallet-adapter-mantine-ui": "^2.0.1",
