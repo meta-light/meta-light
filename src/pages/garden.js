@@ -58,8 +58,8 @@ export default function garden() { // will not work until I purchase another yea
       <Head>
         <title>Nick Carpinito - Garden</title>
         <meta name="description" content="Garden Air Quality Stats"/>
-        <Script src="https://cdn.jsdelivr.net/npm/chart.js"/>
       </Head>
+      <Script src="https://cdn.jsdelivr.net/npm/chart.js"/>
       <div>
         <canvas id="myChart"></canvas>
       </div>
