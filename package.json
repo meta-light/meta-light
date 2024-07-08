@@ -30,7 +30,9 @@
     "p-ratelimit": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
-    "sass": "^1.77.4"
+    "sass": "^1.77.4",
+    "react-markdown": "^8.0.0",
+    "twitter-api-v2": "^1.12.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
