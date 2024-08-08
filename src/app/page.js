@@ -121,7 +121,7 @@ const Home = () => {
                       <Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Head of Partnerships @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><br/>
+                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><br/>
                       <h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
                       <ul><li>My role includes oversight of business development, onboarding, partnerships and product management for the Unleashing DePIN brand.</li></ul>
                     </div>
