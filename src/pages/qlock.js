@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Qlock - A JavaScript Quine Clock</title>
+        <title>Qlock</title>
         <meta property="og:title" content="Qlock - A JavaScript Quine Clock" />
         <meta property="og:url" content="https://aem1k.com/qlock" />
         <meta property="og:image" content="https://aem1k.com/qlock/preview.png" />

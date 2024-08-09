@@ -3,8 +3,11 @@ import Script from 'next/script';
 import '../styles/capital/css/main.css'
 import '../styles/capital/css/noscript.css'
 import '../styles/capital/sass/main.scss'
-import '../styles/capital/sass/noscript.scss'
+// import '../styles/capital/sass/noscript.scss'
 import '../styles/capital/css/fontawesome-all.min.css'
+// import '../scripts/capital/main'
+// import '../scripts/capital/util'
+// import '../pages/_document'
 
 export default function capital() {
     return (
@@ -21,7 +24,6 @@ export default function capital() {
                     <div className="content">
                         <div className="inner">
                             <h1>Carp Cap</h1>
-                            <p>Supporting founders and projects that disrupt incumbent offerings through distributed networks</p>
                             <p>Most are whales, we are carp</p>
                         </div>
                     </div>
@@ -31,7 +33,13 @@ export default function capital() {
 							<article id="thesis">
 								<section>
 									<h4>Thesis</h4>
-									<blockquote>We believe in the inherent capabilities of unique and equitable Web3 incentive structures to disrupt legacy systems of governance and reward mechanisms. The emergence of high-throughput blockchain infrastructure paired with the advent of token-incentivized DePINs present opportunities to revolutionize the status quo in the creation for a more fair, clean and transparent future.</blockquote>
+									{/* <blockquote>
+										We believe in the inherent capabilities of unique and equitable Web3 
+										incentive structures to disrupt legacy systems of governance and reward mechanisms. 
+										The emergence of high-throughput blockchain infrastructure paired with the advent of 
+										token-incentivized DePINs present opportunities to revolutionize the status quo 
+										in the creation for a more fair, clean and transparent future.
+									</blockquote> */}
 								</section>
 								{/* <section>
 									<h4>CarpCap Ecosystem</h4>
@@ -77,15 +85,14 @@ export default function capital() {
 								<p><a href="docs/memos/tari.pdf"><strong>Tari Investment Memo</strong></a></p>
 								<p><a href="docs/memos/helium-mobile.pdf"><strong>Helium Mobile Investment Memo</strong></a></p>
 							</article>
-							<article id="ecosystem">
+							{/* <article id="ecosystem">
 								<h2 className="major">Ecosystem</h2>
-								<img src="capital/mycelium.png" alt="" width="35%" style={{display: 'center'}}/>
 								<img src="capital/sov-white.png" alt="" width="25%"/>
 								<img src="capital/ud.png" alt="" width="25%"/>
-							</article>
+							</article> */}
 							<article id="team">
 								<h2 className="major">team</h2>
-								<img src="capital/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo.jpg" alt="" width="25%"/>
+								{/* <img src="capital/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo.jpg" alt="" width="25%"/> */}
 								<p><strong>Nick Carpinito (Meta Light)</strong></p>
 								<p>Head of Ecosystem - Mycelium Networks</p>								
 							</article>
@@ -103,6 +110,10 @@ export default function capital() {
 			</div>
             <div id="bg"/>
             <Script src="/capital/scripts/main.js" strategy="afterInteractive"/>
+			<Script src="/capital/scripts/util.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/jquery.min.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/breakpoints.min.js" strategy="beforeInteractive"/>
         </>
     );
 }

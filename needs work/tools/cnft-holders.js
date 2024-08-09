@@ -2,7 +2,7 @@ const fs = require('fs');
 const url = ``
 
 const getAssetsByGroup = async () => {
-  console.time("getAssetsByGroup"); // Start the timer
+  console.time("getAssetsByGroup");
   let page = 1;
   let assetList = [];
 

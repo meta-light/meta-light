@@ -10,3 +10,16 @@ To address this issue, cNFT Basket creates a pNFT, sends an input of 10-1000 cNF
 - 10 Tensorian Shards (Amount needed to mint 1 Tensorian)
 - 100 Dialect Stickers (floor priced stickers from the same pack)
 - 1000 Drip Haus S2 commons (cost effective trading) 
+
+
+## Getting Started
+First, run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
