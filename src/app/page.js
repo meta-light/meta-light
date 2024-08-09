@@ -108,7 +108,7 @@ const Home = () => {
                       <Image loader={customLoader} src="/home/roof.png" alt="Mycelium Networks" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
-                    <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><br/>
+                    <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3>
                       <h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Web3</span></h4>
                       <ul>
                         <li>Mycelium is an incubator and accelerator of decentralized physical infrastructure networks (DePINs)</li>
@@ -121,7 +121,7 @@ const Home = () => {
                       <Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><br/>
+                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3>
                       <h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
                       <ul><li>My role includes oversight of business development, onboarding, partnerships and product management for the Unleashing DePIN brand.</li></ul>
                     </div>
@@ -131,7 +131,7 @@ const Home = () => {
                       <Image loader={customLoader} src="/home/cc.png" alt="UARK" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Blockchain @ University of Arkansas</h3><br/>
+                      <h3>Blockchain @ University of Arkansas</h3>
                       <h4><span className="techStack">Web3</span>, <span className="techStack">Finance</span>, <span className="techStack">Computer Science</span></h4>
                       <ul>
                         <li>B.S.B.A in Information Systems, Concentration in Blockchain Enterprise Systems</li>
@@ -146,7 +146,7 @@ const Home = () => {
                       <Image loader={customLoader} src="/home/mycdoc.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Research & Experiments</h3><br/>
+                      <h3>Research & Experiments</h3>
                       <h4><span className="techStack">Web3</span>, <span className="techStack">DePIN</span>, <span className="techStack">Incentive Mechanisms</span></h4>
                       <ul>
                         <li>Acedemic Research surrounding the <a href="docs/mycelium-testbed.pdf/" className="liveLink" target="_blank" rel="noopener noreferrer">Mycelium Testbed</a>, and general applications of protocol agnostic DePIN testing facilities</li>
@@ -164,7 +164,6 @@ const Home = () => {
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Development Projects</h3>
-                      <br/>
                       <h4><span className="techStack">NextJS</span>, <span className="techStack">Web3.js</span>, <span className="techStack">Ubuntu</span></h4>
                       <ul>
                         <li><a href="https://github.com/meta-light/SolCV" className="liveLink" target="_blank" rel="noopener noreferrer">SolCV</a>: A Solana based framework for creating cNFT business cards</li>
