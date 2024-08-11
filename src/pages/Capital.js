@@ -1,31 +1,23 @@
 import Head from 'next/head';
 import Script from 'next/script';
-import '../styles/capital/css/main.css'
-import '../styles/capital/css/noscript.css'
+import { useEffect, useState } from 'react';
 import '../styles/capital/sass/main.scss'
-// import '../styles/capital/sass/noscript.scss'
 import '../styles/capital/css/fontawesome-all.min.css'
-// import '../scripts/capital/main'
-// import '../scripts/capital/util'
-// import '../pages/_document'
+import '../styles/capital/sass/noscript.scss'
+
 
 export default function capital() {
+	const [isLoaded, setIsLoaded] = useState(false);
+	useEffect(() => {const timer = setTimeout(() => {document.body.classList.remove('is-preload'); setIsLoaded(true);}, 100); return () => clearTimeout(timer);}, []);
     return (
         <>
-            <Head>
-                <title>Carp Capital</title>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <style>{`body { overflow: hidden; } #team { text-align: center; }`}</style>
+            <Head><title>Carp Capital</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
             </Head>
-            <div id="wrapper" className="is-preload" style={{ overflowY: 'scroll' }}>
+            <div id="wrapper" className={isLoaded ? 'loaded' : ''}>
                 <header id="header">
                     <div className="logo"><img src="capital/grey-c.svg"/></div>
-                    <div className="content">
-                        <div className="inner">
-                            <h1>Carp Cap</h1>
-                            <p>Most are whales, we are carp</p>
-                        </div>
+                    <div className={`content ${isLoaded ? 'loaded' : ''}`}>
+                        <div className="inner"><h1>Carp Cap</h1><p>Most are whales, we are carp</p></div>
                     </div>
                     <nav><ul><li><a href="#thesis">thesis</a></li><li><a href="#research">research</a></li><li><a href="#ecosystem">ecosystem</a></li><li><a href="#team">me</a></li></ul></nav>
                 </header>
@@ -79,27 +71,24 @@ export default function capital() {
 							</article>
 							<article id="research">
 								<h2 className="major">research</h2>
-								<p><a href="https://carpinito.id/assets/mycelium-testbed.pdf/"><strong>Mycelium Testbed: A Comprehensive Platform for DePIN</strong></a></p>
+								<p><a href="docs"><strong>Mycelium Testbed: A Comprehensive Platform for DePIN</strong></a></p>
 								<p><a href="docs/memos/shdwdrive.pdf"><strong>shdwDrive Investment Memo</strong></a></p>
 								<p><a href="docs/memos/eclipse.pdf"><strong>Eclipse Investment Memo</strong></a></p>
 								<p><a href="docs/memos/tari.pdf"><strong>Tari Investment Memo</strong></a></p>
 								<p><a href="docs/memos/helium-mobile.pdf"><strong>Helium Mobile Investment Memo</strong></a></p>
 							</article>
-							{/* <article id="ecosystem">
+							<article id="ecosystem">
 								<h2 className="major">Ecosystem</h2>
-								<img src="capital/sov-white.png" alt="" width="25%"/>
-								<img src="capital/ud.png" alt="" width="25%"/>
-							</article> */}
+							</article>
 							<article id="team">
 								<h2 className="major">team</h2>
-								{/* <img src="capital/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo.jpg" alt="" width="25%"/> */}
+								<img src="home/dewi-cat.gif" alt="" width="25%"/>
 								<p><strong>Nick Carpinito (Meta Light)</strong></p>
 								<p>Head of Ecosystem - Mycelium Networks</p>								
 							</article>
 					</div>
 					<footer id="footer">
 						<p className="copyright">&copy; Carp Capital</p>
-						<br/>
 						<ul className="icons">
 							<li><a href="https://twitter.com/0xMetaLight/" className="icon brands fa-twitter"><span className="label">Twitter</span></a></li>
 							<li><a href="https://www.linkedin.com/in/nick-carpinito/" className="icon brands fa-linkedin in"><span className="label">LinkedIn</span></a></li>
@@ -109,11 +98,11 @@ export default function capital() {
 					</footer>
 			</div>
             <div id="bg"/>
-            <Script src="/capital/scripts/main.js" strategy="afterInteractive"/>
-			<Script src="/capital/scripts/util.js" strategy="beforeInteractive"/>
 			<Script src="/capital/scripts/jquery.min.js" strategy="beforeInteractive"/>
-			<Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive"/>
 			<Script src="/capital/scripts/breakpoints.min.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/util.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/main.js" strategy="afterInteractive"/>
         </>
     );
 }

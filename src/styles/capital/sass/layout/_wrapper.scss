@@ -17,6 +17,13 @@
 		padding: 4rem 2rem;
 		z-index: 3;
 
+		opacity: 0;
+		transition: opacity 0.5s ease;
+
+		&.loaded {
+			opacity: 1;
+		}
+
 		&:before {
 			content: '';
 			display: block;

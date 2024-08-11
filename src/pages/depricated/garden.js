@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Script from 'next/script';
 import { useEffect } from 'react';
-import "../app/styles/styles.css";
-import "../app/styles/LineIcons.css";
+import "../../app/styles/styles.css";
+import "../../app/styles/LineIcons.css";
 
 export default function garden() { // will not work until I purchase another year of service
   const sensecapKey = process.env.SENSECAP_API_KEY;

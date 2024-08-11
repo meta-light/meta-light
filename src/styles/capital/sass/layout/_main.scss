@@ -17,6 +17,12 @@
 		max-width: 100%;
 		z-index: 3;
 
+		display: none;
+
+		&.active {
+			display: flex;
+		}
+
 		article {
 			@include vendor('transform', 'translateY(0.25rem)');
 			@include vendor('transition', (

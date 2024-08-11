@@ -74,10 +74,46 @@
 					'padding #{_duration(intro)} ease',
 					'opacity #{_duration(article)} ease-in-out'
 				));
-				@include vendor('transition-delay', '0.25s');
+				@include vendor('transition-delay', '0.2s');
 				padding: 3rem 2rem;
 				max-height: 40rem;
 				overflow: hidden;
+				opacity: 0.95;
+				transform: translateY(0.5rem);
+				position: relative;
+
+				&::before,
+				&::after {
+					content: '';
+					position: absolute;
+					left: 0;
+					right: 0;
+					height: 1px;
+					background: _palette(border);
+					transition: transform 0.5s ease;
+				}
+
+				&::before {
+					top: 0;
+					transform: scaleX(0);
+					transform-origin: center;
+				}
+
+				&::after {
+					bottom: 0;
+					transform: scaleX(0);
+					transform-origin: center;
+				}
+
+				&.loaded {
+					opacity: 1;
+					transform: translateY(0);
+
+					&::before,
+					&::after {
+						transform: scaleX(1);
+					}
+				}
 
 				> :last-child {
 					margin-bottom: 0;
