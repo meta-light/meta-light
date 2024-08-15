@@ -13,7 +13,7 @@ export default function Pines() {
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>
-              <UiLayout links={links}>
+              <UiLayout>
                 <DashboardFeature />
               </UiLayout>
             </SolanaProvider>
