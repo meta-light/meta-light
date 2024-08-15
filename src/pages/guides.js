@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { remark } from 'remark';
 import html from 'remark-html';
 

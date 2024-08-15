@@ -20,24 +20,29 @@
     "@solana/wallet-adapter-react-ui": "^0.9.34",
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.78.4",
+    "@tanstack/react-query": "^5.51.23",
     "axios": "^1.7.2",
     "bottleneck": "^2.19.5",
     "eslint-config-next": "13.4.19",
     "fs": "^0.0.1-security",
     "helius-sdk": "^1.0.13",
+    "jotai": "^2.9.3",
     "jquery": "^3.7.1",
-    "next": "14.2.3",
+    "next": "^14.2.5",
     "p-ratelimit": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "sass": "^1.77.4"
+    "sass": "^1.77.4",
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/react": "18.3.3",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.20",
     "bs58": "^4.0.1",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.5",
@@ -46,7 +51,7 @@
     "eslint-plugin-node": "^11.1.0",
     "isomorphic-fetch": "^3.0.0",
     "jsbi": "^4.3.0",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4"
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10"
   }
 }

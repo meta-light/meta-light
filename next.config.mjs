@@ -2,8 +2,9 @@
 const nextConfig = {
     images: {
       loader: 'custom',
-      path: '/',
+      loaderFile: './src/app/image-loader.js',
     },
+    reactStrictMode: true,
   };
   
   export default nextConfig;

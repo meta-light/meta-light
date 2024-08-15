@@ -27,7 +27,7 @@ function App()
       const data = await response.text();
       const movieList = data.split('\n');
       console.log(movieList);
-      setState(prevState => ({ ...prevState, results: [] })); // Reset the results list
+      setState(prevState => ({ ...prevState, results: [] }));
       movieList.forEach(async (movie) => {
         const searchResponse = await axios(apiUrl + "&s=" + movie, { headers: {"Content-Type":"application/json"} });
         const results = searchResponse.data.Search;

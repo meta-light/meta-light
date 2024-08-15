@@ -1,4 +1,4 @@
-import ProviderWrapper from '@/components/basket/providers/ProviderWrapper';
+import ProviderWrapper from '../components/basket/providers/ProviderWrapper';
 
 function MyApp({ Component, pageProps }) {
   return (
