@@ -24,50 +24,23 @@ export default function capital() {
                 <div id="main">
 							<article id="thesis">
 								<section>
-									<h4>Thesis</h4>
-									{/* <blockquote>
-										We believe in the inherent capabilities of unique and equitable Web3 
-										incentive structures to disrupt legacy systems of governance and reward mechanisms. 
-										The emergence of high-throughput blockchain infrastructure paired with the advent of 
-										token-incentivized DePINs present opportunities to revolutionize the status quo 
-										in the creation for a more fair, clean and transparent future.
-									</blockquote> */}
+									<h4>A Qualitative Liquid Investment and Research Form (QLIRF) for Crypto Analysis</h4>
 								</section>
-								{/* <section>
-									<h4>CarpCap Ecosystem</h4>
-									<div className="table-wrapper">
-										<table className="alt">
-											<thead>
-												<tr>
-													<th>Category</th>
-													<th>Think</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Decentralized Physical Infrastructure Networks (DePIN)</td>
-													<td>Helium, DIMO, Hivemapper, WeatherXM</td>
-												</tr>
-												<tr>
-													<td>Decentralized Virtual Infrastructure Networks (DeVIN)</td>
-													<td>Urbit, Holium, AirTOR</td>
-												</tr>
-												<tr>
-													<td>High-Performance Blockchains</td>
-													<td>Solana, Eclipse, Sui, Aptos</td>
-												</tr>
-												<tr>
-													<td>Next-Gen Proof of Work (PoW)</td>
-													<td>Tari, Ironfish</td>
-												</tr>
-												<tr>
-													<td>Sovereign Computing</td>
-													<td>Urbit, Holium, AirTOR</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</section> */}
+								<section>
+									<h4>Thesis</h4>
+									<blockquote>
+										We believe in leveraging qualitative data and innovative approaches to create unique insights in the crypto space. By combining on-chain analysis with real-world indicators, we aim to identify opportunities that others might miss.
+									</blockquote>
+								</section>
+								<section>
+									<h4>CarpCap Approach</h4>
+									<ul>
+										<li>Qualitative data from diverse sources (job postings, social media, podcasts, Big Mac Index) to create inferences</li>
+										<li>Running servers for mining/farming to generate earned funds</li>
+										<li>VC investing using only earned funds, without reliance on external investors</li>
+										
+									</ul>
+								</section>
 							</article>
 							<article id="research">
 								<h2 className="major">research</h2>
@@ -76,9 +49,21 @@ export default function capital() {
 								<p><a href="docs/memos/eclipse.pdf"><strong>Eclipse Investment Memo</strong></a></p>
 								<p><a href="docs/memos/tari.pdf"><strong>Tari Investment Memo</strong></a></p>
 								<p><a href="docs/memos/helium-mobile.pdf"><strong>Helium Mobile Investment Memo</strong></a></p>
+								<p><a href="docs/qlirf-methodology.pdf"><strong>QLIRF Methodology: Combining Qualitative Data with On-Chain Analysis</strong></a></p>
+								<p><a href="docs/earned-funds-vc.pdf"><strong>The Earned Funds VC Model: Sustainable Crypto Investing</strong></a></p>
 							</article>
 							<article id="ecosystem">
 								<h2 className="major">Ecosystem</h2>
+								<p>Our ecosystem spans various areas of the crypto space, including:</p>
+								<ul>
+									<li>Decentralized Physical Infrastructure Networks (DePIN)</li>
+									<li>Decentralized Virtual Infrastructure Networks (DeVIN)</li>
+									<li>High-Performance Blockchains</li>
+									<li>Next-Gen Proof of Work (PoW)</li>
+									<li>Sovereign Computing</li>
+									<li>Qualitative Data Analysis Tools</li>
+									<li>Mining and Farming Operations</li>
+								</ul>
 							</article>
 							<article id="team">
 								<h2 className="major">team</h2>
