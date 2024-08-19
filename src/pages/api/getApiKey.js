@@ -1,0 +1,1 @@
+export default function handler(req, res) {res.status(200).json({ apiKey: process.env.UNDERDOG_API_KEY });}

@@ -27,6 +27,7 @@
     "jotai": "^2.9.3",
     "jquery": "^3.7.1",
     "next": "^14.2.5",
+    "openai": "^4.56.0",
     "p-ratelimit": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
@@ -34,6 +35,7 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "sass": "^1.77.4",
+    "terminal.css": "^0.7.5",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
