@@ -5,6 +5,8 @@ import './styles/styles.css';
 import './styles/scss/styles.scss';
 import './styles/LineIcons.css';
 import Image from 'next/image';
+import Sidebar from '../components/home/sidebar';
+
 
 const Home = () => {
   useEffect(() => {
@@ -52,19 +54,7 @@ const Home = () => {
       <body>
         <div id="home" className="visuallyHidden"></div>
         <div className="menuButton" id="menuButton" tabIndex="0"><div className="linesContainer"></div></div>
-        <aside className="sideMenu sideMenuShow" id="sideMenu"> 
-          <p className="logo">NC</p>
-          <nav>
-            <ul className="navBar">
-              <li className="homeNav"><a href="#home" className="navItem"><i className="lni lni-home"></i><span className="navItemName">HOME</span></a></li>
-              <li className="aboutNav"><a href="#about" className="navItem"><i className="lni lni-user"></i><span className="navItemName">ABOUT</span></a></li>
-              <li className="worksNav"><a href="#works" className="navItem"><i className="lni lni-briefcase"></i><span className="navItemName">EXPERIENCE</span></a></li>
-              <li className="skillsNav"><a href="#skills" className="navItem"><i className="lni lni-code-alt"></i><span className="navItemName">SKILLS</span></a></li>
-              <li className="contactNav"><a href="#contact" className="navItem"><i className="lni lni-phone"></i><span className="navItemName">CONTACT</span></a></li>
-            </ul>
-          </nav>
-          <div className="scrollDown" id="scrollDown"></div>
-        </aside>
+        <Sidebar />
         <div className="outerWrapper"> 
           <div className="innerWrapper">
             <header>
@@ -75,7 +65,7 @@ const Home = () => {
                 <p className="greeting">Howdy! I'm</p>
                 <h1><span>Nick Carpinito</span></h1>
                 <p className="greeting">(Meta-Light)</p>
-                 <br/>
+                <br/>
                 <p className="smallBio">A <span>Web3 Research</span> and <span>Ecosystem Lead</span> passionate about advancing the future of decentralized networks</p>
                 <div className="socialsResume">
                   <a className="resumeLink" href="https://medium.com/@meta-light" alt="My Blog Here" target="_blank" rel="noopener noreferrer">Blog</a>

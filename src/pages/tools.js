@@ -1,39 +1,18 @@
 "use client";
 import React, { useState } from 'react';
 import '../styles/tailwind.css';
+import { Connection, clusterApiUrl } from '@solana/wallet-adapter-base';
+import { getPhantomWallet } from '@solana/wallet-adapter-wallets';
+import Sidebar from '../components/home/sidebar';
 
 export default function Home() {
-
-
-  //wallet test code: 
-
-//   import { Connection, Wallet, clusterApiUrl, WalletAdapter } from '@solana/wallet-adapter-base';
-// import { getPhantomWallet } from '@solana/wallet-adapter-wallets';
-
-// const connection = new Connection(clusterApiUrl('mainnet-beta'));
-  
-// const wallet = getPhantomWallet();
-  
-// wallet.connect();
-  
-// const disconnectWallet = wallet.disconnect();
-
-// const isWalletConnected =  wallet.connected;
-
-      //remove duplicates in txt file
-    // const fs = require('fs');
-    function removeDuplicatesAndSave(inputFilePath, outputFilePath) {
-        try {
-            const content = fs.readFileSync(inputFilePath, 'utf-8');
-            const uniqueContent = Array.from(new Set(content.split('\n'))).join('\n');
-            fs.writeFileSync(outputFilePath, uniqueContent, 'utf-8');
-            console.log('File processed and saved as:', outputFilePath);
-        } catch (error) {
-            console.error('Error processing the file:', error);
-        }
-    }
-    // removeDuplicatesAndSave('input.txt', 'final.txt');
-
+  async function walletTest() {
+    const connection = new Connection(clusterApiUrl('mainnet-beta'));
+    const wallet = getPhantomWallet();
+    wallet.connect();
+    const disconnectWallet = wallet.disconnect();
+    const isWalletConnected =  wallet.connected;
+  }
 
   const [groupValue, setGroupValue] = useState('');
   const handleSubmit = () => {getAssetsByGroup(groupValue);};
@@ -55,21 +34,33 @@ export default function Home() {
     rawList.forEach(owner => {if (!uniqueOwners.includes(owner)) {uniqueOwners.push(owner);}});
     console.log(uniqueOwners);
     console.log("Unique Owners: ", uniqueOwners.length);
-    const downloadUniqueOwners = () => {
-      const data = JSON.stringify(uniqueOwners);
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'uniqueOwners.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-    downloadUniqueOwners();
+
+    try {
+      const response = await fetch('/api/processDuplicates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: uniqueOwners }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        const a = document.createElement('a');
+        a.href = result.path;
+        a.download = 'uniqueOwners.json';
+        a.click();
+      } else {
+        console.error('Error:', result.error);
+      }
+    } catch (error) {
+      console.error('Error calling API:', error);
+    }
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Sidebar />
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">Solana NFT Snapshot Tool&nbsp;</p>
       </div>
