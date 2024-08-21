@@ -5,20 +5,13 @@ export default function FindFirstTX() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const apiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY; // Make sure to set this in your .env.local file
-
+  const apiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      const data = await parseTransactions(address, apiKey);
-      setResult(data);
-    } catch (err) {
-      setError('Error fetching data. Please try again.');
-      console.error(err);
-    }
+    try {const data = await parseTransactions(address, apiKey); setResult(data);} 
+    catch (err) {setError('Error fetching data. Please try again.'); console.error(err);}
     setLoading(false);
   };
 
@@ -37,25 +30,10 @@ export default function FindFirstTX() {
     <div className="max-w-md mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-4">Find First Transaction</h2>
       <form onSubmit={handleSubmit} className="mb-4">
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Enter Solana address"
-          className="w-full px-3 py-2 border rounded-md"
-          required
-        />
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Find First TX'}
-        </button>
+        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter Solana address" className="w-full px-3 py-2 border rounded-md" required />
+        <button type="submit" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" disabled={loading}>{loading ? 'Loading...' : 'Find First TX'}</button>
       </form>
-
       {error && <p className="text-red-500">{error}</p>}
-
       {result && (
         <div>
           <h3 className="text-xl font-semibold mb-2">Results:</h3>
@@ -63,9 +41,7 @@ export default function FindFirstTX() {
           <p>Total Transactions: {result.slots.length}</p>
           <details>
             <summary className="cursor-pointer text-blue-500">View Lowest Slot Entry</summary>
-            <pre className="mt-2 p-2 bg-gray-100 rounded-md overflow-x-auto">
-              {JSON.stringify(result.lowestslotEntry, null, 2)}
-            </pre>
+            <pre className="mt-2 p-2 bg-gray-100 rounded-md overflow-x-auto">{JSON.stringify(result.lowestslotEntry, null, 2)}</pre>
           </details>
         </div>
       )}

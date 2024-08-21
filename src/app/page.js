@@ -7,7 +7,6 @@ import './styles/LineIcons.css';
 import Image from 'next/image';
 import Sidebar from '../components/home/sidebar';
 
-
 const Home = () => {
   useEffect(() => {
     const loadJQuery = async () => {
@@ -44,9 +43,7 @@ const Home = () => {
     loadJQuery();
   }, []);
 
-  const customLoader = ({ src }) => {
-    return `${src}`;
-  };
+  const customLoader = ({ src }) => {return `${src}`;};
 
   return (
     <>

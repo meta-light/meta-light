@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Connection, PublicKey, Keypair } from '@solana/web3.js';
 import { TokenSwap } from '@solana/spl-token-swap';
-import { Token } from '@solana/spl-token';
+import { getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
 
 export default function SolanaSwap() {
   const [tokenAAddress, setTokenAAddress] = useState('iotEVVZLEywoTn1QdwNPddxPWszn3zFhEot3MfL9fns');
@@ -41,11 +41,47 @@ export default function SolanaSwap() {
     const externalAddressPubkey = new PublicKey(externalAddress);
 
     const tokenSwapMarket = await TokenSwap.loadTokenSwap(connection, tokenSwapAddressPubkey, {}, null);
-    const tokenA = new Token(connection, tokenAAddressPubkey, null, wallet);
-    const tokenB = new Token(connection, tokenBAddressPubkey, null, wallet);
 
-    const swapResult = await tokenSwapMarket.swap(tokenA, tokenB, wallet.publicKey, null, amountToSwap, 0);
-    const transaction = await tokenB.transfer(swapResult, wallet.publicKey, externalAddressPubkey, []);
+    // Get or create associated token accounts
+    const tokenAAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet,
+      tokenAAddressPubkey,
+      wallet.publicKey
+    );
+    const tokenBAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet,
+      tokenBAddressPubkey,
+      wallet.publicKey
+    );
+
+    // Perform the swap
+    const swapResult = await tokenSwapMarket.swap(
+      tokenAAccount.address,
+      tokenBAccount.address,
+      wallet.publicKey,
+      null,
+      amountToSwap,
+      0
+    );
+
+    // Transfer swapped tokens to external address
+    const externalTokenBAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet,
+      tokenBAddressPubkey,
+      externalAddressPubkey
+    );
+    
+    const transaction = await tokenSwapMarket.transfer(
+      tokenBAccount.address,
+      externalTokenBAccount.address,
+      wallet.publicKey,
+      [],
+      swapResult
+    );
+
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.partialSign(wallet);

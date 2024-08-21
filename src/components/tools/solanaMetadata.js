@@ -1,48 +1,14 @@
 import React, { useState } from 'react';
 
 export default function SolanaMetadata() {
-  const [metadata, setMetadata] = useState({
-    name: '',
-    symbol: '',
-    description: '',
-    image: '',
-    properties: {
-      files: [{ uri: '', type: 'image/png' }],
-      category: 'image',
-    },
-  });
+  const [metadata, setMetadata] = useState({name: '', symbol: '', description: '', image: '', properties: { files: [{ uri: '', type: 'image/png' }], category: 'image' }});
   const [generatedFiles, setGeneratedFiles] = useState([]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setMetadata(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleFilePropertyChange = (e) => {
-    const { name, value } = e.target;
-    setMetadata(prevState => ({
-      ...prevState,
-      properties: {
-        ...prevState.properties,
-        files: [{ ...prevState.properties.files[0], [name]: value }]
-      }
-    }));
-  };
-
+  const handleInputChange = (e) => {const { name, value } = e.target; setMetadata(prevState => ({...prevState, [name]: value}));};
+  const handleFilePropertyChange = (e) => {const { name, value } = e.target; setMetadata(prevState => ({...prevState, properties: { ...prevState.properties, files: [{ ...prevState.properties.files[0], [name]: value }] }}));};
   const generateMetadata = () => {
     let generatedFiles = [];
     for (let counter = 0; counter <= 100; counter++) {
-      let currentMetadata = {
-        ...metadata,
-        image: `${counter}.png`,
-        properties: {
-          ...metadata.properties,
-          files: [{ ...metadata.properties.files[0], uri: `${counter}.glb` }]
-        }
-      };
+      let currentMetadata = {...metadata, image: `${counter}.png`, properties: { ...metadata.properties, files: [{ ...metadata.properties.files[0], uri: `${counter}.glb` }] }};
       let jsonOutput = JSON.stringify(currentMetadata, null, 2);
       let fileName = `${counter}.json`;
       generatedFiles.push({ name: fileName, content: jsonOutput });
@@ -66,53 +32,21 @@ export default function SolanaMetadata() {
       <form onSubmit={(e) => { e.preventDefault(); generateMetadata(); }} className="space-y-4">
         <div>
           <label className="block mb-1">Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={metadata.name}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" name="name" value={metadata.name} onChange={handleInputChange} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">Symbol:</label>
-          <input
-            type="text"
-            name="symbol"
-            value={metadata.symbol}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" name="symbol" value={metadata.symbol} onChange={handleInputChange} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">Description:</label>
-          <textarea
-            name="description"
-            value={metadata.description}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <textarea name="description" value={metadata.description} onChange={handleInputChange} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">File Type:</label>
-          <input
-            type="text"
-            name="type"
-            value={metadata.properties.files[0].type}
-            onChange={handleFilePropertyChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" name="type" value={metadata.properties.files[0].type} onChange={handleFilePropertyChange} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Generate Metadata
-        </button>
+        <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Generate Metadata</button>
       </form>
 
       {generatedFiles.length > 0 && (
@@ -121,12 +55,7 @@ export default function SolanaMetadata() {
           <ul className="space-y-2">
             {generatedFiles.map((file, index) => (
               <li key={index}>
-                <button
-                  onClick={() => downloadFile(file.name, file.content)}
-                  className="text-blue-500 hover:underline"
-                >
-                  Download {file.name}
-                </button>
+                <button onClick={() => downloadFile(file.name, file.content)} className="text-blue-500 hover:underline">Download {file.name}</button>
               </li>
             ))}
           </ul>

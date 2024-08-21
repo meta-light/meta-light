@@ -8,6 +8,8 @@ import SolanaHex from '../components/tools/SolanaHex';
 import SolanaSwap from '../components/tools/solanaSwap';
 import SolanaUtils from '../components/tools/solanaUtils';
 import SolanaMetadata from '../components/tools/solanaMetadata';
+import UpdateMetadata from '../components/tools/update-metadata';
+import CNFTHolders from '../components/tools/cnft-holders';
 
 export default function Home() {
   const [activeTool, setActiveTool] = useState('snapshot');
@@ -23,6 +25,8 @@ export default function Home() {
           <li><button onClick={() => setActiveTool('solanaSwap')} className={`px-3 py-2 rounded ${activeTool === 'solanaSwap' ? 'bg-blue-500' : 'hover:bg-gray-700'}`}>Solana Swap</button></li>
           <li><button onClick={() => setActiveTool('solanaUtils')} className={`px-3 py-2 rounded ${activeTool === 'solanaUtils' ? 'bg-blue-500' : 'hover:bg-gray-700'}`}>Solana Utils</button></li>
           <li><button onClick={() => setActiveTool('solanaMetadata')} className={`px-3 py-2 rounded ${activeTool === 'solanaMetadata' ? 'bg-blue-500' : 'hover:bg-gray-700'}`}>Solana Metadata</button></li>
+          <li><button onClick={() => setActiveTool('updateMetadata')} className={`px-3 py-2 rounded ${activeTool === 'updateMetadata' ? 'bg-blue-500' : 'hover:bg-gray-700'}`}>Update Metadata</button></li>
+          <li><button onClick={() => setActiveTool('cnftHolders')} className={`px-3 py-2 rounded ${activeTool === 'cnftHolders' ? 'bg-blue-500' : 'hover:bg-gray-700'}`}>CNFT Holders</button></li>
         </ul>
       </nav>
 
@@ -40,6 +44,8 @@ export default function Home() {
         {activeTool === 'solanaSwap' && <SolanaSwap />}
         {activeTool === 'solanaUtils' && <SolanaUtils />}
         {activeTool === 'solanaMetadata' && <SolanaMetadata />}
+        {activeTool === 'updateMetadata' && <UpdateMetadata />}
+        {activeTool === 'cnftHolders' && <CNFTHolders />}
 
         <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
           <a href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

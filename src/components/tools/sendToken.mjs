@@ -15,28 +15,18 @@ export default function SendToken() {
     e.preventDefault();
     setError(null);
     setResult(null);
-
-    try {
-      const txHash = await transfer();
-      setResult(`Transaction hash: ${txHash}`);
-    } catch (err) {
-      setError(`Error: ${err.message}`);
-      console.error(err);
-    }
+    try {const txHash = await transfer(); setResult(`Transaction hash: ${txHash}`);} catch (err) {setError(`Error: ${err.message}`); console.error(err);}
   };
 
   const transfer = async () => {
     // Note: In a real application, you would need to handle wallet connection and signing
     const connection = new Connection("https://api.mainnet-beta.solana.com");
-    const feePayer = null; // This should be the connected wallet
-    const prevOwner = null; // This should be the connected wallet
-
+    const feePayer = null;
+    const prevOwner = null;
     const mintPubkey = new PublicKey(mintAddress);
     const receiveAdressPubkey = new PublicKey(receiveAddress);
     const tokenAccount1Pubkey = new PublicKey(fromTokenAccount);
-
     let ata = await getAssociatedTokenAddress(mintPubkey, receiveAdressPubkey);
-
     const tokenAccount2Pubkey = new PublicKey(ata);
     let tx = new Transaction();
     tx.add(
@@ -61,62 +51,26 @@ export default function SendToken() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1">Mint Address:</label>
-          <input
-            type="text"
-            value={mintAddress}
-            onChange={(e) => setMintAddress(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">Receive Address:</label>
-          <input
-            type="text"
-            value={receiveAddress}
-            onChange={(e) => setReceiveAddress(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" value={receiveAddress} onChange={(e) => setReceiveAddress(e.target.value)} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">From Token Account:</label>
-          <input
-            type="text"
-            value={fromTokenAccount}
-            onChange={(e) => setFromTokenAccount(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="text" value={fromTokenAccount} onChange={(e) => setFromTokenAccount(e.target.value)} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">Amount:</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
         <div>
           <label className="block mb-1">Decimals:</label>
-          <input
-            type="number"
-            value={decimals}
-            onChange={(e) => setDecimals(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-          />
+          <input type="number" value={decimals} onChange={(e) => setDecimals(e.target.value)} className="w-full px-3 py-2 border rounded-md" required/>
         </div>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Send Token
-        </button>
+        <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Send Token</button>
       </form>
-
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {result && <p className="mt-4 text-green-500">{result}</p>}
     </div>

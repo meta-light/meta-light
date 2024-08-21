@@ -38,7 +38,6 @@ export default function capital() {
 										<li>Qualitative data from diverse sources (job postings, social media, podcasts, Big Mac Index) to create inferences</li>
 										<li>Running servers for mining/farming to generate earned funds</li>
 										<li>VC investing using only earned funds, without reliance on external investors</li>
-										
 									</ul>
 								</section>
 							</article>
