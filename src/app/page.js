@@ -44,44 +44,45 @@ const Home = () => {
   }, []);
 
   const customLoader = ({ src }) => {return `${src}`;};
-
+  {/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
   return (
     <>
-      <Head><title>Nick Carpinito</title><meta name="description" content="A Web3 Researcher and BD Lead."/></Head>{/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
+      <Head><title>Nick Carpinito</title><meta name="description" content="GM"/></Head>
       <body>
         <div id="home" className="visuallyHidden"></div>
         <div className="menuButton" id="menuButton" tabIndex="0"><div className="linesContainer"></div></div>
-        <Sidebar />
+        <Sidebar/>
         <div className="outerWrapper"> 
           <div className="innerWrapper">
             <header>
-              <div className="heroImageContainer">
-                <Image loader={customLoader} src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500} />
-              </div>
+              <div className="heroImageContainer"><Image loader={customLoader} src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500}/></div>
               <div className="heroDescription">
                 <p className="greeting">Howdy! I'm</p>
                 <h1><span>Nick Carpinito</span></h1>
-                <p className="greeting">(Meta-Light)</p>
-                <br/>
-                <p className="smallBio">A <span>Web3 Research</span> and <span>Ecosystem Lead</span> passionate about advancing the future of decentralized networks</p>
+                <p className="greeting">(Also known as Meta-Light)</p><br/>
+                <p className="smallBio">A driven <span>Web3 Researcher</span> and <span>Ecosystem Developer</span> Driving the Future of Decentralized Networks</p>
                 <div className="socialsResume">
-                  <a className="resumeLink" href="https://medium.com/@meta-light" alt="My Blog Here" target="_blank" rel="noopener noreferrer">Blog</a>
                   <ul className="socialsList">
                     <li><a href="https://www.linkedin.com/in/nick-carpinito" target="_blank" rel="noopener noreferrer"><i className="lni lni-linkedin-original" aria-label="Link to my LinkedIn page."></i></a></li>
                     <li><a href="https://github.com/meta-light" target="_blank" rel="noopener noreferrer"><i className="lni lni-github-original" aria-label="Link to my GitHub page."></i></a></li>
                     <li><a href="https://twitter.com/0xMetaLight" target="_blank" rel="noopener noreferrer"><i className="lni lni-twitter-original" aria-label="Link to my Twitter profile."></i></a></li>
+                    <li><a href="https://medium.com/@meta-light" target="_blank" rel="noopener noreferrer"><i className="lni lni-medium" aria-label="Link to my Medium Blog."></i></a></li>
+                    <li><a href="https://dune.com/metalight/" target="_blank" rel="noopener noreferrer"><img src="/home/dune-logo.png" aria-label="Dune Dashboards" width={20} height={20}/></a></li>
+                    <li><a href="https://flipsidecrypto.xyz/MetaLight/" target="_blank" rel="noopener noreferrer"><img src="/home/flipside.png" alt="Flipside Dashboards" width={20} height={20}/></a></li>
                   </ul>
                 </div>
               </div>
             </header>
             <main>
               <section className="aboutSection" id="about">
-                <div className="sectionHead">
-                  <span>SOME INFO</span>
-                  <h2>ABOUT ME</h2>
-                </div>
+                <div className="sectionHead"><span>SOME INFO</span><h2>ABOUT ME</h2></div>
                 <article className="aboutContainer sectionContainer">
-                  <p>I’m Nick, a Web3 Research and Ecosystem Lead focused on <span>DePIN & Decentralized Compute</span>. I’ve spent the past 4 years working in Web3 tracking the emergence of the DePIN/DeVIN sectors and thier affects in legacy industries whom are ripe for disruption. I have experience with non-technical roles <span>(Business Development, Partnerships, Research & DD)</span> as well as technical roles <span>(Development, Compute Infrastructure, Analytics)</span>, and I am deeply committed to contributing to the advancement of Web3 technology and its potential to revolutionize the way we interact with the digital world in a more open, transparent, and free way.</p>
+                  <p>
+                    I’m a Web3 Researcher and Ecosystem Developer focused on <span>DePIN, Web3 Compute, and High-Performance Infrastructure</span>. 
+                    Over the past four years, I have been at the forefront of Web3 innovation, tracking the evolution of the DePIN/DeVIN sectors and their transformative impact on legacy industries poised for disruption. 
+                    My experience encompasses a wide range of roles, including Business Development, Partnerships, Research, Due Diligence, Development, and Analytics. 
+                    I am deeply committed to advancing Web3 technology and its potential to revolutionize the world by fostering greater openness, transparency, and freedom in our interactions.
+                  </p>
                 </article>
               </section>
               <section className="worksSection" id="works">
@@ -91,73 +92,59 @@ const Home = () => {
                 </div>
                 <div className="worksContainer sectionContainer">
                   <article className="workBox">
-                    <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/mycdoc.png" alt="Mycelium Networks" width={500} height={500} layout="intrinsic"/>
-                    </div>
+                    <div className="workImageContainer"><Image loader={customLoader} src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} layout="intrinsic"/></div>
                     <div className="workDescribeContainer">
-                    <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3>
-                      <h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Web3</span></h4>
+                      <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Research</span></h4>
                       <ul>
-                        <li>Mycelium is an incubator & accelerator of <span className="techStack">decentralized physical infrastructure networks</span> (DePINs)</li>
-                        <li>I oversaw the launch of the <span className="techStack">Mycelium Testbed</span>, the world's first physical DePIN sandbox, spanning <span className="techStack">1600+ SqMi</span> of concentrated & composable DePIN coverage in Americas Heartland.</li>
-                        <li>Acedemic Research surrounding the <a href="docs/mycelium-testbed.pdf/" className="liveLink" target="_blank" rel="noopener noreferrer">Mycelium Testbed</a>, and general applications of protocol agnostic DePIN testing facilities</li>
+                        <li>Mycelium is an incubator & accelerator of <span className="techStack">decentralized physical infrastructure networks</span> (DePINs).</li>
+                        <li>Oversaw the launch of the <a href="http://myceliumnetworks.com/testbed/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Testbed</a>, the world's first physical DePIN sandbox, spanning <span className="techStack">1600+ SqMi</span> of concentrated & composable DePIN coverage in Americas Heartland.</li>
+                        <li>Conducted academic research surrounding the <a href="/docs/mycelium-testbed.pdf/" className="liveLink" target="_blank" rel="noopener noreferrer">Mycelium Testbed</a>, and general applications of protocol agnostic DePIN testing facilities.</li>
                       </ul>
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/>
-                    </div>
+                    <div className="workImageContainer"><Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/></div>
                     <div className="workDescribeContainer">
-                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3>
-                      <h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
-                      <ul><li>My role includes oversight of growth, operations and product development for the Unleashing DePIN brand.</li></ul>
+                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
+                      <ul>
+                        <li>Oversight of growth, operations, and product development, driving the brand's expansion and technological advancements in the DePIN space.</li>
+                        <li>Developed <a href="https://depinpulse.app/" className="liveLink" target="_blank" rel="noopener noreferrer">DePIN Pulse</a>, a DePIN ecosystem opportunities aggregator and research tool.</li>
+                      </ul>
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/cc.png" alt="UARK" width={500} height={500} layout="intrinsic"/>
-                    </div>
+                    <div className="workImageContainer"><Image loader={customLoader} src="/home/cc.png" alt="UARK" width={500} height={500} layout="intrinsic"/></div>
                     <div className="workDescribeContainer">
-                      <h3>Blockchain @ University of Arkansas</h3>
-                      <h4><span className="techStack">Web3</span>, <span className="techStack">Finance</span>, <span className="techStack">Computer Science</span></h4>
+                      <h3>Blockchain @ University of Arkansas</h3><h4><span className="techStack">Web3</span>, <span className="techStack">Finance</span>, <span className="techStack">Computer Science</span></h4>
                       <ul>
                         <li>B.S.B.A in Information Systems, Concentration in Blockchain Enterprise Systems</li>
                         <li>Founded the <a href="https://hogsync.uark.edu/club_signup?group_type=&search=crypto&category_tags=&order=name_asc" target="_blank" rel="noopener noreferrer">UARK Crypto Club</a> - First student-led blockchain society in state of Arkansas</li>
-                        <li>2nd Place, <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer">RazorBlock</a> Hackathon - <a href="https://carpinito.id/docs/chrg.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">CHRG</a>, a decentralized EV charging platform</li>
+                        <li>Secured 2nd Place at the <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer">RazorBlock Hackathon</a> with <a href="/docs/chrg.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">CHRG</a>, a decentralized EV charging platform</li>
                       </ul>
                     </div>
                   </article>
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/>
+                      <Image loader={customLoader} src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/><br/><br/>
+                      <Image loader={customLoader} src="/home/movie.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Research & Experiments</h3>
                       <h4><span className="techStack">Web3</span>, <span className="techStack">DePIN</span>, <span className="techStack">Incentive Mechanisms</span></h4>
                       <ul>
-                        <li>Web3 Dashboards: Leveraged <a href="https://dune.com/metalight/dewi-project-users" className="liveLink" target="_blank" rel="noopener noreferrer">Dune</a> and <a href="https://flipsidecrypto.xyz/MetaLight" className="liveLink" target="_blank" rel="noopener noreferrer">Flipside</a> to compile some of the first user growth metrics in DePIN</li>
-                        <li><a href="https://twitter.com/0xMetaLight/status/1630989599488049154?s=20" className="liveLink" target="_blank" rel="noopener noreferrer">MultiNode</a>: Research around the application of low-power cluster computing in blockchain node operation.</li>
-                          {/* Most blockchain nodes are deployed on personal computers. 90% of these nodes are lightweight and require less than 10% of the compute power present on a standard PC, but are deployed in such a way that their efficiency and carbon footprint reduction are not realized. */}
-                        <li>Use Case Sponsor - <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer">RazorBlock</a> Hackathon Helium Network <a href="https://carpinito.id/docs/helium-blue-light.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">Blue Light</a> System</li>
-                        <li><a href="https://github.com/meta-light/coldfront" className="liveLink" target="_blank" rel="noopener noreferrer">Coldfront</a>: A simple weather app that displays current conditions, as well as relevant news and predictive analysis regarding Razorbacks Baseball games</li>
+                        <h4><span className="techStack">2024</span></h4>
+                        <li>Explored compressed NFTs on Solana with <a href="/basket" className="liveLink" target="_blank" rel="noopener noreferrer">CNFT Basket</a>, a tool for creating tradable "baskets" of compressed NFTs.</li>
+                        <h4><span className="techStack">2023</span></h4>
+                        <li>Developed Web3 dashboards using <a href="https://dune.com/metalight/" className="liveLink" target="_blank" rel="noopener noreferrer">Dune</a> and <a href="https://flipsidecrypto.xyz/MetaLight" className="liveLink" target="_blank" rel="noopener noreferrer">Flipside</a>, compiling some of the first user growth metrics in DePIN.</li>
+                        <li>Built <a href="/movies" className="liveLink" target="_blank" rel="noopener noreferrer">MetaMovies</a>, a personal movie database leveraging OMDB, built with NextJS.</li>
+                        <h4><span className="techStack">2022</span></h4>
+                        <li>Developed <a href="/card" className="liveLink" target="_blank" rel="noopener noreferrer">SolCV</a>, a Solana based framework for minting business cards as compressed NFTs.</li>
+                        <li>Acted as a Use Case Sponsor for the <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer"> RazorBlock Hackathon </a>developing a Helium Network <a href="/docs/helium-blue-light.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">Blue Light</a> System.</li>
+                        <li>Conducted research on low-power cluster computing (<a href="https://twitter.com/0xMetaLight/status/1630989599488049154?s=20" className="liveLink" target="_blank" rel="noopener noreferrer">MultiNode</a>) in blockchain node operations.</li>
+                        <li>Created <a href="https://coldfront.vercel.app/" className="liveLink" target="_blank" rel="noopener noreferrer">Coldfront</a>, a weather app offering current conditions, relevant news, and predictive analysis for Razorbacks Baseball games.</li>
                       </ul>
                     </div>
                   </article>
-                  {/* <article className="workBox">
-                    <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/coldfront.png" alt="SolCV" width={500} height={500} layout="intrinsic"/>
-                    </div>
-                    <div className="workDescribeContainer">
-                      <h3>Development Projects</h3>
-                      <h4><span className="techStack">NextJS</span>, <span className="techStack">Web3.js</span>, <span className="techStack">Ubuntu</span></h4>
-                      <ul>
-                        <li><a href="https://github.com/meta-light/SolCV" className="liveLink" target="_blank" rel="noopener noreferrer">SolCV</a>: A Solana based framework for creating cNFT business cards</li>
-                        <li><a href="https://github.com/meta-light/meta-movies" className="liveLink" target="_blank" rel="noopener noreferrer">Meta Movies</a>: Personal movie database leveraging OMDB, built with NextJS</li>
-                      </ul>
-                    </div>
-                  </article> */}
-                  {/* maybe turn this into a timeline type thing? */}
                 </div>
               </section>
               <section className="skillsSection" id="skills">
