@@ -43,8 +43,8 @@ const Home = () => {
     loadJQuery();
   }, []);
 
-  const customLoader = ({ src }) => {return `${src}`;};
-  {/* Forked and heavily edited from https://github.com/alexcalia/alexCaliaPortfolio */}
+  const customLoader = ({ src, width, quality }) => {return `${src}?w=${width}&q=${quality || 75}`;};
+
   return (
     <>
       <Head><title>Nick Carpinito</title><meta name="description" content="GM"/></Head>
@@ -55,7 +55,7 @@ const Home = () => {
         <div className="outerWrapper"> 
           <div className="innerWrapper">
             <header>
-              <div className="heroImageContainer"><Image loader={customLoader} src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500}/></div>
+              <div className="heroImageContainer"><Image src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500} unoptimized/></div>
               <div className="heroDescription">
                 <p className="greeting">Howdy! I'm</p>
                 <h1><span>Nick Carpinito</span></h1>
@@ -78,7 +78,7 @@ const Home = () => {
                 <div className="sectionHead"><span>SOME INFO</span><h2>ABOUT ME</h2></div>
                 <article className="aboutContainer sectionContainer">
                   <p>
-                    I’m a Web3 Researcher and Ecosystem Developer focused on <span>DePIN, Web3 Compute, and High-Performance Infrastructure</span>. 
+                    I'm a Web3 Researcher and Ecosystem Developer focused on <span>DePIN, Web3 Compute, and High-Performance Infrastructure</span>. 
                     Over the past four years, I have been at the forefront of Web3 innovation, tracking the evolution of the DePIN/DeVIN sectors and their transformative impact on legacy industries poised for disruption. 
                     My experience encompasses a wide range of roles, including Business Development, Partnerships, Research, Due Diligence, Development, and Analytics. 
                     I am deeply committed to advancing Web3 technology and its potential to revolutionize the world by fostering greater openness, transparency, and freedom in our interactions.
@@ -92,7 +92,7 @@ const Home = () => {
                 </div>
                 <div className="worksContainer sectionContainer">
                   <article className="workBox">
-                    <div className="workImageContainer"><Image loader={customLoader} src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} layout="intrinsic"/></div>
+                    <div className="workImageContainer"><Image src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} unoptimized/></div>
                     <div className="workDescribeContainer">
                       <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Research</span></h4>
                       <ul>
@@ -103,7 +103,7 @@ const Home = () => {
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer"><Image loader={customLoader} src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} layout="intrinsic"/></div>
+                    <div className="workImageContainer"><Image src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} unoptimized/></div>
                     <div className="workDescribeContainer">
                       <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
                       <ul>
@@ -113,7 +113,7 @@ const Home = () => {
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer"><Image loader={customLoader} src="/home/cc.png" alt="UARK" width={500} height={500} layout="intrinsic"/></div>
+                    <div className="workImageContainer"><Image src="/home/cc.png" alt="UARK" width={500} height={500} unoptimized/></div>
                     <div className="workDescribeContainer">
                       <h3>Blockchain @ University of Arkansas</h3><h4><span className="techStack">Web3</span>, <span className="techStack">Finance</span>, <span className="techStack">Computer Science</span></h4>
                       <ul>
@@ -125,8 +125,8 @@ const Home = () => {
                   </article>
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <Image loader={customLoader} src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/><br/><br/>
-                      <Image loader={customLoader} src="/home/movie.png" alt="Mycelium Testbed" width={500} height={500} layout="intrinsic"/>
+                      <Image src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/><br/><br/>
+                      <Image src="/home/movie.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Research & Experiments</h3>
@@ -151,13 +151,13 @@ const Home = () => {
                 <div className="sectionHead"><span>CHECK OUT MY</span><h2>SKILLS</h2></div>
                 <div className="skillsContainer sectionContainer">
                   <ul className="skillsGrid">
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/nextjs.svg" alt="NextJS" width={256} height={256}/><p>NextJS</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/node.png" alt="NodeJS" width={256} height={256}/><p>NodeJS</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/react.png" alt="React JS" width={256} height={256}/><p>React</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/github.png" alt="Git" width={256} height={256}/><p>Git</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/linux.png" alt="Linux" width={256} height={256}/><p>Linux</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/pc.png" alt="Analytics" width={256} height={256}/><p>Analytics</p></div></li>
-                    <li><div className="itemContainer"><Image loader={customLoader} src="/home/icons/stonks.png" alt="SQL" width={256} height={256}/><p>SQL</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/nextjs.svg" alt="NextJS" width={256} height={256} unoptimized/><p>NextJS</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/node.png" alt="NodeJS" width={256} height={256} unoptimized/><p>NodeJS</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/react.png" alt="React JS" width={256} height={256} unoptimized/><p>React</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/github.png" alt="Git" width={256} height={256} unoptimized/><p>Git</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/linux.png" alt="Linux" width={256} height={256} unoptimized/><p>Linux</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/pc.png" alt="Analytics" width={256} height={256} unoptimized/><p>Analytics</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/stonks.png" alt="SQL" width={256} height={256} unoptimized/><p>SQL</p></div></li>
                   </ul>
                 </div>
               </section>
@@ -167,7 +167,7 @@ const Home = () => {
                   <h3>Get in Touch</h3>
                   <div className="contactTypes">
                     <div className="flexContainer"><div className="typeBox"><i className="lni lni-envelope"></i><a href="mailto:nick@carpinito.id">nick@carpinito.id</a><p>Email Me</p></div></div>
-                    <div className="flexContainer"><div className="typeBox"><i className="lni lni-calendar"></i><a href="https://calendly.com/nickcarp/30min" target="_blank" rel="noopener noreferrer">Calendly</a><p>Schedule a Meeting</p></div></div>
+                    <div className="flexContainer"><div className="typeBox"><i className="lni lni-calendar"></i><a href="https://calendly.com/nick-carpinito/30min" target="_blank" rel="noopener noreferrer">Calendly</a><p>Schedule a Meeting</p></div></div>
                   </div>
                 </div> 
               </section>
