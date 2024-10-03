@@ -59,7 +59,7 @@ const Home = () => {
               <div className="heroDescription">
                 <p className="greeting">Howdy! I'm</p>
                 <h1><span>Nick Carpinito</span></h1>
-                <p className="greeting">(Also known as Meta-Light)</p><br/>
+                <p className="greeting">(Meta-Light)</p><br/>
                 <p className="smallBio">A driven <span>Web3 Researcher</span> and <span>Ecosystem Developer</span> Driving the Future of Decentralized Networks</p>
                 <div className="socialsResume">
                   <ul className="socialsList">
