@@ -57,7 +57,7 @@ const Home = () => {
             <header>
               <div className="heroImageContainer"><Image src="/home/dewi-cat.gif" alt="Dewi Cat" width={500} height={500} unoptimized/></div>
               <div className="heroDescription">
-                <p className="greeting">Howdy! I'm</p>
+                <p className="greeting">GM</p>
                 <h1><span>Nick Carpinito</span></h1>
                 <p className="greeting">(Meta-Light)</p><br/>
                 <p className="smallBio">A driven <span>Web3 Researcher</span> and <span>Ecosystem Developer</span> Driving the Future of Decentralized Networks</p>
@@ -75,40 +75,53 @@ const Home = () => {
             </header>
             <main>
               <section className="aboutSection" id="about">
-                <div className="sectionHead"><span>SOME INFO</span><h2>ABOUT ME</h2></div>
+                <div className="sectionHead"><span></span><h2>ABOUT ME</h2></div>
                 <article className="aboutContainer sectionContainer">
                   <p>
-                    I'm a Web3 Researcher and Ecosystem Developer focused on <span>DePIN, Web3 Compute, and High-Performance Infrastructure</span>. 
-                    Over the past four years, I have been at the forefront of Web3 innovation, tracking the evolution of the DePIN/DeVIN sectors and their transformative impact on legacy industries poised for disruption. 
-                    My experience encompasses a wide range of roles, including Business Development, Partnerships, Research, Due Diligence, Development, and Analytics. 
-                    I am deeply committed to advancing Web3 technology and its potential to revolutionize the world by fostering greater openness, transparency, and freedom in our interactions.
+                  I am a Web3 Ecosystem & Research leader focused on driving innovation in decentralized networks and high-performance infrastructure.
+                  </p>
+                  <br></br>
+                  <p>
+                  Over the past four years, I have been at the cutting edge of Web3, exploring the transformative potential of DePIN and Web3 Infrastructure sectors as they disrupt traditional industries. 
+                  </p>
+                  <br></br>
+                  <p>
+                  My work spans across various domains, with a commitment to advancing the technology’s potential to foster greater openness, transparency, and digital freedom.
                   </p>
                 </article>
               </section>
               <section className="worksSection" id="works">
-                <div className="sectionHead">
-                  <span>TAKE A LOOK AT MY</span>
-                  <h2>PROJECTS and EXPERIENCE</h2>
-                </div>
+                <div className="sectionHead"><span></span><h2>PROJECTS and EXPERIENCE</h2></div>
                 <div className="worksContainer sectionContainer">
                   <article className="workBox">
-                    <div className="workImageContainer"><Image src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} unoptimized/></div>
+                    <div className="workImageContainer">
+                      <Image src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} unoptimized/><br></br>
+                      <Image src="/home/mycdoc.png" alt="Mycelium Networks" width={500} height={500} unoptimized/>
+                    </div>
                     <div className="workDescribeContainer">
                       <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Research</span></h4>
                       <ul>
-                        <li>Mycelium is an incubator & accelerator of <span className="techStack">decentralized physical infrastructure networks</span> (DePINs).</li>
-                        <li>Oversaw the launch of the <a href="http://myceliumnetworks.com/testbed/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Testbed</a>, the world's first physical DePIN sandbox, spanning <span className="techStack">1600+ SqMi</span> of concentrated & composable DePIN coverage in Americas Heartland.</li>
-                        <li>Conducted academic research surrounding the <a href="/docs/mycelium-testbed.pdf/" className="liveLink" target="_blank" rel="noopener noreferrer">Mycelium Testbed</a>, and general applications of protocol agnostic DePIN testing facilities.</li>
+                        <li>Oversaw the launch of the <a href="http://myceliumnetworks.com/testbed/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Testbed</a>, a 1600+ SqMi incubator and accelerator for decentralized physical infrastructure networks (DePINs), enabling large-scale deployments of hardware and solutions.</li>
+                        <li>Led ecosystem partnerships with industry leaders such as Helium and IoTeX, as well as emerging projects like XNET and Wayru.</li>
+                        <li>Conducted comprehensive due diligence and market analysis of decentralized infrastructure projects, supported partners throughout their journey, and developed a robust database to track DePIN projects.</li>
+                        <li>Developed an automated internal backend system to collect and process data from both on-chain and off-chain sources, streamlining research and analysis efforts.</li>
+                        <li>Built, deployed, and maintained a fleet of bare-metal servers for mining, validation, and running various decentralized protocols.</li>
+                        <li>Member inaugural cohort of the Bounds Accelerator, backed by Coinbase Ventures and Haun Ventures.</li>
                       </ul>
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer"><Image src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} unoptimized/></div>
+                    <div className="workImageContainer">
+                      <Image src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} unoptimized/><br/>
+                      <Image src="/home/pulse.png" alt="Unleashing DePIN Pulse" width={500} height={500} unoptimized/>
+                    </div>
                     <div className="workDescribeContainer">
                       <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
                       <ul>
-                        <li>Oversight of growth, operations, and product development, driving the brand's expansion and technological advancements in the DePIN space.</li>
-                        <li>Developed <a href="https://depinpulse.app/" className="liveLink" target="_blank" rel="noopener noreferrer">DePIN Pulse</a>, a DePIN ecosystem opportunities aggregator and research tool.</li>
+                        <li>Curated a pipeline of DePIN industry projects and emerging founders for Unleashing DePIN, spotlighting key innovators and new ventures.</li>
+                        <li>Conducted due diligence on featured projects, ensuring reliable and valuable insights for investors and the broader audience.</li>
+                        <li>Built <a href="https://depinpulse.app/" className="liveLink" target="_blank" rel="noopener noreferrer">DePIN Pulse</a>, an aggregator showcasing earnings opportunities across DePIN protocols, including APYs, ROIs, staking, mining hardware, and compute resources.</li>
+                        <li>Provided direct oversight of business development, onboarding, and partnerships, driving growth and adoption across the DePIN ecosystem.</li>
                       </ul>
                     </div>
                   </article>
@@ -119,22 +132,24 @@ const Home = () => {
                       <ul>
                         <li>B.S.B.A in Information Systems, Concentration in Blockchain Enterprise Systems</li>
                         <li>Founded the <a href="https://hogsync.uark.edu/club_signup?group_type=&search=crypto&category_tags=&order=name_asc" target="_blank" rel="noopener noreferrer">UARK Crypto Club</a> - First student-led blockchain society in state of Arkansas</li>
-                        <li>Secured 2nd Place at the <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer">RazorBlock Hackathon</a> with <a href="/docs/chrg.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">CHRG</a>, a decentralized EV charging platform</li>
+                        <li>Contributed to OzDAO - a local Web3 collective.</li>
                       </ul>
                     </div>
                   </article>
                   <article className="workBox">
                     <div className="workImageContainer">
-                      <Image src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/><br/><br/>
-                      <Image src="/home/movie.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/>
+                      <Image src="/home/xray.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/><br/><br/>
+                      <Image src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/>
                     </div>
                     <div className="workDescribeContainer">
                       <h3>Research & Experiments</h3>
                       <h4><span className="techStack">Web3</span>, <span className="techStack">DePIN</span>, <span className="techStack">Incentive Mechanisms</span></h4>
                       <ul>
                         <h4><span className="techStack">2024</span></h4>
+                        <li>Awarded the Total Eclipse Challenge Community Award for <a href="https://eclipsexray.id/" className="liveLink" target="_blank" rel="noopener noreferrer">Eclipse XRAY</a>, the first community-built explorer for the Eclipse ecosystem, enabling native block exploration powered by public RPCs.</li>
                         <li>Explored compressed NFTs on Solana with <a href="/basket" className="liveLink" target="_blank" rel="noopener noreferrer">CNFT Basket</a>, a tool for creating tradable "baskets" of compressed NFTs.</li>
                         <h4><span className="techStack">2023</span></h4>
+                        <li>Won 2nd Place in the <a href="https://www.youtube.com/playlist?list=PLjrNbvbJ6nUErr0nIMOsgIRKbqTDsvwZ5" className="liveLink" target="_blank" rel="noopener noreferrer">RazorBlock Hackathon</a> with <a href="/docs/chrg.pdf" className="liveLink" target="_blank" rel="noopener noreferrer">CHRG</a>, a decentralized protocol for electric vehicle (EV) charging infrastructure.</li>
                         <li>Developed Web3 dashboards using <a href="https://dune.com/metalight/" className="liveLink" target="_blank" rel="noopener noreferrer">Dune</a> and <a href="https://flipsidecrypto.xyz/MetaLight" className="liveLink" target="_blank" rel="noopener noreferrer">Flipside</a>, compiling some of the first user growth metrics in DePIN.</li>
                         <li>Built <a href="/movies" className="liveLink" target="_blank" rel="noopener noreferrer">MetaMovies</a>, a personal movie database leveraging OMDB, built with NextJS.</li>
                         <h4><span className="techStack">2022</span></h4>
@@ -148,23 +163,48 @@ const Home = () => {
                 </div>
               </section>
               <section className="skillsSection" id="skills">
-                <div className="sectionHead"><span>CHECK OUT MY</span><h2>SKILLS</h2></div>
+                <div className="sectionHead"><span></span><h2>SKILLS</h2></div>
                 <div className="skillsContainer sectionContainer">
+                  <h1>Software Development</h1>
                   <ul className="skillsGrid">
-                    <li><div className="itemContainer"><Image src="/home/icons/nextjs.svg" alt="NextJS" width={256} height={256} unoptimized/><p>NextJS</p></div></li>
-                    <li><div className="itemContainer"><Image src="/home/icons/node.png" alt="NodeJS" width={256} height={256} unoptimized/><p>NodeJS</p></div></li>
-                    <li><div className="itemContainer"><Image src="/home/icons/react.png" alt="React JS" width={256} height={256} unoptimized/><p>React</p></div></li>
-                    <li><div className="itemContainer"><Image src="/home/icons/github.png" alt="Git" width={256} height={256} unoptimized/><p>Git</p></div></li>
-                    <li><div className="itemContainer"><Image src="/home/icons/linux.png" alt="Linux" width={256} height={256} unoptimized/><p>Linux</p></div></li>
-                    <li><div className="itemContainer"><Image src="/home/icons/pc.png" alt="Analytics" width={256} height={256} unoptimized/><p>Analytics</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/ts.png" alt="Typescript" width={35} height={35} unoptimized/><p>Typescript</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/js.png" alt="Javascript" width={35} height={35} unoptimized/><p>Javascript</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/mongo.png" alt="MongoDB" width={35} height={35} unoptimized/><p>MongoDB</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/docker.png" alt="" width={35} height={35} unoptimized/><p>Docker</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/pc.png" alt="" width={35} height={35} unoptimized/><p>REST APIs</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/nvidia.png" alt="Nvidia" width={35} height={35} unoptimized/><p>Nvidia</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/svelte.svg" alt="Svelte" width={35} height={35} unoptimized/><p>Svelte</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/railway.png" alt="Railway" width={35} height={35} unoptimized/><p>Railway</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/nextjs.svg" alt="NextJS" width={35} height={35} unoptimized/><p>NextJS</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/vercel.svg" alt="Vercel" width={35} height={35} unoptimized/><p>Vercel</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/node.png" alt="ExpressJS" width={35} height={35} unoptimized/><p>ExpressJS</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/react.png" alt="React JS" width={35} height={35} unoptimized/><p>React</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/github.png" alt="Git" width={35} height={35} unoptimized/><p>Git</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/web3.png" alt="Web3.js" width={35} height={35} unoptimized/><p>Web3.js</p></div></li>
+                  </ul>
+                  <h1>Analytics & Research</h1>
+                  <ul className="skillsGrid">
+                    <li><div className="itemContainer"><Image src="/home/icons/dune.png" alt="Dune" width={35} height={35} unoptimized/><p>Dune</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/flipside.png" alt="Flipside" width={35} height={35} unoptimized/><p>Flipside</p></div></li>
                     <li><div className="itemContainer"><Image src="/home/icons/stonks.png" alt="SQL" width={256} height={256} unoptimized/><p>SQL</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/scrape.png" alt="Web Scraping" width={35} height={35} unoptimized/><p>Web Scraping</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/rpc.png" alt="RPC Queries" width={35} height={35} unoptimized/><p>RPC Queries</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/analysis.png" alt="Quantitative Analysis" width={35} height={35} unoptimized/><p>Quantitative Analysis</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/duedilligence.png" alt="Due Diligence" width={35} height={35} unoptimized/><p>Docs & Reporting</p></div></li>
+                  </ul>
+                  <h1>Infrastructure</h1>
+                  <ul className="skillsGrid">
+                    <li><div className="itemContainer"><Image src="/home/icons/lorawan.png" alt="LoRaWAN" width={35} height={35} unoptimized/><p>LoRaWAN</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/rf.png" alt="RF Environments" width={35} height={35} unoptimized/><p>RF Environments</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/sensors.png" alt="IoT Sensors" width={35} height={35} unoptimized/><p>IoT Sensors</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/linux.png" alt="Linux" width={256} height={256} unoptimized/><p>Linux</p></div></li>
+                    <li><div className="itemContainer"><Image src="/home/icons/server.png" alt="Server Hardware" width={35} height={35} unoptimized/><p>Bare Metal Servers</p></div></li>
                   </ul>
                 </div>
               </section>
               <section className="contactSection" id="contact">
-                <div className="sectionHead"><span>SAY HELLO</span><h2>CONTACT</h2></div>
+                <div className="sectionHead"><span></span><h2>CONTACT</h2></div>
                 <div className="contactContainer sectionContainer">
-                  <h3>Get in Touch</h3>
                   <div className="contactTypes">
                     <div className="flexContainer"><div className="typeBox"><i className="lni lni-envelope"></i><a href="mailto:nick@carpinito.id">nick@carpinito.id</a><p>Email Me</p></div></div>
                     <div className="flexContainer"><div className="typeBox"><i className="lni lni-calendar"></i><a href="https://carp.youcanbook.me/" target="_blank" rel="noopener noreferrer">Calendar</a><p>Schedule a Meeting</p></div></div>

@@ -549,6 +549,10 @@ header .heroDescription .socialsResume .resumeLink:focus {
   transition: all 0.3s ease-in;
   box-shadow: 0px 4px 8px rgba(134, 151, 168, 0.1);
   border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .skillsGrid li p {
   margin-top: 10px;
@@ -556,6 +560,19 @@ header .heroDescription .socialsResume .resumeLink:focus {
 .skillsGrid li img {
   width: 35px;
   height: 35px;
+}
+.skillsGrid li div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.skillsContainer h1 {
+  font-size: 1rem;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-align: left;
 }
 
 .workBox {
