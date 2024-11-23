@@ -8,8 +8,6 @@ This textbook is a living document created with the intention to serve as a reso
 ### Important Tweets
 * https://twitter.com/SolBrah/status/1522580127338713089?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
 * https://twitter.com/nansen_intern/status/1527638546638458880?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
-* https://twitter.com/matthuang/status/1540726260971606016?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
-* https://twitter.com/Rothmus/status/1542555973419765760?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
 * https://twitter.com/austinvirts/status/1551990111448883200?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
 * https://twitter.com/mrexits/status/1540776474361204740?s=20&t=5YUGQ7aZhK1rasW5TU4DEQ
 * https://twitter.com/kikisknees/status/1559970846596366336?s=20&t=RXPTUOYUuT6KO-iLMgL44g
