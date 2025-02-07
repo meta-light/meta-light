@@ -116,7 +116,7 @@ const Home = () => {
                       <Image src="/home/pulse.png" alt="Unleashing DePIN Pulse" width={500} height={500} unoptimized/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Head of Growth @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
+                      <h3>Head of Research @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
                       <ul>
                         <li>Curated a pipeline of DePIN industry projects and emerging founders for Unleashing DePIN, spotlighting key innovators and new ventures.</li>
                         <li>Conducted due diligence on featured projects, ensuring reliable and valuable insights for investors and the broader audience.</li>
