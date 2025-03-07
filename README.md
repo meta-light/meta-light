@@ -16,3 +16,4 @@
 - [token-list](https://github.com/jup-ag/token-list): Jupiter Exchanges SPL token verification repository.
 - [helium/hip](https://github.com/helium/HIP): Helium Improvement Proposals.
 - [helius/xray](https://github.com/helius-labs/xray): Xray Explorer.
+- [nexus-xyz](https://github.com/nexus-xyz/network-api): High-performance interface for supplying compute to the Nexus network.
