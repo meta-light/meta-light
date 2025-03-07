@@ -1,6 +1,3 @@
-## GM
-[Meta Light](https://carpinito.id/). 
-
 ### Resources 
 - [Awesome-Eclipse](https://github.com/meta-light/awesome-eclipse): An Eclipse Ecosystem Resource Guide.
 - [Solana-Rolodex, Hello-Sugar, Textbook.md](https://www.carpinito.id/guides) and all other guides have been transfered to my personal site.
