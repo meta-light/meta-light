@@ -86,20 +86,50 @@ const Home = () => {
                   </p>
                   <br></br>
                   <p>
-                  My work spans across various domains, with a commitment to advancing the technology’s potential to foster greater openness, transparency, and digital freedom.
+                  My work spans across various domains, with a commitment to advancing the technology's potential to foster greater openness, transparency, and digital freedom.
                   </p>
                 </article>
               </section>
               <section className="worksSection" id="works">
                 <div className="sectionHead"><span></span><h2>PROJECTS and EXPERIENCE</h2></div>
                 <div className="worksContainer sectionContainer">
+                <article className="workBox">
+                    <div className="workImageContainer">
+                      {/* <Image src="/home/bw.png" alt="Mycelium Networks" width={500} height={500} unoptimized/><br></br> */}
+                      <Image src="/home/bwr.png" alt="Mycelium Networks" width={500} height={500} unoptimized/><br></br>
+                    </div>
+                    <div className="workDescribeContainer">
+                      <h3>Research Analyst @ <a href="https://blockworks.co/" target="_blank" rel="noopener noreferrer" className='h3Style'>Blockworks</a></h3><h4><span className="techStack">Research</span>,<span className="techStack">Data</span>,<span className="techStack">DePIN</span></h4>
+                      <ul>
+                        <li>Conducting deep research and analysis for consumption by <a href="https://www.blockworksresearch.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Blockworks Research</a> subscribers.</li>
+                        <li>Monitoring market trends, ecosystem developments and relevant governance proposals.</li>
+                        <li>Analyzing on-chain datasets to support analysis and back team theses.</li>
+                      </ul>
+                    </div>
+                  </article>
+                  <article className="workBox">
+                    <div className="workImageContainer">
+                      <Image src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} unoptimized/><br/>
+                      <Image src="/home/pulse.png" alt="Unleashing DePIN Pulse" width={500} height={500} unoptimized/>
+                    </div>
+                    <div className="workDescribeContainer">
+                      <h3>Head of Research @ <a href="https://www.parameter.ventures/" target="_blank" rel="noopener noreferrer" className='h3Style'>Parameter Research</a></h3><h4><span className="techStack">DePIN</span>,<span className="techStack">Growth</span>,<span className="techStack">Software Development</span></h4>
+                      <ul>
+                        <li>Curating a pipeline of DePIN industry projects and emerging founders for <a href="https://www.unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a>, spotlighting key innovators and new ventures.</li>
+                        <li>Conducting due diligence on featured projects, ensuring reliable and valuable insights for investors and the broader audience.</li>
+                        <li>Building <a href="https://depinpulse.app/" className="liveLink" target="_blank" rel="noopener noreferrer">DePIN Pulse</a>, an aggregator showcasing earnings opportunities across DePIN protocols, including APYs, ROIs, staking, mining hardware, and compute resources.</li>
+                        <li>Providing direct oversight of business development, onboarding, and partnerships, driving growth and adoption across the DePIN ecosystem.</li>
+                        <li>Awarded the Total Eclipse Challenge Community Award for <a href="https://eclipsexray.id/" className="liveLink" target="_blank" rel="noopener noreferrer">Eclipse XRAY</a>, the first community-built explorer for the Eclipse ecosystem, enabling native block exploration powered by public RPCs.</li>
+                      </ul>
+                    </div>
+                  </article>
                   <article className="workBox">
                     <div className="workImageContainer">
                       <Image src="/home/mycelium.png" alt="Mycelium Networks" width={500} height={500} unoptimized/><br></br>
                       <Image src="/home/mycdoc.png" alt="Mycelium Networks" width={500} height={500} unoptimized/>
                     </div>
                     <div className="workDescribeContainer">
-                      <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Compute</span>, <span className="techStack">Research</span></h4>
+                      <h3>Head of Ecosystem @ <a href="http://myceliumnetworks.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Networks</a></h3><h4><span className="techStack">DePIN</span>,<span className="techStack">Compute</span>,<span className="techStack">Research</span></h4>
                       <ul>
                         <li>Oversaw the launch of the <a href="http://myceliumnetworks.com/testbed/" target="_blank" rel="noopener noreferrer" className='h3Style'>Mycelium Testbed</a>, a 1600+ SqMi incubator and accelerator for decentralized physical infrastructure networks (DePINs), enabling large-scale deployments of hardware and solutions.</li>
                         <li>Led ecosystem partnerships with industry leaders such as Helium and IoTeX, as well as emerging projects like XNET and Wayru.</li>
@@ -111,17 +141,19 @@ const Home = () => {
                     </div>
                   </article>
                   <article className="workBox">
-                    <div className="workImageContainer">
-                      <Image src="/home/ud.png" alt="Unleashing DePIN" width={500} height={500} unoptimized/><br/>
-                      <Image src="/home/pulse.png" alt="Unleashing DePIN Pulse" width={500} height={500} unoptimized/>
-                    </div>
+                    {/* <div className="workImageContainer"><Image src="/home/cc.png" alt="UARK" width={500} height={500} unoptimized/></div> */}
                     <div className="workDescribeContainer">
-                      <h3>Head of Research @ <a href="http://unleashingdepin.com/" target="_blank" rel="noopener noreferrer" className='h3Style'>Unleashing DePIN</a></h3><h4><span className="techStack">DePIN</span>, <span className="techStack">Growth</span>, <span className="techStack">Software Development</span></h4>
+                      <h3>Volunteering</h3><h4><span className="techStack">Web3</span>, <span className="techStack">Strategy</span>, <span className="techStack">Mentoring</span></h4>
                       <ul>
-                        <li>Curated a pipeline of DePIN industry projects and emerging founders for Unleashing DePIN, spotlighting key innovators and new ventures.</li>
-                        <li>Conducted due diligence on featured projects, ensuring reliable and valuable insights for investors and the broader audience.</li>
-                        <li>Built <a href="https://depinpulse.app/" className="liveLink" target="_blank" rel="noopener noreferrer">DePIN Pulse</a>, an aggregator showcasing earnings opportunities across DePIN protocols, including APYs, ROIs, staking, mining hardware, and compute resources.</li>
-                        <li>Provided direct oversight of business development, onboarding, and partnerships, driving growth and adoption across the DePIN ecosystem.</li>
+                        <h4><span className="techStack"><a href="https://outlierventures.io/base-camp/depin-2025/" target="_blank" rel="noopener noreferrer" className='h3Style'>Outlier Ventures DePIN Accelerator</a> — Mentor</span></h4>
+                        <li>Provided strategic guidance to early stage DePIN builders to support growth and GTM strategy in early stage projects.</li>
+                        <li>Facilitated 12 weeks of dedicated support for the next generation of DePINs.</li>
+                      </ul>
+                      <br/>
+                      <ul>
+                        <h4><span className="techStack"><a href="https://depin.surf/" target="_blank" rel="noopener noreferrer" className='h3Style'>IoTeX DePIN Surf Accelerator</a> — Mentor</span></h4>
+                        <li>Developed informational content surrounding the design and development of DePIN Hardware for reference by cohort companies.</li>
+                        <li>Contributed to "Decentralized Physical Infrastructure Networks: A Modular Infrastructure Thesis" report alongside the DePIN community and IoTeX team.</li>
                       </ul>
                     </div>
                   </article>
@@ -131,12 +163,14 @@ const Home = () => {
                       <h3>Blockchain @ University of Arkansas</h3><h4><span className="techStack">Web3</span>, <span className="techStack">Finance</span>, <span className="techStack">Computer Science</span></h4>
                       <ul>
                         <li>B.S.B.A in Information Systems, Concentration in Blockchain Enterprise Systems</li>
+                        <li>Independent Study surrounding operation of blockchain nodes on IBM z16 Mainframe architecture</li>
                         <li>Founded the <a href="https://hogsync.uark.edu/club_signup?group_type=&search=crypto&category_tags=&order=name_asc" target="_blank" rel="noopener noreferrer">UARK Crypto Club</a> - First student-led blockchain society in state of Arkansas</li>
+                        <li>Won 2nd Place in the Razorblock Blockchain Hackathon with CHRG, a decentralized protocol for electric vehicle (EV) charging infrastructure.</li>
                         <li>Contributed to OzDAO - a local Web3 collective.</li>
                       </ul>
                     </div>
                   </article>
-                  <article className="workBox">
+                  {/* <article className="workBox">
                     <div className="workImageContainer">
                       <Image src="/home/xray.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/><br/><br/>
                       <Image src="/home/coldfront.png" alt="Mycelium Testbed" width={500} height={500} unoptimized/>
@@ -159,7 +193,7 @@ const Home = () => {
                         <li>Created <a href="https://coldfront.vercel.app/" className="liveLink" target="_blank" rel="noopener noreferrer">Coldfront</a>, a weather app offering current conditions, relevant news, and predictive analysis for Razorbacks Baseball games.</li>
                       </ul>
                     </div>
-                  </article>
+                  </article> */}
                 </div>
               </section>
               <section className="skillsSection" id="skills">
