@@ -1,18 +1,11 @@
-import fs from 'fs';
-import path from 'path';
 import { useState } from 'react';
 import { remark } from 'remark';
 import html from 'remark-html';
+import path from 'path';
 
-export async function getStaticProps() {
-  const guidesDir = path.join(process.cwd(), 'public', 'guides');
-  let filenames = [];
-  try {filenames = fs.readdirSync(guidesDir).filter(file => file.endsWith('.md'));} catch (error) {console.error('Error reading guides directory:', error);}
-  return { props: { filenames } };
-}
-
-export default function MarkdownPage({ filenames = [] }) {
+export default function GuidesComponent({ filenames = [] }) {
   const [contentHtml, setContentHtml] = useState('');
+  
   const loadFile = async (filename) => {
     const filePath = path.join('/guides', filename); // Adjusted path
     const response = await fetch(filePath);
@@ -27,4 +20,4 @@ export default function MarkdownPage({ filenames = [] }) {
       <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
     </div>
   );
-}
+} 

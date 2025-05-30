@@ -1,14 +1,14 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import Section from '../components/basket/section';
-import ProviderWrapper from '../components/basket/providers/ProviderWrapper';
+import Section from '../basket/section';
+import ProviderWrapper from '../basket/providers/ProviderWrapper';
 import '../styles/basket/page.module.css';
 import '../styles/basket/globals.css';
 require('@solana/wallet-adapter-react-ui/styles.css');
 import Image from 'next/image';
 
-export default function Basket() {
+export default function BasketComponent() {
   const wallet = useWallet();
   const [assetInfoList, setAssetInfoList] = useState([]);
   const [tps, setTps] = useState(null);
@@ -68,4 +68,4 @@ export default function Basket() {
       </main>
     </ProviderWrapper>
   )
-}
+} 

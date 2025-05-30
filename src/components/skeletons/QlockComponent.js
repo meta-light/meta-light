@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-export default function Home() {
+export default function QlockComponent() {
   useEffect(() => {
     let j, o, y, x, c, i, D, S, r;
     (r=()=>setInterval(t=>{for(j=o="\n",y=5;y--;document.body["inn"
@@ -48,4 +48,4 @@ export default function Home() {
       `}</style>
     </>
   );
-}
+} 

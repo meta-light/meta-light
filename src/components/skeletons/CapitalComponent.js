@@ -5,8 +5,7 @@ import '../styles/capital/sass/main.scss'
 import '../styles/capital/css/fontawesome-all.min.css'
 import '../styles/capital/sass/noscript.scss'
 
-
-export default function capital() {
+export default function CapitalComponent() {
 	const [isLoaded, setIsLoaded] = useState(false);
 	useEffect(() => {const timer = setTimeout(() => {document.body.classList.remove('is-preload'); setIsLoaded(true);}, 100); return () => clearTimeout(timer);}, []);
     return (
@@ -85,8 +84,8 @@ export default function capital() {
 			<Script src="/capital/scripts/jquery.min.js" strategy="beforeInteractive"/>
 			<Script src="/capital/scripts/breakpoints.min.js" strategy="beforeInteractive"/>
 			<Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive"/>
-			<Script src="/capital/scripts/util.js" strategy="beforeInteractive"/>
+			<Script src="/capital/scripts/util.js" strategy="afterInteractive"/>
 			<Script src="/capital/scripts/main.js" strategy="afterInteractive"/>
         </>
     );
-}
+} 

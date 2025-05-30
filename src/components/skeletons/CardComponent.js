@@ -5,7 +5,7 @@ import '../app/styles/LineIcons.css'
 import '../app/globals.css'
 import 'terminal.css'
 
-export default function Card() {
+export default function CardComponent() {
     const [apiKey, setApiKey] = useState('');
 
     useEffect(() => {
@@ -83,4 +83,4 @@ export default function Card() {
         </div>
     </>
   );
-}
+} 

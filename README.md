@@ -7,9 +7,6 @@
 - [DePIN Pulse](https://depinpulse.app): A DePIN ecosystem opportunities aggregator and research tool.
 - [Coldfront](https://github.com/meta-lite/coldfront): A simple weather app that displays current conditions, as well as relevant news and information about Razorbacks Baseball.
 - [MultiNode](https://twitter.com/0xMetaLight/status/1630989599488049154?s=20): Research around the application of low-power cluster computing in blockchain node operation.
-- [SolCV](https://carpinito.id/card): A Solana based framework for creating cNFT business cards.
-- [Meta Movies](https://carpinito.id/movies): Personal movie database leveraging OMDB, built with NextJS.
-- [CNFT-Basket](https://carpinito.id/basket): WIP CNFT grouping tool for multi-CNFT trading on secondary markets.
 
 ### Contributions
 - [awesome-depin](https://github.com/iotexproject/awesome-depin): A curated list of all DePIN research, projects and resources.
