@@ -7,7 +7,7 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=optional" rel="stylesheet" />
           <Script src="/capital/scripts/jquery.min.js" strategy="beforeInteractive" />
           <Script src="/capital/scripts/browser.min.js" strategy="beforeInteractive" />

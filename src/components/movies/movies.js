@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Search from '../components/movies/Search';
-import Results from '../components/movies/Results';
+import Search from '../movies/Search';
+import Results from '../movies/Results';
 import axios from 'axios';
-import Popup from '../components/movies/Popup';
+import Popup from '../movies/Popup';
 import styles from '../styles/movies/Home.module.css';
 
 function App()

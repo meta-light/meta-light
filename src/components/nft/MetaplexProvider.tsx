@@ -1,9 +1,13 @@
 import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js';
 import { MetaplexContext } from './useMetaplex';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useMemo } from 'react';
+import { useMemo, ReactNode } from 'react';
 
-export const MetaplexProvider = ({ children }) => {
+interface MetaplexProviderProps {
+  children: ReactNode;
+}
+
+export const MetaplexProvider = ({ children }: MetaplexProviderProps) => {
   const { connection } = useConnection();
   const wallet = useWallet();
 
@@ -13,7 +17,7 @@ export const MetaplexProvider = ({ children }) => {
   );
 
   return (
-    <MetaplexContext.Provider value={{ metaplex }}>
+    <MetaplexContext.Provider value={{ metaplex } as any}>
       {children}
     </MetaplexContext.Provider>
   )

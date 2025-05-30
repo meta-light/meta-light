@@ -1,9 +1,9 @@
 import '../app/globals.css';
-import { UiLayout } from '../pines/ui/ui-layout';
-import { ClusterProvider } from '../pines/cluster/cluster-data-access';
-import { SolanaProvider } from '../pines/solana/solana-provider';
-import { ReactQueryProvider } from '../pines/react-query-provider';
-import DashboardFeature from '../pines/dashboard/dashboard-feature';
+import { UiLayout } from './ui/ui-layout';
+import { ClusterProvider } from './cluster/cluster-data-access';
+import { SolanaProvider } from './solana/solana-provider';
+import { ReactQueryProvider } from './react-query-provider';
+import DashboardFeature from './dashboard/dashboard-feature';
 
 export const metadata = { title: 'The Pines', description: "There's no need to pine over spilled milk" };
 

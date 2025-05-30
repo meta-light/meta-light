@@ -61,7 +61,10 @@ const Works = () => {
         </WorkBox>
 
         <WorkBox
+          images={[]}
           title="Volunteering"
+          company=""
+          companyUrl=""
           techStack={["Web3", "Strategy", "Mentoring"]}
         >
           <ul>
@@ -80,6 +83,8 @@ const Works = () => {
         <WorkBox
           images={[{ src: "/home/cc.png", alt: "UARK" }]}
           title="Blockchain @ University of Arkansas"
+          company=""
+          companyUrl=""
           techStack={["Web3", "Finance", "Computer Science"]}
         >
           <ul>

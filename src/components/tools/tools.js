@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from 'react';
 import '../styles/tailwind.css';
-import SnapshotTool from '../components/tools/snapshot';
-import FindFirstTX from '../components/tools/findFirstTX';
-import GetBalance from '../components/tools/getBalance';
-import SolanaHex from '../components/tools/SolanaHex';
-import SolanaSwap from '../components/tools/solanaSwap';
-import SolanaUtils from '../components/tools/solanaUtils';
-import SolanaMetadata from '../components/tools/solanaMetadata';
-import UpdateMetadata from '../components/tools/update-metadata';
-import CNFTHolders from '../components/tools/cnft-holders';
+import SnapshotTool from '../tools/snapshot';
+import FindFirstTX from '../tools/findFirstTX';
+import GetBalance from '../tools/getBalance';
+import SolanaHex from '../tools/SolanaHex';
+import SolanaSwap from '../tools/solanaSwap';
+import SolanaUtils from '../tools/solanaUtils';
+import SolanaMetadata from '../tools/solanaMetadata';
+import UpdateMetadata from '../tools/update-metadata';
+import CNFTHolders from '../tools/cnft-holders';
 
 export default function Home() {
   const [activeTool, setActiveTool] = useState('snapshot');

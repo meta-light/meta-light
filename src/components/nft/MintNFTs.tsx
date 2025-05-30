@@ -24,7 +24,7 @@ export const MintNFTs = ({ onClusterChange }) => {
   const { metaplex } = useMetaplex();
   const wallet = useWallet();
 
-  const [nft, setNft] = useState(null);
+  const [nft, setNft] = useState<any>(null);
 
   const [isLive, setIsLive ] = useState(true)
   const [hasEnded, setHasEnded ] = useState(false)
@@ -52,6 +52,9 @@ export const MintNFTs = ({ onClusterChange }) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(DEFAULT_GUARD_NAME);
   const [candyMachineLoaded, setCandyMachineLoaded] = useState(false);
+  if (!process.env.NEXT_PUBLIC_CANDY_MACHINE_ID) {
+    throw new Error("NEXT_PUBLIC_CANDY_MACHINE_ID is not set");
+  }
 
   const candyMachineAddress = new PublicKey(process.env.NEXT_PUBLIC_CANDY_MACHINE_ID);
   let candyMachine;
@@ -60,8 +63,9 @@ export const MintNFTs = ({ onClusterChange }) => {
   
 
   const fetchMintedCount = async () => {
+    if (!metaplex) return;
     try {
-      const candyMachineState = await metaplex
+      const candyMachineState = await (metaplex as any)
         .candyMachines()
         .findByAddress({ address: candyMachineAddress });
 
@@ -102,6 +106,7 @@ export const MintNFTs = ({ onClusterChange }) => {
   }, [selectedGroup, mintingInProgress])
 
   const addListener = async () => {
+    if (!metaplex) return;
     // The below listeners were getting too noisy, and resulting in 429's from Solana endpoints.
     // Turning them off for now as a workaround until a more stable release is out from Metaplex
 
@@ -116,8 +121,8 @@ export const MintNFTs = ({ onClusterChange }) => {
     // );
 
     // add a listener to reevaluate if the user is allowed to mint if startDate is reached
-    const slot = await metaplex.connection.getSlot();
-    const solanaTime = await metaplex.connection.getBlockTime(slot);
+    const slot = await (metaplex as any).connection.getSlot();
+    const solanaTime = await (metaplex as any).connection.getBlockTime(slot);
     const startDateGuard = getGuard(selectedGroup, candyMachine).startDate;
     if (startDateGuard != null) {
       const candyStartDate = startDateGuard.date.toString(10);
@@ -162,13 +167,13 @@ const LearnMoreButton = () => {
 
   const checkEligibility = async () => {
     //wallet not connected?
-    if (!wallet.connected) {
+    if (!wallet.connected || !metaplex) {
       setDisableMint(true);
       return;
     }
 
     // read candy machine state from chain
-    candyMachine = await metaplex
+    candyMachine = await (metaplex as any)
       .candyMachines()
       .findByAddress({ address: candyMachineAddress });
     
@@ -200,8 +205,8 @@ const LearnMoreButton = () => {
     const guard = getGuard(selectedGroup, candyMachine);
 
     // Calculate current time based on Solana BlockTime which the on chain program is using - startTime and endTime guards will need that
-    const slot = await metaplex.connection.getSlot();
-    const solanaTime = await metaplex.connection.getBlockTime(slot);
+    const slot = await (metaplex as any).connection.getSlot();
+    const solanaTime = await (metaplex as any).connection.getBlockTime(slot);
 
     if (guard.startDate != null) {
       const candyStartDate = guard.startDate.date.toString(10);
@@ -224,7 +229,7 @@ const LearnMoreButton = () => {
     }
 
     if (guard.addressGate != null) {
-      if (metaplex.identity().publicKey.toBase58() != guard.addressGate.address.toBase58()) {
+      if ((metaplex as any).identity().publicKey.toBase58() != guard.addressGate.address.toBase58()) {
         console.error("addressGate: You are not allowed to mint");
         setDisableMint(true);
         setAddressGateAllowedToMint(false)
@@ -233,14 +238,14 @@ const LearnMoreButton = () => {
     }
 
     if (guard.mintLimit != null) {
-      const mitLimitCounter = metaplex.candyMachines().pdas().mintLimitCounter({
+      const mitLimitCounter = (metaplex as any).candyMachines().pdas().mintLimitCounter({
         id: guard.mintLimit.id,
-        user: metaplex.identity().publicKey,
+        user: (metaplex as any).identity().publicKey,
         candyMachine: candyMachine.address,
         candyGuard: candyMachine.candyGuard.address,
       });
       //Read Data from chain
-      const mintedAmountBuffer = await metaplex.connection.getAccountInfo(mitLimitCounter, "processed");
+      const mintedAmountBuffer = await (metaplex as any).connection.getAccountInfo(mitLimitCounter, "processed");
       let mintedAmount;
       if (mintedAmountBuffer != null) {
         mintedAmount = mintedAmountBuffer.data.readUintLE(0, 1);
@@ -254,8 +259,8 @@ const LearnMoreButton = () => {
     }
 
     if (guard.solPayment != null) {
-      walletBalance = await metaplex.connection.getBalance(
-        metaplex.identity().publicKey
+      walletBalance = await (metaplex as any).connection.getBalance(
+        (metaplex as any).identity().publicKey
       );
 
       const costInLamports = guard.solPayment.amount.basisPoints.toString(10);
@@ -269,8 +274,8 @@ const LearnMoreButton = () => {
     }
 
     if (guard.freezeSolPayment != null) {
-      walletBalance = await metaplex.connection.getBalance(
-        metaplex.identity().publicKey
+      walletBalance = await (metaplex as any).connection.getBalance(
+        (metaplex as any).identity().publicKey
       );
 
       const costInLamports = guard.freezeSolPayment.amount.basisPoints.toString(10);
@@ -284,7 +289,7 @@ const LearnMoreButton = () => {
     }
 
     if (guard.nftGate != null) {
-      const ownedNfts = await metaplex.nfts().findAllByOwner({ owner: metaplex.identity().publicKey });
+      const ownedNfts = await (metaplex as any).nfts().findAllByOwner({ owner: (metaplex as any).identity().publicKey });
       const nftsInCollection = ownedNfts.filter(obj => {
         return (obj.collection?.address.toBase58() === guard.nftGate.requiredCollection.toBase58()) && (obj.collection?.verified === true);
       });
@@ -297,7 +302,7 @@ const LearnMoreButton = () => {
     }
 
     if (guard.nftBurn != null) {
-      const ownedNfts = await metaplex.nfts().findAllByOwner({ owner: metaplex.identity().publicKey });
+      const ownedNfts = await (metaplex as any).nfts().findAllByOwner({ owner: (metaplex as any).identity().publicKey });
       const nftsInCollection = ownedNfts.filter(obj => {
         return (obj.collection?.address.toBase58() === guard.nftBurn.requiredCollection.toBase58()) && (obj.collection?.verified === true);
       });
@@ -310,7 +315,7 @@ const LearnMoreButton = () => {
     }
 
     if (guard.nftPayment != null) {
-      const ownedNfts = await metaplex.nfts().findAllByOwner({ owner: metaplex.identity().publicKey });
+      const ownedNfts = await (metaplex as any).nfts().findAllByOwner({ owner: (metaplex as any).identity().publicKey });
       const nftsInCollection = ownedNfts.filter(obj => {
         return (obj.collection?.address.toBase58() === guard.nftPayment.requiredCollection.toBase58()) && (obj.collection?.verified === true);
       });
@@ -332,8 +337,8 @@ const LearnMoreButton = () => {
     }
 
     if (guard.tokenBurn != null) {
-      const ata = await metaplex.tokens().pdas().associatedTokenAccount({ mint: guard.tokenBurn.mint, owner: metaplex.identity().publicKey });
-      const balance = await metaplex.connection.getTokenAccountBalance(ata);
+      const ata = await (metaplex as any).tokens().pdas().associatedTokenAccount({ mint: guard.tokenBurn.mint, owner: (metaplex as any).identity().publicKey });
+      const balance = await (metaplex as any).connection.getTokenAccountBalance(ata);
       if (balance < guard.tokenBurn.amount.basisPoints.toNumber()) {
         console.error("tokenBurn: Not enough SPL tokens to burn!");
         setDisableMint(true);
@@ -343,8 +348,8 @@ const LearnMoreButton = () => {
     }
 
     if (guard.tokenGate != null) {
-      const ata = await metaplex.tokens().pdas().associatedTokenAccount({ mint: guard.tokenGate.mint, owner: metaplex.identity().publicKey });
-      const balance = await metaplex.connection.getTokenAccountBalance(ata);
+      const ata = await (metaplex as any).tokens().pdas().associatedTokenAccount({ mint: guard.tokenGate.mint, owner: (metaplex as any).identity().publicKey });
+      const balance = await (metaplex as any).connection.getTokenAccountBalance(ata);
       if (balance < guard.tokenGate.amount.basisPoints.toNumber()) {
         console.error("tokenGate: Not enough SPL tokens!");
         setDisableMint(true);
@@ -354,8 +359,8 @@ const LearnMoreButton = () => {
     }
 
     if (guard.tokenPayment != null) {
-      const ata = await metaplex.tokens().pdas().associatedTokenAccount({ mint: guard.tokenPayment.mint, owner: metaplex.identity().publicKey });
-      const balance = await metaplex.connection.getTokenAccountBalance(ata);
+      const ata = await (metaplex as any).tokens().pdas().associatedTokenAccount({ mint: guard.tokenPayment.mint, owner: (metaplex as any).identity().publicKey });
+      const balance = await (metaplex as any).connection.getTokenAccountBalance(ata);
       if (balance < guard.tokenPayment.amount.basisPoints.toNumber()) {
         console.error("tokenPayment: Not enough SPL tokens to pay!");
         setDisableMint(true);
@@ -363,8 +368,8 @@ const LearnMoreButton = () => {
         return;
       }
       if (guard.freezeTokenPayment != null) {
-        const ata = await metaplex.tokens().pdas().associatedTokenAccount({ mint: guard.freezeTokenPayment.mint, owner: metaplex.identity().publicKey });
-        const balance = await metaplex.connection.getTokenAccountBalance(ata);
+        const ata = await (metaplex as any).tokens().pdas().associatedTokenAccount({ mint: guard.freezeTokenPayment.mint, owner: (metaplex as any).identity().publicKey });
+        const balance = await (metaplex as any).connection.getTokenAccountBalance(ata);
         if (balance < guard.tokenPayment.amount.basisPoints.toNumber()) {
           console.error("freezeTokenPayment: Not enough SPL tokens to pay!");
           setDisableMint(true);
@@ -448,6 +453,7 @@ const LearnMoreButton = () => {
   };
 
   const mintSingleNFT = async () => {
+    if (!metaplex) return;
     setMintingInProgress(true);
     try {
       // Here the actual mint happens. Depending on the guards that you are using you have to run some pre validation beforehand 
@@ -455,10 +461,10 @@ const LearnMoreButton = () => {
       await mintingGroupAllowlistCheck();
 
       const group = selectedGroup == DEFAULT_GUARD_NAME ? undefined : selectedGroup;
-      const { nft } = await metaplex.candyMachines().mint({
+      const { nft } = await (metaplex as any).candyMachines().mint({
         candyMachine,
         collectionUpdateAuthority: candyMachine.authorityAddress,
-        ...group && { group },
+        ...(group ? { group } : {}),
       });
 
       setNft(nft);
@@ -471,6 +477,7 @@ const LearnMoreButton = () => {
 
 
   const mintingGroupAllowlistCheck = async () => {
+    if (!metaplex) return;
     const group = selectedGroup == DEFAULT_GUARD_NAME ? undefined : selectedGroup;
 
     const guard = getGuard(selectedGroup, candyMachine);
@@ -486,17 +493,17 @@ const LearnMoreButton = () => {
       throw new Error(`Cannot mint, as no list of accounts provided for group ${selectedGroup} with allowlist settings enabled`)
     }
 
-    const mintingWallet = metaplex.identity().publicKey.toBase58();
+    const mintingWallet = (metaplex as any).identity().publicKey.toBase58();
 
     try {
-      await metaplex.candyMachines().callGuardRoute({
+      await (metaplex as any).candyMachines().callGuardRoute({
         candyMachine,
         guard: 'allowList',
         settings: {
           path: 'proof',
           merkleProof: getMerkleProof(groupDetails.wallets, mintingWallet),
         },
-        ...group && { group },
+        ...(group ? { group } : {}),
       });
     } catch (e) {
       console.error(`MerkleTreeProofMismatch: Wallet ${mintingWallet} is not allowlisted for minting in the group ${selectedGroup}`);
@@ -540,7 +547,7 @@ const LearnMoreButton = () => {
           (
             <div className={styles.inlineContainer}>
               <h1 className={styles.title}>Minting Group: </h1>
-              <select onChange={onGroupChanged} className={styles.dropdown} defaultValue={selectedGroup}>
+              <select onChange={onGroupChanged} className={styles.dropdown} defaultValue={selectedGroup || undefined}>
                 {
                   groups.map(group => {
                     return (
