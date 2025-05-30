@@ -1,9 +1,5 @@
-### Resources 
-- [Awesome-Eclipse](https://github.com/meta-light/awesome-eclipse): An Eclipse Ecosystem Resource Guide.
-- [Solana-Rolodex, Hello-Sugar, Textbook.md](https://www.carpinito.id/guides) and all other guides have been transfered to my personal site.
-
 ### Projects
-- [Eclipse XRAY](https://github.com/meta-light/eclipse-xray): An Eclipse implimentation of the XRAY Solana Explorer.
+- [Eclipse XRAY](https://github.com/ParameterResearch/eclipse-xray): An Eclipse implimentation of the XRAY Solana Explorer.
 - [DePIN Pulse](https://depinpulse.app): A DePIN ecosystem opportunities aggregator and research tool.
 - [Coldfront](https://github.com/meta-lite/coldfront): A simple weather app that displays current conditions, as well as relevant news and information about Razorbacks Baseball.
 - [MultiNode](https://twitter.com/0xMetaLight/status/1630989599488049154?s=20): Research around the application of low-power cluster computing in blockchain node operation.
