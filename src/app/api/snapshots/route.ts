@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    // Get API key from environment variables
     const underdogApiKey = process.env.UNDERDOG_API_KEY;
     if (!underdogApiKey) {
       return NextResponse.json(
@@ -10,7 +9,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
     const postOptions = {
       method: 'POST',
       headers: {
@@ -19,9 +17,7 @@ export async function POST(request: NextRequest) {
         authorization: `Bearer ${underdogApiKey}`
       }
     };
-
     const response = await fetch('https://devnet.underdogprotocol.com/v2/snapshots', postOptions);
-    
     if (!response.ok) {
       const errorData = await response.json();
       return NextResponse.json(
@@ -29,17 +25,15 @@ export async function POST(request: NextRequest) {
         { status: response.status }
       );
     }
-
     const data = await response.json();
     console.log('Snapshot created:', data);
-
     return NextResponse.json({
       success: true,
       message: 'Snapshot created successfully',
       data: data
     });
-
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error creating snapshot:', error);
     return NextResponse.json(
       {
@@ -57,7 +51,6 @@ export async function GET(request: NextRequest) {
     const page = searchParams.get('page') || '1';
     const limit = searchParams.get('limit') || '10';
 
-    // Get API key from environment variables
     const underdogApiKey = process.env.UNDERDOG_API_KEY;
     if (!underdogApiKey) {
       return NextResponse.json(

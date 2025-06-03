@@ -3,38 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const { underdogId } = await request.json();
-
-    if (!underdogId) {
-      return NextResponse.json(
-        { error: 'Underdog ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // Get API key from environment variables
+    if (!underdogId) {return NextResponse.json({ error: 'Underdog ID is required' }, { status: 400 });}
     const underdogApiKey = process.env.UNDERDOG_API_KEY;
-    if (!underdogApiKey) {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 }
-      );
-    }
-
+    if (!underdogApiKey) {return NextResponse.json({ error: 'API key not configured' }, { status: 500 });}
     const url = `https://mainnet.underdogprotocol.com/v2/projects/1/nfts/${underdogId}`;
-    
     const response = await fetch(url, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${underdogApiKey}`
-      },
+      headers: {'Content-Type': 'application/json', Authorization: `Bearer ${underdogApiKey}`},
       body: JSON.stringify({
-        attributes: {
-          staked: 'false',
-          supply: '222',
-          price: '0',
-          namespace: 'public'
-        },
+        attributes: {staked: 'false', supply: '222', price: '0', namespace: 'public'},
         name: 'The Pines',
         symbol: 'PINE',
         description: 'There\'s no need to pine over spilled milk.',
@@ -42,32 +19,16 @@ export async function POST(request: NextRequest) {
         externalUrl: 'https://t.me/+iVKU8g_o5j5jOWUx'
       })
     });
-
     if (!response.ok) {
       const errorData = await response.json();
-      return NextResponse.json(
-        { error: 'Failed to unstake Pine NFT', details: errorData },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to unstake Pine NFT', details: errorData }, { status: response.status });
     }
-
     const data = await response.json();
     console.log('Pine unstaked successfully:', data);
-
-    return NextResponse.json({
-      success: true,
-      message: `Pine NFT ${underdogId} unstaked successfully`,
-      data: data
-    });
-
-  } catch (error) {
+    return NextResponse.json({success: true, message: `Pine NFT ${underdogId} unstaked successfully`, data: data});
+  } 
+  catch (error) {
     console.error('Error unstaking Pine NFT:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error'}, { status: 500 });
   }
 } 

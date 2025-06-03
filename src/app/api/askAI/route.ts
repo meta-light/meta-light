@@ -1,18 +1,29 @@
 import { OpenAI } from 'openai';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {return res.status(405).json({ error: 'Method not allowed' });}
-  const { query } = req.body;
-  if (!query) {return res.status(400).json({ error: 'Query is required' });}
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-  if (!apiKey) {return res.status(500).json({ error: 'OpenAI API key is not configured' });}
-  const openai = new OpenAI({ apiKey });
+export async function POST(request: NextRequest) {
   try {
-    const completion = await openai.chat.completions.create({model: "gpt-3.5-turbo", messages: [{ role: "user", content: query }],});
-    res.status(200).json({ response: completion.choices[0].message.content });
-  } 
-  catch (error) {
+    const { query } = await request.json();
+    
+    if (!query) {
+      return NextResponse.json({ error: 'Query is required' }, { status: 400 });
+    }
+    
+    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: 'OpenAI API key is not configured' }, { status: 500 });
+    }
+    
+    const openai = new OpenAI({ apiKey });
+    
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", 
+      messages: [{ role: "user", content: query }],
+    });
+    
+    return NextResponse.json({ response: completion.choices[0].message.content }, { status: 200 });
+  } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred while processing your request' });
+    return NextResponse.json({ error: 'An error occurred while processing your request' }, { status: 500 });
   }
 }

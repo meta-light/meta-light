@@ -3,25 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const { underdogId } = await request.json();
-
-    if (!underdogId) {
-      return NextResponse.json(
-        { error: 'Underdog ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // Get API key from environment variables
+    if (!underdogId) {return NextResponse.json({ error: 'Underdog ID is required' }, { status: 400 });}
     const underdogApiKey = process.env.UNDERDOG_API_KEY;
-    if (!underdogApiKey) {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 }
-      );
-    }
-
+    if (!underdogApiKey) {return NextResponse.json({ error: 'API key not configured' }, { status: 500 });}
     const url = `https://mainnet.underdogprotocol.com/v2/projects/1/nfts/${underdogId}`;
-    
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
@@ -42,7 +27,6 @@ export async function POST(request: NextRequest) {
         externalUrl: 'https://t.me/+iVKU8g_o5j5jOWUx'
       })
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       return NextResponse.json(
@@ -50,17 +34,15 @@ export async function POST(request: NextRequest) {
         { status: response.status }
       );
     }
-
     const data = await response.json();
     console.log('Pine staked successfully:', data);
-
     return NextResponse.json({
       success: true,
       message: `Pine NFT ${underdogId} staked successfully`,
       data: data
     });
-
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error staking Pine NFT:', error);
     return NextResponse.json(
       {

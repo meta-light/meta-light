@@ -4,7 +4,6 @@ export async function POST(request: NextRequest) {
   try {
     const { receiverAddress } = await request.json();
 
-    // Validate input
     if (!receiverAddress) {
       return NextResponse.json(
         { error: 'Receiver address is required' },
@@ -12,7 +11,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate Solana address format (basic validation)
     if (receiverAddress.length < 30) {
       return NextResponse.json(
         { error: 'Invalid Solana address format' },
@@ -20,7 +18,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get API key from environment variables
     const apiKey = process.env.UNDERDOG_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
@@ -58,7 +55,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if minting was successful
     if (data.projectId === 4) {
       return NextResponse.json({
         success: true,

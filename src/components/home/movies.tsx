@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from '../styles/movies/Home.module.css';
-import { OMDB_API_KEY } from '../app/env';
+import { OMDB_API_KEY } from '../../app/env';
 
 export default function Movies() {
   const [state, setState] = useState({ s: "", results: [] as any[], selected: {} as any });

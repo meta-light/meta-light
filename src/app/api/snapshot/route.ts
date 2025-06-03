@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
     let page: number | null = 1;
     let assetList: any[] = [];
     
-    // Fetch all assets with pagination
     while (page) {
       const response = await fetch(url, {
         method: "POST",
@@ -70,7 +69,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Process ownership data to get unique owners
     const rawList = assetList.map(item => item.ownership?.owner).filter(Boolean);
     let uniqueOwners: string[] = [];
     rawList.forEach(owner => {
@@ -79,7 +77,6 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Try to call the existing processDuplicates API if it exists
     try {
       const processResponse = await fetch(`${process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_VERCEL_URL || 'https://your-domain.com'}/api/processDuplicates`, {
         method: 'POST',
@@ -103,7 +100,6 @@ export async function POST(request: NextRequest) {
       console.log('processDuplicates API not available, returning raw data');
     }
 
-    // If processDuplicates API is not available, return the data directly
     return NextResponse.json({
       success: true,
       uniqueOwners,

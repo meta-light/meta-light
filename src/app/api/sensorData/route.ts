@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get sensor credentials from environment variables
     const sensecapEUI = process.env.SENSECAP_EUI;
     const sensecapKey = process.env.SENSECAP_KEY;
 
@@ -13,7 +12,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch data from SenseCap API
     const response = await fetch(
       `https://sensecap.seeed.cc/openapi/list_telemetry_data?device_eui=${sensecapEUI}`,
       {
@@ -41,24 +39,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Process the sensor data
     const labels: string[] = [];
     const temperatureData: number[] = [];
     const humidityData: number[] = [];
     const CO2Data: number[] = [];
 
     try {
-      // Navigate the nested data structure
       const sensorReadings = data[1];
       if (!sensorReadings || !Array.isArray(sensorReadings) || sensorReadings.length < 3) {
         throw new Error('Incomplete sensor data');
       }
 
-      const tempReadings = sensorReadings[0]; // Temperature readings
-      const humidityReadings = sensorReadings[1]; // Humidity readings  
-      const co2Readings = sensorReadings[2]; // CO2 readings
+      const tempReadings = sensorReadings[0];
+      const humidityReadings = sensorReadings[1];
+      const co2Readings = sensorReadings[2];
 
-      // Process each reading
       for (let index = 0; index < tempReadings.length; index++) {
         if (tempReadings[index] && humidityReadings[index] && co2Readings[index]) {
           const temperature = tempReadings[index][0];
@@ -82,7 +77,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Return processed data
     return NextResponse.json({
       success: true,
       data: {

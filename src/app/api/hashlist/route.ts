@@ -21,8 +21,6 @@ export async function POST(request: NextRequest) {
 
     const url = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
     
-    // Note: This only fetches the first 1000 items as per the original logic
-    // If you need all items, implement pagination like in cnft-holders
     const response = await fetch(url, {
       method: 'POST',
       headers: {

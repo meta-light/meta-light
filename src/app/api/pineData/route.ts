@@ -12,7 +12,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get API keys from environment variables
     const underdogApiKey = process.env.UNDERDOG_API_KEY;
     const heliusApiKey = process.env.HELIUS_API_KEY;
 
@@ -48,7 +47,6 @@ export async function GET(request: NextRequest) {
       })
     };
 
-    // Fetch data from both APIs
     const totalPages = 3;
     let underdogData: {
       id: string;
@@ -58,7 +56,6 @@ export async function GET(request: NextRequest) {
       mintAddress: string;
     }[] = [];
 
-    // Fetch Underdog data across multiple pages
     for (let i = 1; i <= totalPages; i++) {
       const response = await fetch(
         `https://mainnet.underdogprotocol.com/v2/projects/1/nfts?page=${i}&limit=100`,
@@ -76,7 +73,6 @@ export async function GET(request: NextRequest) {
       underdogData = underdogData.concat(data.results);
     }
 
-    // Fetch Helius data
     const heliusResponse = await fetch(heliusUrl, heliusOptions);
     if (!heliusResponse.ok) {
       return NextResponse.json(
@@ -97,7 +93,6 @@ export async function GET(request: NextRequest) {
       };
     }[] = heliusResult.result.items;
 
-    // Process and combine the data
     const pinesData = underdogData.map((item) => ({
       underdogId: item.id,
       underdogHolder: item.ownerAddress,
@@ -108,10 +103,8 @@ export async function GET(request: NextRequest) {
       heliusStaked: heliusData.find((heliusItem) => heliusItem.id === item.mintAddress)?.content.metadata.attributes.find(attr => attr.trait_type === 'staked')?.value || 'Unknown',
     }));
 
-    // Filter for the specified wallet
     const pinesOwnedByWallet = pinesData.filter((item) => item.heliusHolder === walletAddress);
 
-    // Calculate holdings statistics
     const pinesHolders = pinesData.reduce((acc: { [key: string]: number }, item) => {
       acc[item.heliusHolder] = (acc[item.heliusHolder] || 0) + 1;
       return acc;
