@@ -1,21 +1,24 @@
 import fs from 'fs';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default function handler(req, res) {
-  if (req.method === 'POST') {
-    const { title } = req.body;
+export async function POST(request: NextRequest) {
+  try {
+    const { title } = await request.json();
     const filePath = 'public/myList.txt';
-    fs.appendFile(filePath, '\n' + title, (error) => {
-      if (error) {
-        console.error('Error adding movie to list:', error);
-        res.status(500).json({ error: 'Error adding movie to list' });
-      } 
-      else {
-        console.log('Movie added to list successfully');
-        res.status(200).json({ message: 'Movie added to list successfully' });
-      }
+    
+    return new Promise<NextResponse>((resolve, reject) => {
+      fs.appendFile(filePath, '\n' + title, (error) => {
+        if (error) {
+          console.error('Error adding movie to list:', error);
+          resolve(NextResponse.json({ error: 'Error adding movie to list' }, { status: 500 }));
+        } else {
+          console.log('Movie added to list successfully');
+          resolve(NextResponse.json({ message: 'Movie added to list successfully' }, { status: 200 }));
+        }
+      });
     });
-  } 
-  else {
-    res.status(405).json({ error: 'Method Not Allowed' });
+  } catch (error) {
+    console.error('Error parsing request:', error);
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
   }
 }
