@@ -19,7 +19,7 @@ const Header = () => {
             <li><a href="https://twitter.com/0xMetaLight" target="_blank" rel="noopener noreferrer"><i className="lni lni-twitter-original" aria-label="Link to my Twitter profile."></i></a></li>
             <li><a href="https://medium.com/@meta-light" target="_blank" rel="noopener noreferrer"><i className="lni lni-medium" aria-label="Link to my Medium Blog."></i></a></li>
             <li><a href="https://dune.com/metalight/" target="_blank" rel="noopener noreferrer"><img src="/home/dune-logo.png" aria-label="Dune Dashboards" width={20} height={20}/></a></li>
-            <li><a href="https://flipsidecrypto.xyz/MetaLight/" target="_blank" rel="noopener noreferrer"><img src="/home/flipside.png" alt="Flipside Dashboards" width={20} height={20}/></a></li>
+            <li><a href="https://www.parameter.ventures/" target="_blank" rel="noopener noreferrer"><img src="/home/icons/substack.svg" alt="Substack" width={20} height={20}/></a></li>
           </ul>
         </div>
       </div>

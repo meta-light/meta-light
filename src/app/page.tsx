@@ -137,8 +137,8 @@ export default function CarpinitoLanding() {
               <a href="https://dune.com/metalight" target="_blank" rel="noopener noreferrer">
                 <img src="/home/icons/dune.png" alt="Telegram" width={20} height={20} />
               </a>
-              <a href="https://flipside.com/@metalight" target="_blank" rel="noopener noreferrer">
-                <img src="/home/icons/flipside.png" alt="Flipside" width={20} height={20} className="h-4 w-4 invert" />
+              <a href="https://www.parameter.ventures/" target="_blank" rel="noopener noreferrer">
+                <img src="/home/icons/substack.svg" alt="Substack" width={20} height={20} className="h-4 w-4 invert" />
               </a>
             </div>
           </div>
@@ -164,15 +164,18 @@ export default function CarpinitoLanding() {
                     {experience.achievements.length > 0 && (
                       <div className="text-xs text-gray-500">
                         {experience.achievements.map((achievement, i) => (
-                          <div key={i}>
+                          <div key={i} className="flex items-start">
+                            <span className="mr-1">•</span>
                             {achievement.url ? (
-                              <a 
-                                href={achievement.url} 
-                                target="_blank" 
+                              <a
+                                href={achievement.url}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:text-gray-300 hover:underline transition-colors"
-                              >• {achievement.text}</a>
-                            ) : (<div>• {achievement.text}</div>)}
+                              >{achievement.text}</a>
+                            ) : (
+                              <span>{achievement.text}</span>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -195,9 +198,9 @@ export default function CarpinitoLanding() {
         </section>
         <section className="mb-20 border-t border-gray-800 pt-20">
           <h2 className="text-2xl font-bold mb-12 text-center">Art</h2>
-          <div className="flex flex-wrap justify-center">
+          <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
             {images.map((image, index) => (
-                <div key={index} className="relative h-64 md:h-80 w-full md:w-1/3 border-r border-gray-800 md:last:border-r-0 md:[&:nth-child(3n)]:border-r-0">
+                <div key={index} className="relative h-64 md:h-80 w-full md:w-1/3 flex-none border-r border-gray-800 md:last:border-r-0 md:[&:nth-child(3n)]:border-r-0">
                     <Image
                         src={image}
                         alt={`Artwork ${index + 1}`}
