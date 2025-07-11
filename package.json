@@ -33,6 +33,7 @@
     "next": "^14.2.5",
     "openai": "^4.56.0",
     "p-ratelimit": "^1.0.1",
+    "pdfjs-dist": "^5.3.93",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
@@ -40,6 +41,7 @@
     "remark-html": "^16.0.1",
     "sass": "^1.77.4",
     "terminal.css": "^0.7.5",
+    "tesseract.js": "^6.0.1",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
