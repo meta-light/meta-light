@@ -1,0 +1,737 @@
+{
+  "research": [
+    {
+      "title": "Bittensor: Less Leakage, More Leverage",
+      "slug": "bittensor-less-leakage-more-leverage",
+      "kind": "flashnote",
+      "excerpt": "Every block, Bittensor mints TAO and splits it across its subnets, the independent AI markets that compete for that inflation. Each subnet issues its own token, called alpha, and a subnet's emission is the TAO the network pays it each block. Until this week the split rule, TaoFlow, rewarded capital flowing into a subnet's pool. The upgrade Opentensor shipped June 22, 2026 swaps that for a rule that pays subnets whose tokens hold value and return it to TAO holders, at the expense of the rest.",
+      "publishedAt": "2026-06-26T12:17:19.979Z",
+      "tags": [
+        "TAO",
+        "AI"
+      ],
+      "twitterUrl": "https://x.com/i/article/2070485361524871168"
+    },
+    {
+      "title": "Helium: No Longer Inert",
+      "slug": "helium-no-longer-inert",
+      "kind": "flashnote",
+      "excerpt": "Nova Labs sold its consumer Mobile Virtual Network Operator (MVNO), Helium Mobile, to Andrew Yang's Noble Mobile, removing any path for subscription revenue to accrue to HNT, and in the same week published HIP 149, a governance proposal that would mint ~141M HNT, ~77% of circulating supply, into a Nova-administered treasury over 36 months to capitalize network growth. Our July 2025 coverage underwrote Nova's offchain revenue flowing into HNT. The realized path routes value the other way, with the operating businesses sold and new token issuance proposed to fund continued network buildout. The network itself is the strongest it has been, at 2.8M daily active users and $17.9M in annualized onchain revenue, while the proposal's issuance is large relative to the post-halving burn, lifting the effective maximum HNT supply to 347M over the program.",
+      "publishedAt": "2026-06-15T16:14:40.133Z",
+      "tags": [
+        "HNT",
+        "DePIN"
+      ],
+      "twitterUrl": "https://x.com/i/article/2066541760935858177"
+    },
+    {
+      "title": "OBEX: Sky's Accelerator for Real-World Yield",
+      "slug": "obex-sky-s-accelerator-for-real-world-yield",
+      "kind": "article",
+      "excerpt": "OBEX is the most ambitious manifestation of that strategy to date, carrying a $2.5B USDS deployment mandate. Announced in November 2025, it functions as a structured accelerator (part incubator, part capital allocator) designed to manufacture demand for USDS by directing capital toward institutional-grade, yield-generating RWAs.",
+      "publishedAt": "2026-05-14T14:06:13.317Z",
+      "tags": [
+        "SKY",
+        "RWA",
+        "Yield"
+      ],
+      "twitterUrl": "https://x.com/i/article/2054639076565995521"
+    },
+    {
+      "title": "Bittensor: Covenant Null and Void",
+      "slug": "bittensor-covenant-null-and-void",
+      "kind": "flashnote",
+      "excerpt": "The public departure of Covenant AI from Bittensor, following a dispute over subnet emission policy and governance authority, is the most significant stress test the network's decentralization thesis has faced since the dTAO upgrade. Covenant's three subnets collectively controlled ~15% of total network emissions at peak, and the founding team's exit triggered forced selling and a sharp repricing of TAO. The Opentensor Foundation's response centers on two protocol upgrades: Locked Stake and alpha-holder subnet elections. If shipped on a credible timeline, these changes directly address the failure mode the incident exposed.",
+      "publishedAt": "2026-04-17T13:07:20.360Z",
+      "tags": [
+        "TAO",
+        "AI"
+      ]
+    },
+    {
+      "title": "COIL: The Physical Infrastructure Credit Layer",
+      "slug": "coil-the-physical-infrastructure-credit-layer",
+      "kind": "article",
+      "excerpt": "Collateralized Onchain Infrastructure Lending (COIL), sometimes referred to as InfraFi, lowers the capital cost and operational friction for deploying physical infrastructure. ",
+      "publishedAt": "2026-04-02T13:09:51.672Z",
+      "tags": [
+        "DeFi",
+        "DePIN",
+        "Infrastructure",
+        "RWA"
+      ]
+    },
+    {
+      "title": "Groma: Tokenized Rent, Durable Yield",
+      "slug": "groma-tokenized-rent-durable-yield",
+      "kind": "article",
+      "excerpt": "Groma is an attempt to reintroduce productive asset backing into monetary design by anchoring a token to a diversified portfolio of real estate. Unlike fiat, where value is policy-mediated, or crypto-native assets, whose value is primarily reflexive or expectation-driven, GromaCoin is explicitly balance-sheet constrained, with monetary expansion governed by asset acquisition.",
+      "publishedAt": "2026-03-02T15:30:03.831Z",
+      "tags": [
+        "RWA",
+        "TOKENIZATION"
+      ]
+    },
+    {
+      "title": "USD.AI: CHIPs on the Table, Cards Face Down",
+      "slug": "usd-ai-chi-ps-on-the-table-cards-face-down",
+      "kind": "flashnote",
+      "excerpt": "When we initiated coverage of USD.AI in July 2025, the protocol was operating in private beta with ~$46M in TVL, a single B200 loan in final closing, and a concept that had not yet faced a real credit cycle. Our core thesis centered around the idea that tokenizing GPU-backed amortizing debt into a composable onchain yield product addresses a real financing gap for sub-hyperscaler AI infrastructure operators.",
+      "publishedAt": "2026-02-24T13:18:11.018Z",
+      "tags": [
+        "DeFi",
+        "Lending",
+        "RWA",
+        "CHIP"
+      ]
+    },
+    {
+      "title": "Covenant AI: The Permissionless AI Lab",
+      "slug": "covenant-ai-the-permissionless-ai-lab",
+      "kind": "flashnote",
+      "excerpt": "Covenant is a tightly integrated AI development stack composed of three Bittensor subnets, each addressing a distinct failure mode in decentralized training. Its architecture is designed to decompose frontier AI development into separable coordination problems, rather than a single capital-intensive infrastructure problem. ",
+      "publishedAt": "2026-02-18T14:26:33.294Z",
+      "tags": [
+        "TAO",
+        "SN3",
+        "SN39"
+      ]
+    },
+    {
+      "title": "MagicBlock: Scaling the SVM for Real-Time State",
+      "slug": "magic-block-scaling-the-svm-for-real-time-state",
+      "kind": "article",
+      "excerpt": "MagicBlock is building a real-time execution layer for Solana designed to push the network beyond its practical latency limits. While Solana offers high throughput and low fees, its current base-layer latency floor, with ~400ms block times and ~500ms to 1.2s end-to-end execution, remains a binding constraint for applications that require deterministic, sub-100ms responsiveness.",
+      "publishedAt": "2026-02-03T14:22:03.004Z",
+      "tags": [
+        "Infrastructure",
+        "SOL",
+        "DeFi"
+      ]
+    },
+    {
+      "title": "Fuse Energy: DePIN Energy Maturation",
+      "slug": "fuse-energy-de-pin-energy-maturation",
+      "kind": "article",
+      "excerpt": "Fuse Energy operates as a vertically integrated energy company spanning renewable generation, wholesale trading, retail supply, and distributed energy coordination. Founded in 2022 by ex-Revolut executives Alan Chang and Charles Orr, the company applies fintech scaling principles to energy infrastructure, targeting 10% cost savings versus incumbent utilities through operational efficiency and in-house control across the value chain.",
+      "publishedAt": "2026-01-22T16:47:10.036Z",
+      "tags": [
+        "DePIN",
+        "Infrastructure"
+      ]
+    },
+    {
+      "title": "BWR 2026 Theses",
+      "slug": "bwr-2026-theses",
+      "kind": "article",
+      "excerpt": "As the year comes to an end, it’s a good time to reflect on the progress made in 2025 and how we’re positioned heading into 2026. This report outlines our key theses across each analyst's focus area, spanning capital formation, onchain spot trading platforms, prediction markets, DePIN, credit markets, perpetuals, and more.",
+      "publishedAt": "2025-12-26T18:05:08.247Z",
+      "tags": [
+        "Ecosystem",
+        "DeFi",
+        "Perps",
+        "DEX",
+        "DePIN",
+        "Derivatives",
+        "Lending",
+        "SOL",
+        "HYPE",
+        "META",
+        "AAVE",
+        "PENDLE",
+        "MORPHO"
+      ]
+    },
+    {
+      "title": "Daylight’s Token Stack: GRID, DAY, and GTM",
+      "slug": "daylight-s-token-stack-grid-day-and-gtm",
+      "kind": "article",
+      "excerpt": "Daylight Energy (FKA React Energy), has secured $75M in new financing to accelerate deployment of distributed energy infrastructure, including $15M in equity and a $60M project development facility. This capital structure mirrors the protocol's design by separating growth capital from infrastructure financing. The company currently operates across a handful of US states including Illinois, Massachusetts, New York, New Jersey, and Pennsylvania, installing solar panels, batteries, and smart devices through Energy Subscriptions with no upfront cost to homeowners.",
+      "publishedAt": "2025-12-11T14:01:58.427Z",
+      "tags": [
+        "DePIN"
+      ]
+    },
+    {
+      "title": "Fogo: Testnet Traction & Mainnet Readiness",
+      "slug": "fogo-testnet-traction-and-mainnet-readiness",
+      "kind": "article",
+      "excerpt": "Fogo launched mainnet on Nov. 25, 2025, as an L1 purpose-built for institutional trading infrastructure, with USDC transfers enabled through native integration with Wormhole. Mainnet validators have been onboarded behind the scenes prior to public announcement, though most ecosystem applications remain in testnet with no confirmed migration timeline.",
+      "publishedAt": "2025-12-09T14:48:07.874Z",
+      "tags": [
+        "L1",
+        "DeFi",
+        "Perps",
+        "FOGO"
+      ]
+    },
+    {
+      "title": "Bittensor: Positioning for the Post-Halving Repricing",
+      "slug": "bittensor-positioning-for-the-post-halving-repricing",
+      "kind": "article",
+      "excerpt": "Bittensor (TAO) remains the AI sector market leader with a MC of ~$3B. Recent protocol upgrades, shifting emissions mechanics, and strengthening subnet fundamentals are reshaping the outlook for TAO and the broader Bittensor ecosystem. With the first halving set to occur in mid-December 2025, conditions may be forming for the next leg of growth across both TAO and leading subnets.",
+      "publishedAt": "2025-12-08T20:31:04.730Z",
+      "tags": [
+        "AI",
+        "TAO",
+        "SN3",
+        "SN39",
+        "SN81"
+      ]
+    },
+    {
+      "title": "Grass: Revenue Figures Emerge",
+      "slug": "grass-revenue-figures-emerge",
+      "kind": "flashnote",
+      "excerpt": "Grass hosted its inaugural token holder call, disclosing Q4 revenue projections of $12.8M and network expansion to 8.5M monthly active participants. ",
+      "publishedAt": "2025-12-02T14:14:25.632Z",
+      "tags": [
+        "GRASS",
+        "AI",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "Glow V2: Democratizing Decentralized Solar",
+      "slug": "glow-v2-democratizing-decentralized-solar",
+      "kind": "flashnote",
+      "excerpt": "Glow V2 aims to transform the protocol from a capital-intensive solar deployment system into an accessible platform with open participation. The upgrade introduces a Mining Center that enables retail participation through GLW token purchases, a Launchpad where token holders delegate capital to solar farms and earn rewards, and a new governance token (GCTL) that allows communities to direct subsidies toward their preferred regions. ",
+      "publishedAt": "2025-11-07T14:19:27.212Z",
+      "tags": [
+        "DePIN",
+        "GLW"
+      ]
+    },
+    {
+      "title": "Cloudflare's NET Dollar: Crypto's Web Infrastructure Stablecoin",
+      "slug": "cloudflare-s-net-dollar-crypto-s-web-infrastructure-stablecoin",
+      "kind": "flashnote",
+      "excerpt": "On September 25th, 2025, Cloudflare announced plans to launch NET Dollar, a 1:1 US dollar-backed stablecoin built for the agentic web. The announcement came just two days after Cloudflare and Coinbase jointly announced the x402 Foundation, a neutral governance body designed to establish x402 as the universal standard for internet-native payments.",
+      "publishedAt": "2025-10-31T14:48:51.183Z",
+      "tags": [
+        "Infrastructure",
+        "x402",
+        "NET",
+        "COIN"
+      ]
+    },
+    {
+      "title": "GEODNET: Strengthening RTK Leadership",
+      "slug": "geodnet-strengthening-rtk-leadership",
+      "kind": "article",
+      "excerpt": "The RTK market remains critical to enabling centimeter-level positioning accuracy for autonomous technologies, such as Robots, Drones, and Autonomous Cars. GEODNET has maintained its competitive edge against multi-billion dollar incumbents Trimble and Hexagon through differentiated economics and vast geographic coverage.",
+      "publishedAt": "2025-10-27T14:49:28.026Z",
+      "tags": [
+        "GEOD",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "Akash Starcluster: Scaling Decentralized AI Infrastructure",
+      "slug": "akash-starcluster-scaling-decentralized-ai-infrastructure",
+      "kind": "flashnote",
+      "excerpt": "Akash Network is launching Starcluster, a “planetary-scale” mesh of decentralized compute designed to democratize AI infrastructure through globally distributed, high-density nodes. This initiative aims to transform underutilized compute capacity into a permissionless, flexible, and resilient network capable of competing with traditional hyperscalers. Combined with the upcoming Burn Mint Equilibrium (BME) tokenomic model replacing AEP-23's stable payment mechanism and the success of three Provider Incentive Pilots bringing over 800 GPUs onchain, Akash is positioning itself as the primary decentralized alternative for enterprise AI workloads.",
+      "publishedAt": "2025-10-15T18:26:54.544Z",
+      "tags": [
+        "AKT",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "The Cross‑Chain Interoperability Stack",
+      "slug": "the-cross-chain-interoperability-stack",
+      "kind": "article",
+      "excerpt": "The march toward an interoperable and onchain-by-default internet depends on reliable messaging and value transfer across heterogeneous domains. Crosschain protocols now process >$1.3T in combined annual transfer volume and secure tens of millions of user interactions, yet no single design dominates.",
+      "publishedAt": "2025-10-09T16:13:14.320Z",
+      "tags": [
+        "Cross-Chain",
+        "Infrastructure"
+      ]
+    },
+    {
+      "title": "Pipe Network: Mainnet Launch & TGE",
+      "slug": "pipe-network-mainnet-launch-and-tge",
+      "kind": "flashnote",
+      "excerpt": "Pipe Network will launch its PIPE token on October 8th, marking a significant milestone for the decentralized CDN sector as the protocol transitions from testnet to production tokenomics. ",
+      "publishedAt": "2025-10-07T19:40:22.006Z",
+      "tags": [
+        "PIPE",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "DoubleZero: Mainnet Launch & SEC No-Action",
+      "slug": "double-zero-mainnet-launch-and-sec-no-action",
+      "kind": "flashnote",
+      "excerpt": "DoubleZero launches mainnet-beta this week with SEC no-action relief confirming 2Z and other DePIN tokens are not securities, marking a significant regulatory milestone for DePIN projects. With just over 21% of Solana mainnet stake already operating on DoubleZero mainnet-beta and the token generation event scheduled for October 2nd, the protocol is positioned to become critical infrastructure for high performance blockchain ecosystems. DoubleZero is positioning itself as a critical validator and searcher infrastructure layer and may command a meaningful take of priority fees across blockchain ecosystems over time. At $750M, significant growth is priced in, but we like the project’s tokenomics and network dynamics at launch, and believe the risk/reward profile becomes increasingly compelling at lower valuations. ",
+      "publishedAt": "2025-09-30T19:16:48.302Z",
+      "tags": [
+        "2Z",
+        "SOL",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "The Institutional Staking Landscape",
+      "slug": "the-institutional-staking-landscape",
+      "kind": "article",
+      "excerpt": "Institutional staking providers specialize in offering secure, compliant, and scalable solutions for organizations, asset managers, and individuals who wish to stake large volumes of digital assets. Staking-as-a-Service Providers (SaaSPs) act as intermediaries, running blockchain nodes and managing the technical complexities of staking on behalf of clients, often providing custody, reporting, and yield optimization features across a broad range of assets and networks.",
+      "publishedAt": "2025-09-26T12:59:20.318Z",
+      "tags": [
+        "Staking",
+        "liquid staking",
+        "ETH",
+        "SOL"
+      ]
+    },
+    {
+      "title": "DoubleZero: IBRL/acc",
+      "slug": "double-zero-ibrl-acc",
+      "kind": "flashnote",
+      "excerpt": "DoubleZero’s validator penetration is ramping faster than anticipated, with ~13% of Solana mainnet stake already operating on the network as of August 21st 2025. We anticipate DoubleZero to launch on mainnet in mid-to-late September, aligning with recent infrastructure and client support updates. If adoption momentum holds and large validator migrations occur as expected, DoubleZero could enter mainnet in double-digit stake share territory, a higher stake penetration than our April projections.",
+      "publishedAt": "2025-08-25T16:57:35.470Z",
+      "tags": [
+        "2Z",
+        "SOL"
+      ]
+    },
+    {
+      "title": "Pipe Network Valuation and Market Positioning",
+      "slug": "pipe-network-valuation-and-market-positioning",
+      "kind": "article",
+      "excerpt": "Pipe Network is a decentralized content delivery network (dCDN) that replaces the sparse, capital intensive data center footprint of traditional CDNs with a permissionless mesh of independent node operators. By orchestrating under-utilized resources that already exist at the edge, rather than purchasing or leasing thousands of servers, Pipe slashes capital intensity while letting supply expand autonomously in the places where bandwidth is scarcest and most expensive.",
+      "publishedAt": "2025-07-28T15:28:38.398Z",
+      "tags": [
+        "DePIN",
+        "Valuation",
+        "PIPE"
+      ]
+    },
+    {
+      "title": "Metaplex Genesis: Fueling Onchain ICOs",
+      "slug": "metaplex-genesis-fueling-onchain-ic-os",
+      "kind": "flashnote",
+      "excerpt": "Metaplex’s Genesis protocol was released on July 15th, 2025, just as renewed interest in onchain ICOs continues gathering momentum across the Solana ecosystem. Genesis expands Metaplex’s product offering beyond NFTs and fungible token metadata, fueling MPLX buybacks. ICO launch platforms are already a highly contested space, and any success will drive further competition.",
+      "publishedAt": "2025-07-23T14:38:23.801Z",
+      "tags": [
+        "DeFi",
+        "MPLX",
+        "SOL"
+      ]
+    },
+    {
+      "title": "Synthetic Dollars Collateralized by GPU Cash-Flows",
+      "slug": "synthetic-dollars-collateralized-by-gpu-cash-flows",
+      "kind": "article",
+      "excerpt": "USDai is a synthetic dollar fully backed by tokenized three‑month T-bills custodied by M^0. When holders stake USDai in an ERC-4626 vault, they mint sUSDai, which finances short-term, amortizing loans secured by NVIDIA-class GPUs and servers.",
+      "publishedAt": "2025-07-18T17:48:09.818Z",
+      "tags": [
+        "USDai",
+        "Lending",
+        "DeFi"
+      ]
+    },
+    {
+      "title": "Robinhood and Arbitrum",
+      "slug": "robinhood-and-arbitrum",
+      "kind": "flashnote",
+      "excerpt": "Robinhood's June 2025 partnership with Arbitrum enables EU customers to trade over 200 US stocks and ETFs on blockchain with 24/5 hours and zero commissions. The company is developing its own \"Robinhood Chain\" using Arbitrum's technology while Arbitrum receives a 10% protocol revenue share from sequencer and MEV profits.",
+      "publishedAt": "2025-07-11T16:17:18.320Z",
+      "tags": [
+        "ARB",
+        "Valuation"
+      ]
+    },
+    {
+      "title": "Helium Halving Tailwinds",
+      "slug": "helium-halving-tailwinds",
+      "kind": "flashnote",
+      "excerpt": "Helium (HNT) is positioned for a potential valuation inflection as it approaches a significant halving event in August 2025, where the token supply could become deflationary with only a ~2x increase in network revenue. Despite HNT declining ~53% since its token unification migration, recent explosive growth in Data Credit (DC) burn, primarily driven by carrier offload demand from major telecoms like AT&T and T-Mobile (though unconfirmed), signals strong fundamental momentum.",
+      "publishedAt": "2025-07-10T13:19:09.100Z",
+      "tags": [
+        "HNT",
+        "Infrastructure",
+        "DePIN"
+      ]
+    },
+    {
+      "title": "Scaling Web Performance: Decentralized CDNs",
+      "slug": "scaling-web-performance-decentralized-cd-ns",
+      "kind": "article",
+      "excerpt": "Content Delivery Networks (CDNs) represent low-hanging fruit in a massive market ripe for Web3-driven disruption. The global CDN market was valued at ~$28B in 2024, and is projected to surpass $140B by 2034, (18.75% CAGR) underscoring the immense demand for efficient content delivery.",
+      "publishedAt": "2025-06-23T18:06:30.663Z",
+      "tags": [
+        "DePIN",
+        "2Z",
+        "Infrastructure",
+        "PIPE",
+        "Blockcast",
+        "Gradient"
+      ]
+    },
+    {
+      "title": "Termina: DePINs & Modular Data Anchoring",
+      "slug": "termina-de-pi-ns-and-modular-data-anchoring",
+      "kind": "flashnote",
+      "excerpt": "Termina’s Data Anchor officially launched on May 20th at Solana Accelerate, introducing a modular and verifiable data storage system optimized for DePINs. With an increasing number of applications that could leverage Data Anchor, the market potential is significant, driven by the growth of DePIN networks and their diverse applications across bandwidth, energy, and computation, highlighting a growing opportunity for reliable and flexible data solutions. As decentralized networks scale and reward systems become increasingly dependent on offchain telemetry, data collected from remote sensors and external sources, the ability to anchor data cheaply and securely onchain could be essential.",
+      "publishedAt": "2025-06-09T16:14:11.286Z",
+      "tags": [
+        "SOL",
+        "DePIN",
+        "Infrastructure",
+        "Termina"
+      ]
+    },
+    {
+      "title": "Decentralized Compute Networks: Scaling Global Infrastructure",
+      "slug": "decentralized-compute-networks-scaling-global-infrastructure",
+      "kind": "article",
+      "excerpt": "2025 has facilitated unprecedented growth in generative AI adoption. By late 2024, over 71% of companies were using generative AI in some form, a massive jump from 33% the year prior. Tools like ChatGPT, Perplexity, and open-source models have proliferated, with potentially billions now leveraging AI chat bots. In Q1 2025, OpenAI’s release of the o3 & o4 models marked another leap, touted as a multimodal “reasoning” model capable of breaking responses into smaller components, testing different approaches, and validating solutions until reaching a final output. ",
+      "publishedAt": "2025-06-04T20:46:15.898Z",
+      "tags": [
+        "DePIN",
+        "IO",
+        "Infrastructure",
+        "Render",
+        "FIL",
+        "ATH",
+        "USDai",
+        "INT"
+      ]
+    },
+    {
+      "title": "Tokenized Virtual Power Plants",
+      "slug": "tokenized-virtual-power-plants",
+      "kind": "article",
+      "excerpt": "The convergence of DePIN and energy generation aims to address modern grid challenges by incentivizing distributed generation.",
+      "publishedAt": "2025-05-08T12:49:53.632Z",
+      "tags": [
+        "DePIN",
+        "RWA",
+        "SRCFUL",
+        "Daylight",
+        "FUSE",
+        "GLW"
+      ]
+    },
+    {
+      "title": "Bitz, Eclipse, and Celestia: Downstream Effects",
+      "slug": "bitz-eclipse-and-celestia-downstream-effects",
+      "kind": "flashnote",
+      "excerpt": "As TurboTap, Eclipse’s primary driver of TPS and fees, winds down, Celestia’s largest consumer has seen a sharp drop in fees and data activity, raising concerns about whether new applications can fill Celestia’s gap in DA revenue. Bitz, a fork of ORE, a popular Solana based mining program deployed on Eclipse, has picked up steam in user growth and fee generation.",
+      "publishedAt": "2025-04-23T17:07:02.610Z",
+      "tags": [
+        "TIA",
+        "Data Availability",
+        "L2",
+        "BITZ",
+        "ES"
+      ]
+    },
+    {
+      "title": "Helium: Decentralizing Telecom with Web3 Incentives",
+      "slug": "helium-decentralizing-telecom-with-web3-incentives",
+      "kind": "article",
+      "excerpt": "Helium stands at a pivotal moment in its evolution as a decentralized wireless network, balancing rapid growth, economic restructuring, and global expansion. With accelerated growth in domestic DAUs and Hotspots supporting its network, Helium is leveraging strategic partnerships and innovative proposals to scale internationally. The recent implementation of HIP 138, “Return to HNT,” has unified its token economy under HNT, simplifying participation and strengthening liquidity, while HIP 139’s phase-out of CBRS refocuses efforts on scalable Wi-Fi offload. Meanwhile, governance shifts under HIP 141 raise questions about centralization as Nova Labs consolidates control over the roadmap.",
+      "publishedAt": "2025-04-17T14:38:33.455Z",
+      "tags": [
+        "DePIN",
+        "Governance",
+        "HNT"
+      ]
+    },
+    {
+      "title": "Aerodrome Finance: Data Dashboard Primer",
+      "url": "https://blockworks.com/insights/aerodrome-finance",
+      "date": "2026-04-22T14:38:33.455Z",
+      "source": "Dashboard Primer",
+      "excerpt": "The protocol is preparing a major architectural upgrade that will merge Aerodrome and Velodrome into a unified cross-chain DEX and introduce MEV internalization as a new revenue stream",
+      "tags": [
+        "AERO",
+        "DeFi"
+      ]
+    }
+  ],
+  "substack": [
+    {
+      "title": "The Little Guy Eats the Big Guy",
+      "url": "https://www.parameter.ventures/p/the-little-guy-eats-the-big-guy",
+      "date": "2025-04-23T19:32:48.148Z",
+      "excerpt": "Lessons from Bell-Northern Research, AT&T, and the Rise of DeWi Against Telcos"
+    },
+    {
+      "title": "Growth in DePIN Driven by Apps",
+      "url": "https://www.parameter.ventures/p/growth-in-depin-driven-by-apps",
+      "date": "2025-02-05T16:02:54.360Z",
+      "excerpt": "A New Era of User Participation"
+    },
+    {
+      "title": "The Argument for Classifying Make Sunsets as a DePIN",
+      "url": "https://www.parameter.ventures/p/make-sunsets-is-a-depin",
+      "date": "2025-01-14T16:01:10.003Z",
+      "excerpt": "Who's gonna tell them?"
+    }
+  ],
+  "twitter": [
+    {
+      "title": "Hardware Shortages as a Leading Indicator",
+      "url": "https://x.com/i/article/1996950366475161600",
+      "date": "2025-12-10T19:53:41.000Z",
+      "excerpt": "Every crypto cycle has some form of supply shock. In 2017 and 2021, you couldn't buy a GPU. Today, this correlation has evolved.\nHistorical Playbook: Direct Causation\nIn previous cycles: rising crypto"
+    },
+    {
+      "title": "The Little Guy Eats the Big Guy",
+      "url": "https://x.com/i/article/1915413462848602112",
+      "date": "2025-04-24T14:36:10.000Z",
+      "excerpt": "Lessons from Bell-Northern Research, AT&T, and the Rise of DeWi Against Telcos\n\nIn the trenches of technological disruption, the story of Bell-Northern Research (BNR) and its relationship with @ATT"
+    },
+    {
+      "title": "Thoughts on Capital Efficiency in DePIN",
+      "url": "https://x.com/i/article/1914671026597699584",
+      "date": "2025-04-22T14:04:35.000Z",
+      "excerpt": "Something I've been thinking about lately: Capital efficiency is the holy grail for DePIN.\n\nWorking on a metric to determine this: DEQ‑R (Revenue Adjusted DePIN Efficency Quotient),  a 5‑factor score"
+    },
+    {
+      "title": "The Argument for Classifying Make Sunsets as a DePIN",
+      "url": "https://x.com/i/article/1878842598023950336",
+      "date": "2025-01-14T17:26:11.000Z",
+      "excerpt": "Who's gonna tell them? \n\nIntroduction: What is Make Sunsets?\n@MakeSunsets  is a bold climate tech startup with a mission to mitigate global warming by deploying reflective aerosol particles into the"
+    }
+  ],
+  "newsletters": [
+    {
+      "title": "Financializing the AI Supply Chain",
+      "subtitle": "Every venue settles cash. Nobody has closed the delivery gap.",
+      "url": "https://blockworks-research.beehiiv.com/p/financializing-the-ai-supply-chain",
+      "date": "2026-07-02T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Grove's penalty clock",
+      "subtitle": "Sky's largest credit agent launches GROVE",
+      "url": "https://blockworks-research.beehiiv.com/p/grove-token",
+      "date": "2026-06-25T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "The Onchain Equity Bull",
+      "subtitle": "Borrowing against your equities onchain",
+      "url": "https://blockworks-research.beehiiv.com/p/the-onchain-equity-bull",
+      "date": "2026-06-18T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Superluminal's Long Runway",
+      "subtitle": "BTC at range lows, Fogo waits",
+      "url": "https://blockworks-research.beehiiv.com/p/superluminal-runway",
+      "date": "2026-06-11T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Andrew Yang Buys Helium Mobile",
+      "subtitle": "Nova sells the MVNO, doubles down on offload",
+      "url": "https://blockworks-research.beehiiv.com/p/andrew-yang-buys-helium-mobile",
+      "date": "2026-06-04T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Token Markets Grow Up",
+      "subtitle": "Blockworks launches the Transparency Alliance",
+      "url": "https://blockworks-research.beehiiv.com/p/token-markets-grow-up",
+      "date": "2026-05-28T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Nockchain's bet on useful work",
+      "subtitle": "Mining that doubles as AI compute",
+      "url": "https://blockworks-research.beehiiv.com/p/nockchains-bet-on-useful-work",
+      "date": "2026-05-22T14:01:43.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Sam Schubert"
+      ]
+    },
+    {
+      "title": "STRCing for yield",
+      "subtitle": "A killer listing, or just the latest points farm?",
+      "url": "https://blockworks-research.beehiiv.com/p/strcing-for-yield",
+      "date": "2026-05-21T13:59:01.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "SLX delays launch, Clarity votes",
+      "subtitle": "The vote that sets crypto's regulatory clock",
+      "url": "https://blockworks-research.beehiiv.com/p/slx-delays-launch-clarity-votes",
+      "date": "2026-05-14T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "The House Always Wins",
+      "subtitle": "Zillow's moat is a lie",
+      "url": "https://blockworks-research.beehiiv.com/p/the-house-always-wins",
+      "date": "2026-05-07T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "CHIP Rips?",
+      "subtitle": "CHIP's Day-1 Report Card",
+      "url": "https://blockworks-research.beehiiv.com/p/chip-rips",
+      "date": "2026-04-23T13:59:31.075Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Bitcoin’s quantum deadline",
+      "subtitle": "Security or immutability?",
+      "url": "https://blockworks-research.beehiiv.com/p/bitcoin-s-quantum-deadline",
+      "date": "2026-04-16T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Stablecoins get a rulebook",
+      "subtitle": "Treasury’s AML rules land, yield stays on the table",
+      "url": "https://blockworks-research.beehiiv.com/p/stablecoins-get-a-rulebook",
+      "date": "2026-04-09T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Drift gets drained",
+      "subtitle": "Solana's largest protocol exploit",
+      "url": "https://blockworks-research.beehiiv.com/p/drift-gets-drained",
+      "date": "2026-04-02T14:00:13.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Intel “partnership”",
+      "subtitle": "Narrative beats fundamentals",
+      "url": "https://blockworks-research.beehiiv.com/p/intel-partnership",
+      "date": "2026-03-26T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Agents need a bank account",
+      "subtitle": "Stripe and Paradigm’s payments chain goes live",
+      "url": "https://blockworks-research.beehiiv.com/p/agents-need-a-bank-account",
+      "date": "2026-03-19T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "DoubleZero's new revenue model",
+      "subtitle": "Validators get paid, not taxed",
+      "url": "https://blockworks-research.beehiiv.com/p/doublezeros-new-revenue-model",
+      "date": "2026-03-12T13:59:22.549Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Kraken cracks the Fed",
+      "subtitle": "While MetaDAO’s model gets a stress test",
+      "url": "https://blockworks-research.beehiiv.com/p/kraken-cracks-the-fed",
+      "date": "2026-03-05T15:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "The power trade",
+      "subtitle": "Relief rally lifts crypto",
+      "url": "https://blockworks-research.beehiiv.com/p/the-power-trade",
+      "date": "2026-02-26T15:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Carlos"
+      ]
+    },
+    {
+      "title": "Hyperliquid wants CLARITY",
+      "subtitle": "While Robinhood brings private markets to retail",
+      "url": "https://blockworks-research.beehiiv.com/p/hyperliquid-wants-clarity",
+      "date": "2026-02-19T15:06:14.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Robinhood bets on crypto rails",
+      "subtitle": "Prediction markets, tokenized stocks, testnet and more",
+      "url": "https://blockworks-research.beehiiv.com/p/robinhood-bets-on-crypto-rails",
+      "date": "2026-02-12T15:00:04.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Not another rainbow chart 🌈",
+      "subtitle": "Bears in control as Rainbow Wallet debuts its token",
+      "url": "https://blockworks-research.beehiiv.com/p/not-another-rainbow-chart",
+      "date": "2026-02-05T15:00:10.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "DePIN Pulse Acquires DePIN.Ninja and WhoLovesBurrito, Launches v2",
+      "subtitle": "Our DePIN analytics tool is evolving",
+      "url": "https://www.parameter.ventures/p/depin-pulse-acquires-depinninja-and",
+      "date": "2025-05-20T16:02:03.315Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Introducing Parameter Research",
+      "subtitle": "Unleashing DePIN is Evolving",
+      "url": "https://www.parameter.ventures/p/introducing-parameter-research",
+      "date": "2024-12-13T20:36:02.022Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    }
+  ]
+}

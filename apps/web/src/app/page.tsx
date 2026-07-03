@@ -1,21 +1,47 @@
 "use client"
-import Image from "next/image"
 import { Github, Linkedin, Twitter } from "lucide-react"
+import { researchItems, newsletterItems, type ResearchSource } from "../lib/research-data"
+
+const sourceColor: Record<ResearchSource, string> = {
+  Flashnote: "text-green-500",
+  "Dashboard Primer": "text-teal-400",
+  Substack: "text-orange-500",
+  Medium: "text-gray-300",
+  Academic: "text-blue-400",
+  X: "text-sky-400",
+}
 
 export default function CarpinitoLanding() {
   const experiences = [
     {
       title: "Research Analyst @ Blockworks",
-      link: "https://www.blockworksresearch.com/",
+      link: "https://www.blockworks.co/",
       period: "2025 - Present",
       category: "Research, Data, DePIN",
       description: "Deep Research and Analysis for Blockworks Research subscribers.",
       achievements: []
     },
     {
-      title: "Vibes Officer @ Parameter Research",
+      title: "Head of Research @ Mycelium Networks",
+      link: "https://www.myceliumx.com/",
+      period: "2021 - 2025",
+      category: "DePIN, Compute, Research",
+      description: "A DePIN Ecosystem Incubator, Accelerator, and Enterprise Miner.",
+      achievements: [
+        { 
+          text: "Bounds Accelerator Inaugural Cohort",
+          url: "https://www.coinbase.com/blog/coinbase-ventures-to-support-university-of-arkansas-bounds-accelerator-to"
+        },
+        {
+          text: "Mycelium Testbed",
+          url: "/docs/mycelium-testbed.pdf"
+        }
+      ]
+    },
+    {
+      title: "Head of Research @ Parameter Research",
       link: "https://www.parameter.ventures/",
-      period: "2025 - Present",
+      period: "2023 - 2025",
       category: "DePIN, Growth, Dev",
       description: "DePIN Data, Analysis and Hot Takes",
       achievements: [
@@ -24,11 +50,11 @@ export default function CarpinitoLanding() {
           url: "https://depinpulse.app/"
         },
         {
-            text: "Unleashing DePIN",
-            url: "https://www.unleashingdepin.com/"
+          text: "Unleashing DePIN",
+          url: "https://www.unleashingdepin.com/"
         },
         {
-          text: "Total Eclipse Challenge Community Award for Eclipse XRAY",
+          text: "Total Eclipse Challenge Community Award for Eclipse XRAY Hackathon",
           url: "https://eclipsexray.id/"
         }
       ]
@@ -50,23 +76,6 @@ export default function CarpinitoLanding() {
       achievements: []
     },
     {
-      title: "Head of Ecosystem @ Mycelium Networks",
-      link: "https://www.myceliumx.com/",
-      period: "2021 - 2025",
-      category: "DePIN, Compute, Research",
-      description: "A DePIN Ecosystem Incubator, Accelerator, and Enterprise Miner.",
-      achievements: [
-        { 
-          text: "Bounds Accelerator Inaugural Cohort",
-          url: "https://www.coinbase.com/blog/coinbase-ventures-to-support-university-of-arkansas-bounds-accelerator-to"
-        },
-        {
-            text: "Mycelium Testbed",
-            url: "/docs/mycelium-testbed.pdf"
-        }
-      ]
-    },
-    {
       title: "Blockchain Enterprise Systems @ University of Arkansas",
       link: "https://uark.edu",
       period: "2019 - 2023",
@@ -74,36 +83,17 @@ export default function CarpinitoLanding() {
       description: "B.S.B.A Information Systems.",
       achievements: [
         {
-            text: "2nd Place Razorblock Hackathon with CHRG",
+          text: "2nd Place Razorblock Hackathon with CHRG",
         },
         {
-            text: "UARK Crypto Club",
+          text: "UARK Crypto Club",
         }
       ]
     }
   ];
 
-  const images = [
-    "https://shdw-drive.genesysgo.net/DojEG4vUWnUZdbSUiajdNagYBtyqkZQaduvR6ya5Mfuy/DeWiCat-20-01ceg.gif",
-    "https://shdw-drive.genesysgo.net/DojEG4vUWnUZdbSUiajdNagYBtyqkZQaduvR6ya5Mfuy/DeWiCat-40-xaxwy.gif",
-    "https://na-assets.pinit.io/Dk6Ug2wbS8WiRF18AaAqJHyx93dWx7q5bxPmm2WxKP8K/bdaecbad-b31e-42b2-b0ea-25f9b44219ff/2909",
-    "https://kqdrcflo4udv6fuso2idqze4xriydwboumpysiklwvfjzroyrdna.arweave.net/VAcRFW7lB18WknaQOGScvFGB2C6jH4khS7VKnMXYiNo?ext=jpg",
-    "https://hews4nahwvpxmtgf5buyphoo3do5omfzgta3c3dewpj3pye6hg5q.arweave.net/OS0uNAe1X3ZMxehph53O2N3XMLk0wbFsZLPTt-CeObs?ext=png",
-    "https://p3o27r5siavoajgj5zjrg34tm2mozm4ya4ukomq2nti2q5rrnruq.arweave.net/ft2vx7JAKuAkye5TE2-TZpjss5gHKKcyGmzRqHYxbGk?ext=png",
-    "https://jt3ivxt36qziq3gzklitnipiruptzezehw72b62kw53egkv7glha.arweave.net/TPaK3nv0Mohs2VLRNqHojR88kyQ9v6D7Srd2Qyq_Ms4/1707606148.3841.png",
-    "https://underdog-protocol.s3.us-west-1.amazonaws.com/6626ebfe-f65d-401a-8087-816ad36ea1bf.png",
-    "https://prod-tensor-creators-s3.s3.us-east-1.amazonaws.com/drop-metadata/b76b5eb6-8c82-4089-bfb5-8dd7f35bbcb7/images/4542.png",
-    "https://pt2mx3s3wtvbx2ryeebg3efrmby3i3smf7svrwvkfy7wouj44deq.arweave.net/fPTL7lu06hvqOCECbZCxYHG0bkwv5Vjaqi4_Z1E84Mk?ext=png",
-    "https://updg8.com/imgdata/5otux6WEGtGfq4rEevSYwfvLWehNBSqF2DsFDAxcUwKo",
-
-  ]
-
-  const techSkills = [
-    "TypeScript", "JavaScript", "MongoDB", "Docker", "REST APIs", "Nvidia",
-    "Svelte", "NextJS", "React", "Git", "Web3.js", "ExpressJS", "Vercel",
-    "RPCs", "SQL", "C#", "Web Scraping", "LoRaWAN", "RF Environments",
-    "IoT Sensors", "Linux", "Dune", "Flipside", "Server Hardware", "Bare Metal Servers"
-  ];
+  const research = researchItems;
+  const formatDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
 
   return (
     <div className="min-h-screen bg-black text-gray-100 font-mono">
@@ -121,7 +111,7 @@ export default function CarpinitoLanding() {
             </div>
           </div>
           <div className="max-w-2xl mx-auto text-center mb-8">
-            <p className="text-lg mb-4 font-bold">A Digital Asset Researcher focused on the DePIN, PoW, and Distributed Infrastructure.</p>
+            <p className="text-lg mb-4 font-bold">Distributed infrastructure analyst covering economics, governance, and transparency.</p>
           </div>
           <div className="max-w-2xl mx-auto text-center mb-4">
             <div className="flex justify-center space-x-4">
@@ -187,34 +177,56 @@ export default function CarpinitoLanding() {
           </div>
         </section>
         <section className="mb-20 border-t border-gray-800 pt-20">
-          <h2 className="text-2xl font-bold mb-12 text-center">Tech I Like</h2>
-          <div className="gap-20 text-center">
-            <div className="border border-gray-800 p-6">
-              <div className="text-xs text-gray-400 space-y-1">
-                <div>{techSkills.join(" • ")}</div>
-              </div>
-            </div>
+          <h2 className="text-2xl font-bold mb-2 text-center">Research</h2>
+          <p className="text-xs text-gray-500 text-center mb-12">{research.length} pieces across Blockworks, Substack &amp; more</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {research.map((item) => (
+              <a
+                key={item.url}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col border border-gray-800 rounded-lg p-4 hover:border-gray-600 transition-colors"
+              >
+                <div className="flex items-center justify-between mb-2 text-xs">
+                  <span className={`uppercase tracking-wide ${sourceColor[item.source]}`}>{item.source}</span>
+                  <span className="text-gray-500">{formatDate(item.date)}</span>
+                </div>
+                <h3 className="text-base font-bold mb-2 group-hover:text-gray-300 transition-colors">{item.title}</h3>
+                {item.excerpt && (<p className="text-sm text-gray-400 line-clamp-3">{item.excerpt}</p>)}
+                {item.tags && item.tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {item.tags.slice(0, 3).map((tag) => (<span key={tag} className="text-[10px] uppercase tracking-wide text-gray-500 border border-gray-800 rounded px-2 py-0.5">{tag}</span>))}
+                  </div>
+                )}
+              </a>
+            ))}
           </div>
         </section>
         <section className="mb-20 border-t border-gray-800 pt-20">
-          <h2 className="text-2xl font-bold mb-12 text-center">Art</h2>
-          <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
-            {images.map((image, index) => (
-                <div key={index} className="relative h-64 md:h-80 w-full md:w-1/3 flex-none border-r border-gray-800 md:last:border-r-0 md:[&:nth-child(3n)]:border-r-0">
-                    <Image
-                        src={image}
-                        alt={`Artwork ${index + 1}`}
-                        fill
-                        className="object-cover grayscale"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        priority={index < 3}
-                        onError={(e) => {
-                          console.error(`Failed to load image ${index + 1}:`, image);
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
-                    />
-                </div>
-            ))}
+          <h2 className="text-2xl font-bold mb-2 text-center">Newsletters</h2>
+          <p className="text-xs text-gray-500 text-center mb-12">{newsletterItems.length} editions co-authored at Blockworks Research</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {newsletterItems.map((n) => {
+              const coAuthors = n.authors.filter((a) => a !== "Nick Carpinito")
+              return (
+                <a
+                  key={n.url}
+                  href={n.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col border border-gray-800 rounded-lg p-4 hover:border-gray-600 transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2 text-xs">
+                    <span className="uppercase tracking-wide text-purple-400">Newsletter</span>
+                    <span className="text-gray-500">{formatDate(n.date)}</span>
+                  </div>
+                  <h3 className="text-base font-bold mb-2 group-hover:text-gray-300 transition-colors">{n.title}</h3>
+                  {n.subtitle && (<p className="text-sm text-gray-400 line-clamp-3">{n.subtitle}</p>)}
+                  {coAuthors.length > 0 && (<p className="mt-3 text-[10px] uppercase tracking-wide text-gray-500">with {coAuthors.join(", ")}</p>)}
+                </a>
+              )
+            })}
           </div>
         </section>
       </main>

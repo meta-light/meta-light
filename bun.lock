@@ -123,6 +123,7 @@
       "dependencies": {
         "@dewicats/connect-button": "^0.0.19",
         "@jup-ag/core": "^4.0.0-beta.21",
+        "@meta-light/utils": "workspace:*",
         "@metaplex-foundation/js": "^0.17.5",
         "@project-serum/sol-wallet-adapter": "^0.2.6",
         "@pubkeyapp/wallet-adapter-mantine-ui": "^2.0.1",
@@ -173,6 +174,13 @@
         "postcss": "^8.4.41",
         "postcss-import": "^16.1.0",
         "tailwindcss": "^3.4.10",
+      },
+    },
+    "packages/utils": {
+      "name": "@meta-light/utils",
+      "version": "0.0.0",
+      "devDependencies": {
+        "typescript": "^5.5.4",
       },
     },
   },
@@ -746,6 +754,8 @@
     "@mercurial-finance/tulip-platform-sdk": ["@mercurial-finance/tulip-platform-sdk@2.0.30", "", { "dependencies": { "@project-serum/anchor": "^0.25.0", "@project-serum/associated-token": "^0.1.1", "@project-serum/borsh": "^0.2.5", "@solana/web3.js": "^1.66.2", "lodash": "^4.17.21" } }, "sha512-ySPxAtFLtati9Vv7g3czrcNEiT9HBZboRDNnfEDmCFJqsub87Y2ZF125dpspaZzKUlolOrBIqBy1FZYIreMgfg=="],
 
     "@mercurial-finance/vault-sdk": ["@mercurial-finance/vault-sdk@0.4.2", "", { "dependencies": { "@blockworks-foundation/mango-client": "^3.4.7", "@mercurial-finance/apricot-sdk": "0.17.6", "@mercurial-finance/cypher-client": "^4.1.4", "@mercurial-finance/drift-sdk": "1.0.3", "@mercurial-finance/frakt-sdk": "0.0.2", "@mercurial-finance/francium-sdk": "1.4.3", "@mercurial-finance/mango-v4": "0.5.4", "@mercurial-finance/optimist": "^0.1.4", "@mercurial-finance/port-sdk": "0.2.69", "@mercurial-finance/solend-sdk": "0.6.5", "@mercurial-finance/tulip-platform-sdk": "2.0.30", "@mithraic-labs/psylend-utils": "0.0.3-rc39", "@project-serum/anchor": "0.25.0", "@quarryprotocol/quarry-sdk": "5.0.2", "@saberhq/anchor-contrib": "^1.13.6", "@solana/buffer-layout": "^4.0.0", "@solana/spl-token": "0.1.8", "@solana/spl-token-registry": "0.2.1105", "@solana/web3.js": "~1.72.0", "bn.js": "5.2.1", "cross-fetch": "^3.1.5", "decimal.js": "10.3.1", "jsbi": "4.3.0" } }, "sha512-td3OgMPXE9S5BB1yzDYaGSjAw3bAh7SJVVh1NAF3SNpX0JrNRcZJj5LSE+uHq3E1ptYsyByTD3PGiFQJQPAkTw=="],
+
+    "@meta-light/utils": ["@meta-light/utils@workspace:packages/utils"],
 
     "@metamask/jazzicon": ["@metamask/jazzicon@2.0.0", "", { "dependencies": { "color": "^0.11.3", "mersenne-twister": "^1.1.0" } }, "sha512-7M+WSZWKcQAo0LEhErKf1z+D3YX0tEDAcGvcKbDyvDg34uvgeKR00mFNIYwAhdAS9t8YXxhxZgsrRBBg6X8UQg=="],
 
