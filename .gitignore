@@ -1,31 +1,50 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Monorepo root .gitignore — patterns are unanchored so they apply to every package
+# (web, crm, carpcap, swap rate, ...). Package-specific rules are scoped by path below.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
+.pnp.*
 .pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 .yarn/install-state.gz
 
-# testing
-/coverage
+# testing / coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
-# production
-/build
+# production / build output
+build/
+dist/
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
-# debug
+# editors
+.idea/
+*.swp
+*.swo
+
+# logs / debug
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# local env files
+# env files
+.env
 .env*.local
 
 # vercel
@@ -35,6 +54,25 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# root scratch
 /repos
 
-.env
+# ---- carpcap (Node + Rust + OCR/PDF tooling) ----
+carpcap/package-lock.json
+carpcap/yarn.lock
+carpcap/.tesseract/
+carpcap/pdfjs-dist/
+carpcap/rust/target/
+carpcap/rust/Cargo.lock
+!carpcap/documents/.gitkeep
+!carpcap/output/.gitkeep
+
+crm/crm.db
+
+.agents/twitter-accounts.json
+
+carpcap/src/backups
+
+carpcap/src/services/ventures
+
+carpcap/src/services/ventures/Rubric.xlsx

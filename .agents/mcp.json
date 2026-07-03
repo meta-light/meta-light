@@ -1,0 +1,12 @@
+{
+    "servers": {
+        "solanaMcp": {
+            "type": "http",
+            "url": "https://mcp.solana.com/mcp"
+        },
+        "morphoMcp": {
+            "type": "http",
+            "url": "https://mcp.morpho.org/mcp"
+        }
+    }
+}

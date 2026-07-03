@@ -1,0 +1,21 @@
+name: Deploy (Coolify)
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify deploy
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          COOLIFY_UUID: ${{ secrets.COOLIFY_UUID }}
+        run: |
+          CLEAN_URL=$(echo "${COOLIFY_URL}" | sed 's/\/$//')
+          curl -sS -X POST "${CLEAN_URL}/api/v1/deploy?uuid=${COOLIFY_UUID}&force=false" \
+            -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{}'
