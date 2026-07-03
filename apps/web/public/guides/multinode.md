@@ -1,0 +1,1 @@
+Most blockchain nodes are deployed on personal computers. 90% of these nodes are lightweight and require less than 10% of the compute power present on a standard PC, but are deployed in such a way that their efficiency and carbon footprint reduction are not realized.

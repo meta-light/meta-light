@@ -1,6 +1,11 @@
 {
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "vscode.typescript-language-features",
+  "explorer.decorations.badges": true,
+  "explorer.decorations.colors": true,
+  "git.enabled": true,
+  "git.decorations.enabled": true,
+  "problems.decorations.enabled": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "never"
   },

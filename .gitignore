@@ -57,22 +57,21 @@ next-env.d.ts
 # root scratch
 /repos
 
+# turborepo
+.turbo/
+
 # ---- carpcap (Node + Rust + OCR/PDF tooling) ----
-carpcap/package-lock.json
-carpcap/yarn.lock
-carpcap/.tesseract/
-carpcap/pdfjs-dist/
-carpcap/rust/target/
-carpcap/rust/Cargo.lock
-!carpcap/documents/.gitkeep
-!carpcap/output/.gitkeep
+apps/carpcap/.tesseract/
+apps/carpcap/pdfjs-dist/
+apps/carpcap/rust/target/
+apps/carpcap/rust/Cargo.lock
+apps/carpcap/src/backups/
+apps/carpcap/src/services/ventures/
+!apps/carpcap/documents/.gitkeep
+!apps/carpcap/output/.gitkeep
 
-crm/crm.db
+# ---- crm ----
+apps/crm/crm.db
 
+# ---- agents ----
 .agents/twitter-accounts.json
-
-carpcap/src/backups
-
-carpcap/src/services/ventures
-
-carpcap/src/services/ventures/Rubric.xlsx

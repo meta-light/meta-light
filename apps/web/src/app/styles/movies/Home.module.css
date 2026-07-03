@@ -1,0 +1,194 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"); */
+@import url("https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css");
+
+.body {
+  margin: 0;
+  background: linear-gradient(95deg, blue, purple);
+  min-height: 100vh;
+  max-height: 10000px
+}
+
+.header {
+  padding: 50px 175px 0px;
+}
+
+.header h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 48px;
+  font-weight: 500;
+}
+
+.main {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.section {
+  padding: 15px;
+}
+
+.searchbox {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  outline: none;
+  background: none;
+  background-color: #eee;
+  border-radius: 8px;
+  color: #53565a;
+  font-size: 20px;
+  font-weight: 300;
+  transition: 0.4s ease-out;
+}
+
+.searchbox:focus {
+  box-shadow: 0 0 8px 3px #4484c4;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.result {
+  border-radius: 6px;
+  width: 25%;
+  padding: 10px;
+  flex: initial;
+}
+
+.results p {
+  color: #fff;
+}
+
+.img:hover {
+  border: 2px solid white;
+}
+.img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.result h3 {
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px;
+  margin-bottom: 20px;
+  flex: 1 1 100%;
+  transition: 0.4s ease-out;
+}
+.result:hover h3 {
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(95deg, blue, purple);
+  overflow-y: scroll;
+}
+
+.popup .content {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 25px;
+  color: #fff;
+}
+
+.content h2 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.content h2 span {
+  font-weight: 300;
+  font-size: 20px;
+}
+
+.plot {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px -15px 15px;
+}
+
+#rating {
+  margin: 0 0 10px;
+}
+
+.plot img {
+  flex: 1 1 50%;
+  max-width: 300px;
+}
+.plot img:hover {
+  border: 2px solid white;
+  padding: 0 !important;
+}
+
+.plot p {
+  flex: 1 1 50%;
+  padding: 15px;
+}
+
+.close {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: 700;
+  background: #4484c4;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: 0.4s ease-out;
+}
+
+.close:hover {
+  background: #223343;
+}
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) {
+  .result {
+    padding: 5px;
+  }
+
+  .result h3 {
+    font-size: 50%;
+    font-weight: 600;
+    padding: 3px;
+    margin: 0;
+  }
+}
+
+@media only screen and (min-device-width: 350px) and (max-device-width: 667px) {
+  .header h1 {
+    color: #fff;
+    font-size: 30px;
+  }
+
+  .result {
+    padding: 5px;
+  }
+
+  .result h3 {
+    font-size: 50%;
+    font-weight: 600;
+    padding: 3px;
+    margin: 0;
+  }
+}

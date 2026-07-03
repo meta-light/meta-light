@@ -1,0 +1,17 @@
+$mainColor: #2a6b53;
+$darkWhite: #f7f7f7;
+$offWhite: #eee;
+$lightBlack: #333;
+$lightGreen: #739876;
+$darkGreen: #499d2f;
+
+$transitionEase: all 0.3s ease-in;
+$plainFocus: 2px solid $mainColor;
+
+$smallBorder: 1px solid $offWhite;
+
+@mixin focusBorder {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}

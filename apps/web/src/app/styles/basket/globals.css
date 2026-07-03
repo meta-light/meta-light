@@ -1,0 +1,174 @@
+/* GOOGLE FONT IMPORT */
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* VARIABLES */ 
+:root {
+    /* COLOR */
+    --CYAN-COLOR: hsl(178, 100%, 50%);
+    --ICE-BLUE: hsl(215, 51%, 70%);
+    --WHITE: white;
+}
+
+body {
+    font-family: "Outfit", sans-serif;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    min-height: flex;
+    background-color: hsl(217, 54%, 11%);
+    color: var(--WHITE);
+    padding: 10px 0px 0px 10px;
+    width: 100%;
+}
+
+/* NTF CARD PREVIEW */
+article {
+    width: 300px;
+    background-image: linear-gradient(to bottom, hsl(215, 32%, 27%), hsl(215, 79%, 50%));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%; /* Ensure the grid takes up the full width of its container */
+}
+
+.article-grid > * {
+    min-width: 0; /* Override any minimum width on the grid items */
+}
+
+/* MAIN IMAGE */
+.equilibrium-image-container {
+    background-color:var(--CYAN-COLOR);
+    margin: 15px;
+    border-radius: 5px;
+    height: 260px;
+    width: 260px;
+    position: relative;
+}
+
+.equilibrium-image {
+    position: relative;
+    width: 90%;
+    height: auto;
+    border-radius: 5px;
+    display: block; /* Ensure the image is treated as a block element */
+    margin: 0 auto; /* Center the image horizontally */
+}
+
+.view-icon-hover {
+    display: flex;
+    position: relative;
+    align-items: center;
+    top: 40%;
+    left: 40%;
+    width: 40px;
+}
+
+.equilibrium-image:hover {
+    opacity: 0.4;
+}
+
+
+/* PROFILE NICKNAME */
+h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.2rem;
+}
+
+.profile-nick-div {
+    padding: 0 20px;
+}
+
+.profile-nick-div p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* PROFILE STATUS */
+.profile-status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
+    margin: 15px 15px 15px 0;
+
+}
+
+.profile-status-div {
+    display: flex;
+}
+
+.profile-status-container p {
+    font-size: 13px;
+}
+
+.collectible {
+    color: var(--CYAN-COLOR);
+}
+
+.last-online {
+    color: var(--ICE-BLUE);
+}
+
+.profile-status-container img {
+    margin: 0 5px;
+}
+
+
+/* DIVISION LINE */
+hr {
+    width: 260px;
+    opacity: 0.2;
+}
+
+/* MAIN PROFILE */
+.profile-div {
+    display: flex;
+    align-items: center;
+    margin: 15px 0 25px 0;
+    padding-right: 90px;
+}
+
+.profile-picture {
+    width: 20px;
+    margin: 0 10px;
+    border: 1px solid var(--WHITE);
+    border-radius: 50%;
+}
+
+.profile-div p {
+    font-size: 0.8rem;
+    color: var(--ICE-BLUE)
+}
+
+.jules-account {
+    color: var(--WHITE);
+}
+
+.hover-cyan:hover {
+    color:var(--CYAN-COLOR);
+    cursor: pointer;
+}
+
+@media (max-width: 430px) {
+    body {
+        width: 350px;
+    }
+
+}
+.attribution { font-size: 11px; text-align: center}
+.attribution a { color: hsl(228, 45%, 44%); }

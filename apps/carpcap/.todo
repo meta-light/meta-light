@@ -1,0 +1,16 @@
+# Bookmarks
+- https://playground.akashml.com/login
+- https://docs.composio.dev/docs
+- https://platform.composio.dev/nick_workspace/nick_workspace_first_project/marketplace
+- https://ongrid.run/
+- https://docs.postgrest.org/en/v14/
+- https://docs.0.xyz/guides/agent-skill
+
+# Tasks
+- Eventually get rid of desearlize and jupiter files and move swap stuff to chain specific files
+- Impliment logger globally
+- Optimize signals in real time
+- Comprete audit of Signal Aggregator
+- Swap fee and gas cost on schema?
+
+- https://github.com/tensorflow/tfjs/tree/master/tfjs-node
