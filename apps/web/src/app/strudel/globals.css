@@ -1,0 +1,131 @@
+/* No @tailwind directives here: the root layout's globals.css already emits
+   base/components/utilities for these routes. The palette below is mirrored
+   into tailwind.config.js theme.extend.colors, which is what generates the
+   bg-surface / text-acid / border-line utilities this subtree uses. */
+
+:root {
+  /* House neutrals, matching the rest of the site (src/app/page.tsx): black
+     ground, gray-800 hairlines, gray-100 text. Green is the one accent and only
+     ever means live/playing/selected; orange only means unsaved or destructive. */
+  --background: #000000;
+  --surface: #030712;
+  --surface-2: #111827;
+  --line: #1f2937;
+  --line-bright: #374151;
+  --text: #f3f4f6;
+  --text-dim: #9ca3af;
+  --text-faint: #6b7280;
+  --acid: #22c55e;
+  --acid-dim: #4b5563;
+  --acid-deep: #052e16;
+  --ember: #f97316;
+  --ember-dim: #9a3412;
+}
+
+/* Everything below is scoped to .strudel-scope (the /strudel layout wrapper) so
+   it cannot reach the pre-merge routes that share this Tailwind build. */
+
+.strudel-scope {
+  min-height: 100%;
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+/* fontFamily.mono stays at the Tailwind default globally, so restore the
+   player's intended mono face for font-mono inside this subtree only. */
+.strudel-scope .font-mono {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+.strudel-scope ::selection {
+  background: var(--acid-deep);
+  color: var(--text);
+}
+
+/* ── scrollbars ─────────────────────────────────────── */
+.strudel-scope * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-bright) transparent;
+}
+
+/* ── codemirror chrome ──────────────────────────────── */
+.strudel-editor-root {
+  height: 100%;
+}
+.strudel-editor-root .cm-editor {
+  height: 100%;
+  outline: none;
+}
+.strudel-editor-root .cm-scroller {
+  line-height: 1.7;
+  padding: 1rem 0.25rem;
+}
+.strudel-editor-root .cm-gutters {
+  background: transparent;
+  border-right: 1px solid var(--line);
+  color: var(--text-faint);
+}
+.strudel-editor-root .cm-activeLineGutter {
+  background: transparent;
+  color: var(--text-dim);
+}
+/* neutral lift rather than a colored wash -- green is reserved for playback */
+.strudel-editor-root .cm-activeLine {
+  background: rgba(255, 255, 255, 0.028);
+}
+.strudel-editor-root .cm-cursor {
+  border-left-color: var(--acid);
+  border-left-width: 2px;
+}
+
+/* ── LED indicator ──────────────────────────────────── */
+/* Inert by default. Lit states get a tight ring instead of the bloom the
+   original theme used -- it still reads as energized, but it belongs to a
+   hairline-and-flat-fill house style rather than a neon one. */
+.led {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--line-bright);
+  transition:
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+.led-on {
+  background: var(--acid);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+}
+.led-warm {
+  background: var(--ember);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.16);
+}
+.led-loading {
+  animation: led-pulse 1.4s ease-in-out infinite;
+}
+@keyframes led-pulse {
+  0%,
+  100% {
+    background: var(--line-bright);
+  }
+  50% {
+    background: var(--text-dim);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .led-loading {
+    animation: none;
+    background: var(--text-dim);
+  }
+}
+
+/* ── panel label ────────────────────────────────────── */
+/* Matches the site's `text-[10px] uppercase tracking-wide text-gray-500` tag
+   treatment; the original 0.18em tracking read as hardware silkscreen. */
+.silkscreen {
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  user-select: none;
+}
