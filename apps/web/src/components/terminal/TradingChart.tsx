@@ -1,20 +1,28 @@
 'use client';
 import { useState, useEffect } from 'react';
+import SignalPanel from './SignalPanel';
 interface TradingChartProps {symbol?: string;}
+
+const DEFAULT_TOKEN = {address: 'So11111111111111111111111111111111111111112', chain: 'solana'};
 
 export default function TradingChart({ symbol = 'SOL' }: TradingChartProps) {
   const [selectedTimeframe, setSelectedTimeframe] = useState('1D');
   const [selectedChain, setSelectedChain] = useState('solana');
-  const [tokenAddress, setTokenAddress] = useState('So11111111111111111111111111111111111111112'); // SOL default
+  const [tokenAddress, setTokenAddress] = useState(DEFAULT_TOKEN.address); // SOL default
   const [isLoading, setIsLoading] = useState(false);
   const [currentSymbol, setCurrentSymbol] = useState(symbol);
+  // The iframe follows the input as you type; the signal panel below hits CoinGecko, so it
+  // tracks the last explicitly loaded token instead of every keystroke.
+  const [loadedToken, setLoadedToken] = useState(DEFAULT_TOKEN);
+  // `coingecko` is the asset-platform id used by CoinGecko's by-contract endpoints, which
+  // does not always match Birdeye's chain prefix.
   const chains = [
-    { id: 'solana', name: 'Solana', prefix: 'solana' },
-    { id: 'ethereum', name: 'Ethereum', prefix: 'ethereum' },
-    { id: 'bsc', name: 'BSC', prefix: 'bsc' },
-    { id: 'polygon', name: 'Polygon', prefix: 'polygon' },
-    { id: 'arbitrum', name: 'Arbitrum', prefix: 'arbitrum' },
-    { id: 'base', name: 'Base', prefix: 'base' }
+    { id: 'solana', name: 'Solana', prefix: 'solana', coingecko: 'solana' },
+    { id: 'ethereum', name: 'Ethereum', prefix: 'ethereum', coingecko: 'ethereum' },
+    { id: 'bsc', name: 'BSC', prefix: 'bsc', coingecko: 'binance-smart-chain' },
+    { id: 'polygon', name: 'Polygon', prefix: 'polygon', coingecko: 'polygon-pos' },
+    { id: 'arbitrum', name: 'Arbitrum', prefix: 'arbitrum', coingecko: 'arbitrum-one' },
+    { id: 'base', name: 'Base', prefix: 'base', coingecko: 'base' }
   ];
   const timeframes = ['5M', '15M', '1H', '4H', '1D', '1W'];
   const popularTokens: { [key: string]: { address: string; symbol: string; chain: string }[] } = {
@@ -29,9 +37,12 @@ export default function TradingChart({ symbol = 'SOL' }: TradingChartProps) {
       { address: '0xA0b86a33E6417aB93cBc3C8fEe6Ef3C8D2c06C30', symbol: 'LINK', chain: 'ethereum' }
     ]
   };
-  const handleAddressSubmit = () => {
-    if (tokenAddress.trim()) {
+  // Quick-select sets state and submits in the same tick, so the token has to be passed in
+  // explicitly rather than read back from the (still stale) state.
+  const handleAddressSubmit = (address: string = tokenAddress, chain: string = selectedChain) => {
+    if (address.trim()) {
       setIsLoading(true);
+      setLoadedToken({ address: address.trim(), chain });
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
@@ -41,7 +52,7 @@ export default function TradingChart({ symbol = 'SOL' }: TradingChartProps) {
     setTokenAddress(token.address);
     setSelectedChain(token.chain);
     setCurrentSymbol(token.symbol);
-    handleAddressSubmit();
+    handleAddressSubmit(token.address, token.chain);
   };
   const getBirdeyeEmbedUrl = () => {
     const chainPrefix = chains.find(c => c.id === selectedChain)?.prefix || 'solana';
@@ -89,7 +100,7 @@ export default function TradingChart({ symbol = 'SOL' }: TradingChartProps) {
             onKeyPress={(e) => e.key === 'Enter' && handleAddressSubmit()}
           />
           <button
-            onClick={handleAddressSubmit}
+            onClick={() => handleAddressSubmit()}
             disabled={isLoading || !tokenAddress.trim()}
             className="px-3 py-1 bg-green-400 text-black text-xs rounded hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -132,6 +143,11 @@ export default function TradingChart({ symbol = 'SOL' }: TradingChartProps) {
         <span>Real-time data • {chains.find(c => c.id === selectedChain)?.name}</span>
         <span>TF: {selectedTimeframe}</span>
       </div>
+      <SignalPanel
+        platform={chains.find(c => c.id === loadedToken.chain)?.coingecko ?? null}
+        address={loadedToken.address}
+        symbol={currentSymbol}
+      />
     </div>
   );
 } 

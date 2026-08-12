@@ -12,6 +12,7 @@ import GetHashlist from '../../components/tools/getHashlist';
 import SolanaHex from '../../components/tools/SolanaHex';
 import SolanaMetadata from '../../components/tools/solanaMetadata';
 import CNFTHolders from '../../components/tools/cnft-holders';
+import SignalChart from '../../components/tools/signalChart';
 
 const ConnectButtonProvider = dynamic(async () => (await import("@dewicats/connect-button")).ConnectButtonProvider, { ssr: false });
 const ConnectButton = dynamic(async () => await import("@dewicats/connect-button"), { ssr: false });
@@ -32,6 +33,7 @@ function ToolsPage() {
     { id: 'solanaHex', name: 'Hex', title: 'Solana Hex Tool' },
     { id: 'solanaMetadata', name: 'Metadata', title: 'Solana Metadata Generator' },
     { id: 'cnftHolders', name: 'Holders', title: 'CNFT Holders' },
+    { id: 'signals', name: 'Signals', title: 'Trading Signal Charts (CoinGecko)' },
   ];
   const getToolTitle = (toolId: string) => {
     const tool = tools.find(t => t.id === toolId);
@@ -111,6 +113,7 @@ function ToolsPage() {
               {activeTool === 'solanaHex' && <SolanaHex />}
               {activeTool === 'solanaMetadata' && <SolanaMetadata />}
               {activeTool === 'cnftHolders' && <CNFTHolders />}
+              {activeTool === 'signals' && <SignalChart />}
             </div>
           </div>
           <div className="mt-4 text-green-700 text-xs">
