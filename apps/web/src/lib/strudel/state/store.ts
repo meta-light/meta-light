@@ -3,7 +3,7 @@ import type { ChunkInfo } from '@/lib/strudel/chunks/detect';
 import type { SongTimeline } from '@/lib/strudel/timeline/types';
 import type { SongArrangement } from '@/lib/strudel/timeline/recognize';
 
-export type PanelKind = 'chunk' | 'sounds' | null;
+export type PanelKind = 'chunk' | 'sounds' | 'ai' | null;
 
 export interface PlayerState {
   /** scheduler is running */

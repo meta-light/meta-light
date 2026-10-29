@@ -5,6 +5,7 @@ import StepSequencer from '@/components/strudel/step-sequencer/StepSequencer';
 import PianoRoll from '@/components/strudel/piano-roll/PianoRoll';
 import EffectKnobs from '@/components/strudel/knobs/EffectKnobs';
 import SoundBrowser from '@/components/strudel/sound-browser/SoundBrowser';
+import AiChat from './AiChat';
 import InstrumentPicker from './InstrumentPicker';
 import VariantTabs from './VariantTabs';
 
@@ -16,13 +17,15 @@ export default function ChunkPanel() {
   if (panel === null) return null;
 
   const title =
-    panel === 'sounds'
-      ? 'sound browser'
-      : chunk?.type === 'drums'
-        ? 'step sequencer'
-        : chunk?.type === 'melody'
-          ? 'piano roll'
-          : 'chunk editor';
+    panel === 'ai'
+      ? 'ai chat'
+      : panel === 'sounds'
+        ? 'sound browser'
+        : chunk?.type === 'drums'
+          ? 'step sequencer'
+          : chunk?.type === 'melody'
+            ? 'piano roll'
+            : 'chunk editor';
 
   return (
     <aside className="flex w-[420px] shrink-0 flex-col border-l border-line bg-surface">
@@ -30,8 +33,12 @@ export default function ChunkPanel() {
         <span className="silkscreen">{title}</span>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-4">
-        {panel === 'sounds' ? (
+      {/* the chat scrolls its own transcript and pins its composer to the
+          bottom, so it opts out of the shared scroll container */}
+      <div className={`flex min-h-0 flex-1 flex-col p-4 ${panel === 'ai' ? '' : 'gap-5 overflow-y-auto'}`}>
+        {panel === 'ai' ? (
+          <AiChat />
+        ) : panel === 'sounds' ? (
           <SoundBrowser />
         ) : docBroken ? (
           <div className="flex flex-col gap-2">

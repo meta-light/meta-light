@@ -1,0 +1,55 @@
+{
+  "name": "fomoapi",
+  "version": "0.1.0",
+  "description": "Single-file TypeScript client for the FOMO API (fomoapi.io) - trader resolution, verified PnL, holdings, theses, token boards and the realtime alert stream.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./src/fomo.ts",
+  "types": "./src/fomo.ts",
+  "exports": {
+    ".": "./src/fomo.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "leaderboard": "tsx --env-file-if-exists=.env examples/leaderboard.ts",
+    "copy-trade": "tsx --env-file-if-exists=.env examples/copy-trade.ts",
+    "smart-money": "tsx --env-file-if-exists=.env examples/smart-money.ts",
+    "bot": "tsx --env-file-if-exists=.env src/index.ts",
+    "watch": "tsx --env-file-if-exists=.env src/watch.ts",
+    "backfill": "tsx --env-file-if-exists=.env src/index.ts --backfill",
+    "follows": "tsx --env-file-if-exists=.env src/follows.ts",
+    "usage": "tsx --env-file-if-exists=.env src/budget.ts"
+  },
+  "keywords": [
+    "fomo",
+    "fomoapi",
+    "solana",
+    "evm",
+    "onchain",
+    "pnl",
+    "copy-trading",
+    "leaderboard",
+    "api-client"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
