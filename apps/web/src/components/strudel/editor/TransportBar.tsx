@@ -72,14 +72,8 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
   };
 
   return (
-    <header className="flex items-center gap-4 border-b border-line bg-surface px-4 py-2.5">
-      <Link href="/" title="all songs">
-        <h1 className="font-display text-sm font-black tracking-[0.25em] text-text select-none transition-colors hover:text-white"></h1>
-      </Link>
-
+    <header className="flex items-center gap-1 border-b border-line bg-surface py-2.5">
       <div className="h-5 w-px bg-line" />
-
-      {/* transport */}
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -94,7 +88,6 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
           {isPlaying ? <StopIcon /> : <PlayIcon />}
         </button>
         <div className="flex items-center gap-2 pl-1">
-          {/* green only while it is actually running; idle is inert, not "ok" */}
           <span className={`led ${!ready ? 'led-loading' : isPlaying ? 'led-on' : ''}`} />
           <span className="silkscreen w-14">{!ready ? 'loading' : isPlaying ? 'playing' : 'ready'}</span>
         </div>
@@ -182,7 +175,7 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
         <MasterScope />
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-3 flex items-center gap-1">
         <button
           type="button"
           onClick={() => getEngine()?.undo()}
@@ -224,13 +217,24 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
         >
           sounds
         </button>
+        <button
+          type="button"
+          onClick={() => setPanel(panel === 'ai' ? 'chunk' : 'ai')}
+          className={`h-7 rounded border px-3 text-xs transition-colors ${
+            panel === 'ai'
+              ? 'border-acid-dim text-acid'
+              : 'border-line bg-surface-2 text-text-dim hover:border-line-bright hover:text-text'
+          }`}
+        >
+          ai
+        </button>
         <input
           type="text"
           value={title}
           onChange={(e) => onTitleChange?.(e.target.value)}
           spellCheck={false}
           aria-label="Song title"
-          className="h-7 w-44 rounded border border-transparent bg-transparent px-2 text-right text-sm text-text outline-none transition-colors hover:border-line focus:border-acid-dim focus:bg-background"
+          className="h-7 w-28 rounded border border-transparent bg-transparent px-2 text-right text-sm text-text outline-none transition-colors hover:border-line focus:border-acid-dim focus:bg-background"
         />
         <button
           type="button"
@@ -250,13 +254,13 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
         >
           export
         </button>
-        <button
+        {/* <button
           type="button"
           onClick={onReset}
           className="h-7 rounded border border-line bg-surface-2 px-3 text-xs text-text-dim hover:border-ember-dim hover:text-ember"
         >
           reset
-        </button>
+        </button> */}
         <Link
           href="/"
           className="h-7 rounded border border-line bg-surface-2 px-3 text-xs leading-7 text-text-dim hover:border-line-bright hover:text-text"

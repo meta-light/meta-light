@@ -15,7 +15,8 @@ export type WriteSource =
   | 'timeline.weights'
   | 'timeline.structure'
   | 'timeline.cell'
-  | 'timeline.author';
+  | 'timeline.author'
+  | 'ai.patch';
 
 export const writeSource = Annotation.define<WriteSource>();
 

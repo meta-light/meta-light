@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+.env
+.DS_Store
+
+# local rate-limit ledger and paid-for lookups
+usage.json
+usage.json.tmp
+cache/
