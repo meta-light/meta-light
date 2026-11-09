@@ -1,6 +1,71 @@
 {
   "research": [
     {
+      "title": "Pearl: Bitcoin for AI?",
+      "url": "https://messari.io/report/pearl-bitcoin-for-ai",
+      "source": "Report",
+      "excerpt": "Pearl keeps Bitcoin's fixed supply but swaps useless hashes for the matrix math that runs AI, so one GPU could earn AI revenue and PEARL at once. Co-authored with Sam Schubert.",
+      "publishedAt": "2026-11-02T15:07:00.000Z",
+      "date": "2026-11-02",
+      "tags": [
+        "PRL",
+        "AI",
+        "PoW"
+      ]
+    },
+    {
+      "title": "DAWN: Underwriting the Ramp",
+      "url": "https://messari.io/report/dawn-underwriting-the-ramp",
+      "source": "Report",
+      "excerpt": "DAWN launched the USD.infra Vault on Solana on September 22: the vault lends against contracted infrastructure revenue and carries the strongest allocation-level disclosure in Collateralized Onchain Infrastructure Lending (COIL), with binary gates, a recomputable scoring rule, and a 30-day delay on parameter changes.",
+      "publishedAt": "2026-10-02T12:00:00.000Z",
+      "date": "2026-10-02",
+      "tags": [
+        "COIL",
+        "DePIN",
+        "Lending"
+      ]
+    },
+    {
+      "title": "USD.AI: The Loan Book Catches Up",
+      "url": "https://messari.io/report/usd-ai-the-loan-book-catches-up",
+      "source": "Report",
+      "excerpt": "Active loans have scaled from $8.02M at our February note and ~$61M at TGE to $272.4M in current principal at a blended 11.6% rate. We frame 12-month scenarios for USD.AI and CHIP calibrated to current fundamentals, with depositor net APY landing between 7.9% and 8.3% in every case.",
+      "publishedAt": "2026-09-15T12:00:00.000Z",
+      "date": "2026-09-15",
+      "tags": [
+        "CHIP",
+        "AI",
+        "Lending"
+      ],
+      "twitterUrl": "https://x.com/0xMetaLight/status/2099841408018292804"
+    },
+    {
+      "title": "The Onchain AI Data Stack",
+      "url": "https://messari.io/report/the-onchain-ai-data-stack",
+      "source": "Report",
+      "excerpt": "The most expensive input to a frontier AI model has become data whose origin labs can prove and attribute. We map the onchain data supply chain across four layers, from commodity collection to provenance infrastructure, and argue that value migrates upward.",
+      "publishedAt": "2026-07-30T12:06:38.566Z",
+      "date": "2026-07-30",
+      "tags": [
+        "AI",
+        "Data"
+      ]
+    },
+    {
+      "title": "Compute Capital Markets: Financializing the AI Supply Chain",
+      "url": "https://messari.io/report/compute-capital-markets-financializing-the-ai-supply-chain",
+      "source": "Report",
+      "excerpt": "A Compute Capital Market lets the producers and consumers of GPU time hedge and speculate on its price, similar to the way energy, metals, and agricultural commodities trade. Compute demand is two-sided, the precondition for any hedging market, and today's dealer-intermediated structure is the seed of one.",
+      "publishedAt": "2026-07-08T15:35:20.619Z",
+      "date": "2026-07-08",
+      "tags": [
+        "AI",
+        "DePIN",
+        "Compute"
+      ]
+    },
+    {
       "title": "Bittensor: Less Leakage, More Leverage",
       "slug": "bittensor-less-leakage-more-leverage",
       "kind": "flashnote",
@@ -500,6 +565,141 @@
   ],
   "newsletters": [
     {
+      "title": "Black October",
+      "subtitle": "Worse before it gets better",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_f505e795-45bd-4ae9-823a-28f0f4c4e0c6",
+      "date": "2026-10-29T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "On quantum risk",
+      "subtitle": "Your favorite chain is (probably not) going to get nuked",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_08f63c65-7923-4473-9884-5a00b6f3c032",
+      "date": "2026-10-15T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Useful is optional",
+      "subtitle": "The miners aren't doing AI",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_404cb91f-20c2-4e55-9a35-3914f42a2031",
+      "date": "2026-10-01T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Project Finance Goes Onchain",
+      "subtitle": "DAWN targets overlooked infrastructure contracts",
+      "url": "https://blockworks-research.beehiiv.com/p/project-finance-goes-onchain",
+      "date": "2026-09-17T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "World's Launch Theater",
+      "subtitle": "Trolling is the distribution strategy",
+      "url": "https://blockworks-research.beehiiv.com/p/world-s-launch-theater",
+      "date": "2026-09-10T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Anatomy of a Helium Squeeze",
+      "subtitle": "Helium went vertical. We checked the oracles.",
+      "url": "https://blockworks-research.beehiiv.com/p/anatomy-of-a-helium-squeeze",
+      "date": "2026-09-03T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "1,000 Macs walk into a compute market",
+      "subtitle": "The DePIN playbook, minus the token",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_1687953f-1c3d-4e3c-ae82-403423dda059",
+      "date": "2026-08-27T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Trust Can't Wait",
+      "subtitle": "Disclosure gets a platform and a rulebook",
+      "url": "https://blockworks-research.beehiiv.com/p/trust-can-t-wait",
+      "date": "2026-08-20T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Compute that pays twice",
+      "subtitle": "Nockchain turns AI inference into block rewards",
+      "url": "https://blockworks-research.beehiiv.com/p/compute-that-pays-twice",
+      "date": "2026-08-13T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "The fomo Question",
+      "subtitle": "Can social trading build a moat?",
+      "url": "https://blockworks-research.beehiiv.com/p/the-fomo-question",
+      "date": "2026-08-06T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Futarchy everywhere",
+      "subtitle": "Upbit rally meets the futarchy moat test",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_0abae172-2bbc-4613-9091-efe657475a7b",
+      "date": "2026-07-30T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Cutting Through CLARITY",
+      "subtitle": "What changed, what didn't",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_115f5959-23d5-4123-b214-ecbdcbabfca3",
+      "date": "2026-07-23T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito",
+        "Luke Leasure"
+      ]
+    },
+    {
+      "title": "Holding the line",
+      "subtitle": "Pre-IPO tokens, BTC treasuries and a $20M exploit",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_d3842fcd-53e9-4bae-a6fa-8c29870c134b",
+      "date": "2026-07-16T14:00:00.000Z",
+      "authors": [
+        "Luke Leasure",
+        "Nick Carpinito"
+      ]
+    },
+    {
+      "title": "Grass sells the news",
+      "subtitle": "Revenue matched all of last year in six months. The token fell a third anyway.",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_d97aaf3a-37bb-46d6-9f0a-8d3ac5695b0f",
+      "date": "2026-07-09T14:00:00.000Z",
+      "authors": [
+        "Nick Carpinito"
+      ]
+    },
+    {
       "title": "Financializing the AI Supply Chain",
       "subtitle": "Every venue settles cash. Nobody has closed the delivery gap.",
       "url": "https://blockworks-research.beehiiv.com/p/financializing-the-ai-supply-chain",
@@ -532,7 +732,7 @@
     {
       "title": "Superluminal's Long Runway",
       "subtitle": "BTC at range lows, Fogo waits",
-      "url": "https://blockworks-research.beehiiv.com/p/superluminal-runway",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_6aefbe5c-2bce-47f2-bd6f-082a9ec5b28d",
       "date": "2026-06-11T14:00:00.000Z",
       "authors": [
         "Nick Carpinito",
@@ -572,7 +772,7 @@
     {
       "title": "STRCing for yield",
       "subtitle": "A killer listing, or just the latest points farm?",
-      "url": "https://blockworks-research.beehiiv.com/p/strcing-for-yield",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_79786e42-7a8b-4c11-8a04-efb169cccded",
       "date": "2026-05-21T13:59:01.000Z",
       "authors": [
         "Luke Leasure",
@@ -582,7 +782,7 @@
     {
       "title": "SLX delays launch, Clarity votes",
       "subtitle": "The vote that sets crypto's regulatory clock",
-      "url": "https://blockworks-research.beehiiv.com/p/slx-delays-launch-clarity-votes",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_10a80b5c-54d0-4f19-819f-fb29d10d6bd7",
       "date": "2026-05-14T14:00:00.000Z",
       "authors": [
         "Nick Carpinito"
@@ -601,7 +801,7 @@
     {
       "title": "CHIP Rips?",
       "subtitle": "CHIP's Day-1 Report Card",
-      "url": "https://blockworks-research.beehiiv.com/p/chip-rips",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_b458562e-b823-4bfb-a432-eef2bc36fc55",
       "date": "2026-04-23T13:59:31.075Z",
       "authors": [
         "Nick Carpinito"
@@ -640,7 +840,7 @@
     {
       "title": "Intel “partnership”",
       "subtitle": "Narrative beats fundamentals",
-      "url": "https://blockworks-research.beehiiv.com/p/intel-partnership",
+      "url": "https://blockworks.com/newsletter/0xresearch/issue/post_5736887d-f4f6-4c56-b539-3418023ca1c6",
       "date": "2026-03-26T14:00:00.000Z",
       "authors": [
         "Nick Carpinito"
@@ -732,6 +932,76 @@
       "authors": [
         "Nick Carpinito"
       ]
+    }
+  ],
+  "speaking": [
+    {
+      "title": "DePIN Burns",
+      "url": "https://x.com/DePINConnection/status/1973006486600360301"
+    },
+    {
+      "title": "DePIN Disruption",
+      "url": "https://youtu.be/0-_2hCY9Dn4"
+    },
+    {
+      "title": "DePIN Roundtable",
+      "url": "https://youtu.be/L2QTohub3aM"
+    },
+    {
+      "title": "DePIN x AI Confluence",
+      "url": "https://youtu.be/bzuhz1jAU3A"
+    },
+    {
+      "title": "DZ Mainnet Stream",
+      "url": "https://youtu.be/FE1J19RWPd0"
+    },
+    {
+      "title": "Helium DAT",
+      "url": "https://x.com/DePINConnection/status/1980658487337316399"
+    },
+    {
+      "title": "Helium Fireside Chat",
+      "url": "https://www.youtube.com/live/Acv9r1VxHng"
+    },
+    {
+      "title": "Helium Live",
+      "url": "https://www.youtube.com/live/yb5X9aq6gMQ"
+    },
+    {
+      "title": "Helium Valuation",
+      "url": "https://x.com/DePINConnection/status/1957981304601080141"
+    },
+    {
+      "title": "MPLX Genesis Stream",
+      "url": "https://x.com/Blockworks_/status/1968353818942538168"
+    },
+    {
+      "title": "PMLS DePIN Playlist",
+      "url": "https://www.youtube.com/watch?v=JdBP-2QFDFY"
+    },
+    {
+      "title": "PMLS Pics",
+      "url": "https://photos.google.com/share/AF1QipMKi7CGVvQStaBvG8f_HXU2wdU84j5YqeYjIZw1_xUhEqx5gYeZcl9EhPcXZTz7Yg?key=R1NwNUxGdDBqRFlielZ4WmUxTU5EZlNKQm9NVUF3"
+    },
+    {
+      "title": "SOL Boston Panel",
+      "url": "https://www.youtube.com/watch?v=-WvdMq66TBo&list=PLZ8A93NdkXILvN9oAo4lwqtdnqysFZA3z&index=4"
+    },
+    {
+      "title": "State of DeWi",
+      "url": "https://youtu.be/z2qJUsiyBZ0"
+    },
+    {
+      "title": "Stream Helium",
+      "url": "https://youtu.be/F6BsNclvbsM"
+    },
+    {
+      "title": "Stream SOL DATs",
+      "url": "https://youtu.be/abzo4aAHRRA"
+    },
+    {
+      "title": "Superteam Germany",
+      "url": "https://x.com/SuperteamDE/status/2027065400387944828"
     }
   ]
 }

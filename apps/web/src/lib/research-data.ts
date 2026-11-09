@@ -1,6 +1,6 @@
 import content from "./content.json";
 
-export type ResearchSource = "Flashnote" | "Dashboard Primer" | "Substack" | "Medium" | "Academic" | "X";
+export type ResearchSource = "Report" | "Dashboard Primer" | "Substack" | "Medium" | "Academic" | "X";
 
 export type ResearchItem = {
   title: string;
@@ -45,7 +45,7 @@ const bwrItems: ResearchItem[] = (content.research as BwrRaw[]).map((r) => {
     officialUrl,
     date: r.publishedAt ?? r.date ?? "",
     excerpt: r.excerpt,
-    source: r.source ?? "Flashnote",
+    source: r.source ?? "Report",
     tags: r.tags,
   };
 });
@@ -94,3 +94,24 @@ export const researchItems: ResearchItem[] = [
 export const newsletterItems: NewsletterItem[] = [
   ...(content.newsletters as NewsletterItem[]),
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+export type SpeakingPlatform = "YouTube" | "X" | "Photos" | "Link";
+
+export type SpeakingItem = {
+  title: string;
+  url: string;
+  platform: SpeakingPlatform;
+};
+
+const platformFor = (url: string): SpeakingPlatform => {
+  const host = new URL(url).hostname.replace(/^www\./, "");
+  if (host === "youtu.be" || host.endsWith("youtube.com")) return "YouTube";
+  if (host === "x.com" || host === "twitter.com") return "X";
+  if (host === "photos.google.com") return "Photos";
+  return "Link";
+};
+
+export const speakingItems: SpeakingItem[] = (content.speaking as { title: string; url: string }[]).map((s) => ({
+  ...s,
+  platform: platformFor(s.url),
+}));

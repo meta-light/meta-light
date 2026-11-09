@@ -1,5 +1,7 @@
 # my-app
 
+https://github.com/alchemy-run/alchemy
+
 To install dependencies:
 
 ```bash
