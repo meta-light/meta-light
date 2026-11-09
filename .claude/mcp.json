@@ -8,5 +8,26 @@
             "type": "http",
             "url": "https://mcp.morpho.org/mcp"
         }
+    },
+    "mcpServers": {
+        "cmc-mcp": {
+        "url": "https://mcp.coinmarketcap.com/mcp",
+        "headers": {
+            "X-CMC-MCP-API-KEY": "xxxx"
+        }
+        },
+        "coingecko_mcp": {
+        "command": "npx",
+        "args": [
+            "mcp-remote",
+            "https://mcp.api.coingecko.com/mcp"
+        ]
+        },
+        "mcp-server-defillama": {
+        "command": "npx",
+        "args": [
+            "@mcp-dockmaster/mcp-server-defillama"
+        ]
+        }
     }
 }
