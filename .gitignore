@@ -74,4 +74,4 @@ apps/carpcap/src/services/ventures/
 apps/crm/crm.db
 
 # ---- agents ----
-.agents/twitter-accounts.json
+.claude/twitter-accounts.json

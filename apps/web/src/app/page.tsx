@@ -1,40 +1,35 @@
 "use client"
 import { Github, Linkedin, Twitter } from "lucide-react"
-import { researchItems, newsletterItems, type ResearchSource } from "../lib/research-data"
-
-const sourceColor: Record<ResearchSource, string> = {
-  Flashnote: "text-green-500",
-  "Dashboard Primer": "text-teal-400",
-  Substack: "text-orange-500",
-  Medium: "text-gray-300",
-  Academic: "text-blue-400",
-  X: "text-sky-400",
-}
+import Writing from "../components/home/Writing"
 
 export default function CarpinitoLanding() {
   const experiences = [
     {
       title: "Research Analyst @ Blockworks",
       link: "https://www.blockworks.co/",
-      period: "2025 - Present",
-      category: "Research, Data, DePIN",
-      description: "Deep Research and Analysis for Blockworks Research subscribers.",
-      achievements: []
+      period: "2025 - 2026",
+      category: "Research, Data, Product",
+      description: "Split time between research and building. Wrote reports and the weekly 0xResearch newsletter. Also wrote PRDs and shipped code for Blockworks products and internal tools.",
+      achievements: [
+        { text: "One of three on the Token Transparency Framework team, built the RapidFile Portal" },
+        { text: "Rebuilt the Blockworks Intel fundraising data pipeline from scratch, replacing external vendors" }, 
+        { text: "Ran internal analytics infrastructure and built AI agent workflows for research and content" }
+      ]
     },
     {
       title: "Head of Research @ Mycelium Networks",
       link: "https://www.myceliumx.com/",
       period: "2021 - 2025",
       category: "DePIN, Compute, Research",
-      description: "A DePIN Ecosystem Incubator, Accelerator, and Enterprise Miner.",
+      description: "A distributed infrastructure incubator and accelerator with a built-in testbed. Started as an intern, then Research Analyst, then Head of Research.",
       achievements: [
-        { 
-          text: "Bounds Accelerator Inaugural Cohort",
-          url: "https://www.coinbase.com/blog/coinbase-ventures-to-support-university-of-arkansas-bounds-accelerator-to"
+        {
+          text: "Grew the Mycelium Testbed from roughly 200 to 1,000+ deployed devices",
+          url: "/docs/mycelium-testbed.pdf"
         },
         {
-          text: "Mycelium Testbed",
-          url: "/docs/mycelium-testbed.pdf"
+          text: "Bounds Accelerator Inaugural Cohort (2024)",
+          url: "https://www.coinbase.com/blog/coinbase-ventures-to-support-university-of-arkansas-bounds-accelerator-to"
         }
       ]
     },
@@ -42,8 +37,8 @@ export default function CarpinitoLanding() {
       title: "Head of Research @ Parameter Research",
       link: "https://www.parameter.ventures/",
       period: "2023 - 2025",
-      category: "DePIN, Growth, Dev",
-      description: "DePIN Data, Analysis and Hot Takes",
+      category: "Product, Research, Development",
+      description: "DePIN data, analysis and due diligence.",
       achievements: [
         { 
           text: "DePIN Pulse",
@@ -80,20 +75,20 @@ export default function CarpinitoLanding() {
       link: "https://uark.edu",
       period: "2019 - 2023",
       category: "Web3, Finance, Computer Science",
-      description: "B.S.B.A Information Systems.",
+      description: "BSBA in Information Systems, concentration in Blockchain Enterprise Systems.",
       achievements: [
         {
           text: "2nd Place Razorblock Hackathon with CHRG",
         },
         {
-          text: "UARK Crypto Club",
+          text: "Founder, UARK Crypto Club",
+        },
+        {
+          text: "Independent study on running blockchain nodes on IBM z16 mainframes",
         }
       ]
     }
   ];
-
-  const research = researchItems;
-  const formatDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
 
   return (
     <div className="min-h-screen bg-black text-gray-100 font-mono">
@@ -105,7 +100,7 @@ export default function CarpinitoLanding() {
                 Nick Carpinito
                 <div className="flex items-center gap-2">
                   <img src="/home/dewi-cat.gif" alt="Dewi Cat" width={60} height={60} />
-                  <span className="text-gray-400">(Meta-Light)</span>
+                  <span className="text-gray-400">(0xMetaLight)</span>
                 </div>
               </h1>
             </div>
@@ -176,59 +171,7 @@ export default function CarpinitoLanding() {
             ))}
           </div>
         </section>
-        <section className="mb-20 border-t border-gray-800 pt-20">
-          <h2 className="text-2xl font-bold mb-2 text-center">Research</h2>
-          <p className="text-xs text-gray-500 text-center mb-12">{research.length} pieces across Blockworks, Substack &amp; more</p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {research.map((item) => (
-              <a
-                key={item.url}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col border border-gray-800 rounded-lg p-4 hover:border-gray-600 transition-colors"
-              >
-                <div className="flex items-center justify-between mb-2 text-xs">
-                  <span className={`uppercase tracking-wide ${sourceColor[item.source]}`}>{item.source}</span>
-                  <span className="text-gray-500">{formatDate(item.date)}</span>
-                </div>
-                <h3 className="text-base font-bold mb-2 group-hover:text-gray-300 transition-colors">{item.title}</h3>
-                {item.excerpt && (<p className="text-sm text-gray-400 line-clamp-3">{item.excerpt}</p>)}
-                {item.tags && item.tags.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {item.tags.slice(0, 3).map((tag) => (<span key={tag} className="text-[10px] uppercase tracking-wide text-gray-500 border border-gray-800 rounded px-2 py-0.5">{tag}</span>))}
-                  </div>
-                )}
-              </a>
-            ))}
-          </div>
-        </section>
-        <section className="mb-20 border-t border-gray-800 pt-20">
-          <h2 className="text-2xl font-bold mb-2 text-center">Newsletters</h2>
-          <p className="text-xs text-gray-500 text-center mb-12">{newsletterItems.length} editions co-authored at Blockworks Research</p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {newsletterItems.map((n) => {
-              const coAuthors = n.authors.filter((a) => a !== "Nick Carpinito")
-              return (
-                <a
-                  key={n.url}
-                  href={n.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col border border-gray-800 rounded-lg p-4 hover:border-gray-600 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2 text-xs">
-                    <span className="uppercase tracking-wide text-purple-400">Newsletter</span>
-                    <span className="text-gray-500">{formatDate(n.date)}</span>
-                  </div>
-                  <h3 className="text-base font-bold mb-2 group-hover:text-gray-300 transition-colors">{n.title}</h3>
-                  {n.subtitle && (<p className="text-sm text-gray-400 line-clamp-3">{n.subtitle}</p>)}
-                  {coAuthors.length > 0 && (<p className="mt-3 text-[10px] uppercase tracking-wide text-gray-500">with {coAuthors.join(", ")}</p>)}
-                </a>
-              )
-            })}
-          </div>
-        </section>
+        <Writing />
       </main>
     </div>
   )
