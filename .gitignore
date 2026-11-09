@@ -75,3 +75,7 @@ apps/crm/crm.db
 
 # ---- agents ----
 .claude/twitter-accounts.json
+
+quantjourney-bt/
+
+backups/
