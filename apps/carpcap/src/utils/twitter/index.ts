@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
-import { Tweets, ITweet } from './schema';
-import { MONGODB_URI, TWITTER_API_KEY } from '../../env';
+import { upsertTweets } from '../../db/tweets';
+import { connectDatabase } from '../../db/client';
+import { ITweet } from './schema';
+import { TWITTER_API_KEY } from '../../env';
 import { USER_PROFILE } from '../../services/social/config';
 
 interface RateLimitInfo {remaining: number; resetTime: number; retryAfter: number;}
@@ -134,14 +135,7 @@ export class TwitterApiService {
         if (!processedTweet.source) processedTweet.source = {} as any;
         processedTweet.source!.fetched_at = processedTweet.source!.fetched_at || new Date();
         if (processedTweet.media && !Array.isArray(processedTweet.media)) {processedTweet.media = [];}
-        const cleanedTweet = JSON.parse(JSON.stringify(processedTweet));
-        bulkOps.push({
-          updateOne: {
-            filter: { id: cleanedTweet.id },
-            update: { $set: cleanedTweet, $setOnInsert: { publishedAt: new Date() }},
-            upsert: true
-          }
-        });
+        bulkOps.push(JSON.parse(JSON.stringify(processedTweet)));
       } 
       catch (error) {
         const errorMsg = `Failed to process tweet ${tweet.id}: ${error instanceof Error ? error.message : String(error)}`;
@@ -149,7 +143,7 @@ export class TwitterApiService {
         console.error(errorMsg);
       }
     }
-    const allIds = bulkOps.map((op: any) => op.updateOne.filter.id);
+    const allIds = bulkOps.map((op: any) => op.id);
     const uniqueIds = new Set(allIds);
     if (allIds.length !== uniqueIds.size) {
       console.log(`   WARNING: Duplicate IDs detected! ${allIds.length} ops but only ${uniqueIds.size} unique IDs`);
@@ -157,22 +151,10 @@ export class TwitterApiService {
       console.log(`       Duplicate IDs: ${[...new Set(duplicates)].join(', ')}`);
     }
     if (bulkOps.length > 0) {
-      bulkOps[0].updateOne.update.$set;
       try {
-        const bulkResult = await Tweets.collection.bulkWrite(bulkOps, { ordered: false });
-        result.newTweets = bulkResult.upsertedCount;
-        result.updatedTweets = bulkResult.modifiedCount;
-        const bulkResultAny = bulkResult as any;
-        if (bulkResultAny.writeErrors && bulkResultAny.writeErrors.length > 0) {
-          console.log(`    BulkWrite had ${bulkResultAny.writeErrors.length} write errors:`);
-          bulkResultAny.writeErrors.slice(0, 3).forEach((err: any) => {
-            console.log(`      Error: ${err.errmsg} | Code: ${err.code} | Index: ${err.index}`);
-            if (err.index < bulkOps.length) {const failedId = bulkOps[err.index].updateOne.filter.id; console.log(`Failed tweet ID: ${failedId}`);}
-          });
-        }
-        const discrepancy = bulkOps.length - bulkResult.matchedCount;
-        if (discrepancy > 0) {console.log(`    WARNING: ${discrepancy} tweets were prepared but not matched/saved!`);}
-        if (bulkResult.matchedCount > 0 && bulkResult.modifiedCount === 0 && bulkResult.upsertedCount === 0) {console.log(`${bulkResult.matchedCount} tweets already exist with identical data`);}
+        const bulkResult = await upsertTweets(bulkOps);
+        result.newTweets = bulkResult.newTweets;
+        result.updatedTweets = bulkResult.updatedTweets;
       } 
       catch (error) {
         const errorMsg = `Database bulk write failed: ${error instanceof Error ? error.message : String(error)}`;
@@ -188,12 +170,7 @@ export class TwitterApiService {
   }
 
   private async ensureDbConnection(): Promise<void> {
-    if (!mongoose.connection.readyState) {
-      if (!MONGODB_URI) {throw new Error('MONGODB_URI not set');}
-      console.log('Connecting to MongoDB...');
-      await mongoose.connect(MONGODB_URI);
-      console.log('MongoDB connected');
-    }
+    await connectDatabase();
   }
 
   private delay(ms: number): Promise<void> {return new Promise(resolve => setTimeout(resolve, ms));}

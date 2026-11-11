@@ -1,7 +1,7 @@
 import puppeteer, { Browser } from 'puppeteer';
 import { existsSync } from 'fs';
 import { platform } from 'os';
-import { Tweet } from './model';
+import { findScrapedTweet, insertScrapedTweet, updateScrapedTweetMetrics } from '../../db/scraped-tweets';
 
 export interface TweetData {id: string; text: string; author: string; timestamp: string; url: string;}
 export interface PuppeteerConfig {headless: boolean; args: string[]; timeout?: number; protocolTimeout?: number; retries?: number; executablePath?: string;}
@@ -836,13 +836,27 @@ export async function scrapeTweets() {
           screenName: profileData.screenName,
           scrapedAt: new Date()
         };
-        const existingTweet = await Tweet.findOne({ id: tweet.id });
+        const existingTweet = await findScrapedTweet(tweet.id);
         if (existingTweet) {
-          await Tweet.findOneAndUpdate({ id: tweet.id }, { $set: {metrics: tweetData.metrics, quotedTweet: tweetData.quotedTweet, scrapedAt: tweetData.scrapedAt} });
+          await updateScrapedTweetMetrics(tweet.id, tweetData.metrics, tweetData.quotedTweet, tweetData.scrapedAt);
           updatedCount++;
           console.log(`🔄 Updated tweet metrics: ${tweet.id}`);
         } 
-        else {await Tweet.create(tweetData); newCount++;}
+        else {
+          await insertScrapedTweet({
+            ...tweetData,
+            tweet: tweetData.tweet ?? undefined,
+            created_at: tweetData.created_at ?? undefined,
+            permalink: tweetData.permalink ?? undefined,
+            quotedTweet: tweetData.quotedTweet ? {
+              id: tweetData.quotedTweet.id,
+              tweet: tweetData.quotedTweet.tweet ?? undefined,
+              created_at: tweetData.quotedTweet.created_at ?? undefined,
+              permalink: tweetData.quotedTweet.permalink ?? undefined,
+            } : undefined,
+          });
+          newCount++;
+        }
       } 
       catch (error) {console.error(`Error upserting tweet ${tweet.id}:`, error);}
     }

@@ -20,6 +20,8 @@ coverage/
 # next.js
 .next/
 out/
+.open-next/
+.wrangler/
 
 # production / build output
 build/
@@ -46,6 +48,7 @@ yarn-error.log*
 # env files
 .env
 .env*.local
+.doppler.yaml
 
 # vercel
 .vercel

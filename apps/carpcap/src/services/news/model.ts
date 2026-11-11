@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 export interface NewsItem {
   id: string;
   title: string;
@@ -17,49 +15,6 @@ export interface NewsItem {
   sourceType: 'velo' | 'treeofalpha' | 'newsapi' | 'cryptopanic' | 'fmp';
   scrapedAt: Date;
 }
-
-const newsItemSchema = new mongoose.Schema<NewsItem>({
-  id: { type: String, required: true, unique: true },
-  title: { type: String, required: true },
-  source: { type: String, required: true },
-  url: { type: String, required: false },
-  publishedAt: { type: Date, required: true },
-  description: { type: String },
-  content: { type: String },
-  type: { 
-    type: String, 
-    enum: ['news', 'social', 'analysis', 'blog'],
-    default: 'news'
-  },
-  impact: { 
-    type: String, 
-    enum: ['high', 'medium', 'low'],
-    default: 'medium'
-  },
-  coin: { type: String },
-  priority: { type: String },
-  kind: { type: String },
-  votes: {
-    negative: { type: Number },
-    positive: { type: Number },
-    important: { type: Number }
-  },
-  sourceType: { 
-    type: String, 
-    enum: ['velo', 'treeofalpha', 'newsapi', 'cryptopanic', 'fmp'],
-    required: true
-  },
-  scrapedAt: { type: Date, default: Date.now }
-}, {timestamps: true, collection: 'carp-news'});
-
-newsItemSchema.index({ publishedAt: -1 });
-newsItemSchema.index({ source: 1 });
-newsItemSchema.index({ sourceType: 1 });
-newsItemSchema.index({ impact: 1 });
-newsItemSchema.index({ type: 1 });
-newsItemSchema.index({ coin: 1 });
-
-export const NewsModel = mongoose.model<NewsItem>('NewsItem', newsItemSchema);
 
 export class NewsTransformer {
   static fromVeloNews(item: any): Partial<NewsItem> {

@@ -1,10 +1,11 @@
 import { GitHubAPIClient } from './fetcher';
-import { ProposalModel, RepoCheckModel, IProposal } from './model';
+import { IProposal } from './model';
 import { TRACKED_REPOS, GITHUB_CONFIG, TrackedRepo } from './config';
 import { ProposalParser } from './parser';
 import { telegramBot } from '../../utils/telegram';
 import { queryGrok } from '../../utils/ai';
-import { Tweets } from '../../utils/twitter/schema';
+import { findTopTweetsByEngagement } from '../../db/tweets';
+import { countProposals, createProposal, findProposalByKey, findRepoCheck, listProposalsByStatus, listProposalsForRepo, listRecentProposals, markProposalsNotified, saveProposal, upsertRepoCheck } from '../../db/proposals';
 import { githubSystemPrompt, githubUserPrompt } from './prompts';
 
 export class GitHubProposalMonitor {
@@ -31,10 +32,10 @@ export class GitHubProposalMonitor {
                     const rawContent = await this.client.fetchRawFileContent(owner, repo, file.path, branch);
                     const parsed = ProposalParser.parse(rawContent, proposalType);
                     const proposalId = `${owner}/${repo}/${file.path}`;
-                    const existing = await ProposalModel.findOne({ proposalId });
+                    const existing = await findProposalByKey(proposalId);
                     if (existing) continue;
                     const csvHeaders = ProposalParser.isCSVFile(file.path) ? ProposalParser.parseCSVHeaders(rawContent) : undefined;
-                    await ProposalModel.create({
+                    await createProposal({
                         proposalId,
                         owner,
                         repo,
@@ -80,17 +81,17 @@ export class GitHubProposalMonitor {
         console.log(`Checking ${owner}/${repo} for ${notificationOnly ? 'changes' : 'proposals'}...`);
         try {
             if (!notificationOnly) {
-                const existingProposalCount = await ProposalModel.countDocuments({ owner, repo });
+                const existingProposalCount = await countProposals(owner, repo);
                 if (existingProposalCount === 0) {console.log('No baseline found - initializing...'); await this.initializeBaseline(trackedRepo); return { newProposals: 0, updatedProposals: 0, totalChecked: 0, proposals: [] };}
             }
-            const repoCheck = await RepoCheckModel.findOne({ owner, repo, branch });
+            const repoCheck = await findRepoCheck(owner, repo, branch);
             const options: any = {branch, per_page: GITHUB_CONFIG.maxCommitsPerFetch};
             if (repoCheck?.lastCommitDate) {options.since = repoCheck.lastCommitDate.toISOString();} 
             else {const lookbackDate = new Date(Date.now() - GITHUB_CONFIG.initialLookbackHours * 60 * 60 * 1000); options.since = lookbackDate.toISOString();}
             const commits = await this.client.fetchCommits(owner, repo, options);
             if (commits.length === 0) {
                 console.log('No new commits since last check');
-                await RepoCheckModel.findOneAndUpdate({ owner, repo, branch }, {$set: {lastCheckAt: new Date(), errorCount: 0}}, { upsert: true, new: true });
+                await upsertRepoCheck({ owner, repo, branch, lastCheckAt: new Date(), errorCount: 0 });
                 return { newProposals: 0, updatedProposals: 0, totalChecked: 0, proposals: [] };
             }
             console.log(`Found ${commits.length} new commits to analyze`);
@@ -117,7 +118,7 @@ export class GitHubProposalMonitor {
                             const rawContent = await this.client.fetchRawFileContent(owner, repo, filePath, branch);
                             const currentHeaders = ProposalParser.parseCSVHeaders(rawContent);
                             const proposalId = `${owner}/${repo}/${filePath}`;
-                            const existing = await ProposalModel.findOne({ proposalId });
+                            const existing = await findProposalByKey(proposalId);
                             
                             if (existing && existing.csvHeaders && currentHeaders) {
                                 let changed = false;
@@ -139,7 +140,7 @@ export class GitHubProposalMonitor {
                                         existing.csvHeaders = currentHeaders;
                                         existing.lastCommitSha = fileInfo.sha;
                                         existing.lastCommitDate = fileInfo.commitDate;
-                                        await existing.save();
+                                        await saveProposal(existing);
                                     }
                                 }
                             } 
@@ -147,7 +148,7 @@ export class GitHubProposalMonitor {
                                 csvFilesWithColumnChanges.push(filePath);
                                 // If notificationOnly, create a minimal record to track headers
                                 if (notificationOnly) {
-                                    await ProposalModel.create({
+                                    await createProposal({
                                         proposalId,
                                         owner,
                                         repo,
@@ -180,7 +181,7 @@ export class GitHubProposalMonitor {
             if (filesToNotify.length > 0 && hasNewCommits && GITHUB_CONFIG.enableNotifications) {await this.sendQuickNotification(owner, repo, filesToNotify, branch, notificationOnly);}
             if (notificationOnly) {
                 const proposalCount = 0;
-                await RepoCheckModel.findOneAndUpdate({ owner, repo, branch }, {$set: { lastCheckAt: new Date(), lastCommitSha: latestCommitSha, lastCommitDate: new Date(commits[0].commit.committer.date), proposalCount, errorCount: 0, lastError: undefined } }, { upsert: true, new: true });
+                await upsertRepoCheck({ owner, repo, branch, lastCheckAt: new Date(), lastCommitSha: latestCommitSha, lastCommitDate: new Date(commits[0].commit.committer.date), proposalCount, errorCount: 0, lastError: null });
                 if (changedFiles.size > 0) {console.log(`Notification sent for ${changedFiles.size} changed files`);}
                 else {console.log('No relevant files changed');}
                 return {newProposals: 0, updatedProposals: 0, totalChecked: changedFiles.size, proposals: []};
@@ -193,7 +194,7 @@ export class GitHubProposalMonitor {
                     const rawContent = await this.client.fetchRawFileContent(owner, repo, filePath, branch);
                     const parsed = ProposalParser.parse(rawContent, proposalType);
                     const proposalId = `${owner}/${repo}/${filePath}`;
-                    const existing = await ProposalModel.findOne({ proposalId });
+                    const existing = await findProposalByKey(proposalId);
                     const githubUrl = `https://github.com/${owner}/${repo}/blob/${branch}/${filePath}`;
                     const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
                     const csvHeaders = ProposalParser.isCSVFile(filePath) ? ProposalParser.parseCSVHeaders(rawContent) : undefined;
@@ -218,7 +219,7 @@ export class GitHubProposalMonitor {
                             if (parsed.summary) existing.summary = parsed.summary;
                             if (parsed.motivation) existing.motivation = parsed.motivation;
                             if (parsed.specification) existing.specification = parsed.specification;
-                            await existing.save();
+                            await saveProposal(existing);
                             savedProposals.push(existing);
                             updatedCount++;
                             console.log(`Updated: ${parsed.proposalNumber || filePath}`);
@@ -226,7 +227,7 @@ export class GitHubProposalMonitor {
                         else {console.log(`Skipped (no changes): ${parsed.proposalNumber || filePath}`);}
                     } 
                     else {
-                        const newProposal = await ProposalModel.create({
+                        const newProposal = await createProposal({
                         proposalId,
                         owner,
                         repo,
@@ -265,15 +266,15 @@ export class GitHubProposalMonitor {
                 } 
                 catch (error) {console.error(`   Error processing ${filePath}:`, error);}
             }
-            const proposalCount = await ProposalModel.countDocuments({ owner, repo });
-            await RepoCheckModel.findOneAndUpdate({ owner, repo, branch }, {$set: { lastCheckAt: new Date(), lastCommitSha: latestCommitSha, lastCommitDate: new Date(commits[0].commit.committer.date), proposalCount, errorCount: 0, lastError: undefined } }, { upsert: true, new: true });
+            const proposalCount = await countProposals(owner, repo);
+            await upsertRepoCheck({ owner, repo, branch, lastCheckAt: new Date(), lastCommitSha: latestCommitSha, lastCommitDate: new Date(commits[0].commit.committer.date), proposalCount, errorCount: 0, lastError: null });
             console.log(`   ${newCount} new, ${updatedCount} updated proposals`);
             return {newProposals: newCount, updatedProposals: updatedCount, totalChecked: changedFiles.size, proposals: savedProposals};
         } 
         catch (error: any) {
 
             console.error(`Error checking ${owner}/${repo}:`, error);
-            await RepoCheckModel.findOneAndUpdate({ owner, repo, branch }, { $set: { lastCheckAt: new Date(), lastError: error.message }, $inc: { errorCount: 1 } }, { upsert: true });
+            await upsertRepoCheck({ owner, repo, branch, lastCheckAt: new Date(), lastError: error.message, incrementError: true });
             throw error;
         }
     }
@@ -299,7 +300,7 @@ export class GitHubProposalMonitor {
     private async getTweetPerformanceContext(): Promise<string> {
         try {
             const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-            const tweets = await Tweets.find({createdAt: { $gte: thirtyDaysAgo.toISOString() }, 'metrics.view_count': { $gt: 0 }}).sort({ 'performance.engagement_rate': -1 }).limit(10).lean();
+            const tweets = await findTopTweetsByEngagement(thirtyDaysAgo.toISOString(), 10);
             if (tweets.length === 0) {return 'No recent tweet data available.';}
             const avgEngagement = tweets.reduce((sum, t) => sum + (t.performance?.engagement_rate || 0), 0) / tweets.length;
             const avgLength = tweets.reduce((sum, t) => sum + (t.text?.length || 0), 0) / tweets.length;
@@ -382,8 +383,7 @@ export class GitHubProposalMonitor {
             if (proposals.length === 0) return;
             const message = this.formatProposalMessage(proposals, summary);
             await telegramBot.sendMessage({text: message, parse_mode: 'Markdown', disable_web_page_preview: false});
-            const proposalIds = proposals.map(p => p._id);
-            await ProposalModel.updateMany({ _id: { $in: proposalIds } }, { $set: { notified: true } });
+            await markProposalsNotified(proposals.map((proposal) => proposal.id));
             console.log(`   📤 Sent Telegram notification for ${proposals.length} proposals`);
         } 
         catch (error) {console.error('Error sending proposal notification:', error);}
@@ -422,11 +422,11 @@ export class GitHubProposalMonitor {
         return '📋';
     }
 
-    async getRecentProposals(limit: number = 10): Promise<IProposal[]> {return await ProposalModel.find().sort({ lastUpdatedAt: -1 }).limit(limit).lean();}
-    async getProposalsByStatus(status: string): Promise<IProposal[]> {return await ProposalModel.find({ status: new RegExp(status, 'i') }).sort({ lastUpdatedAt: -1 }).lean();}
+    async getRecentProposals(limit: number = 10): Promise<IProposal[]> {return listRecentProposals(limit);}
+    async getProposalsByStatus(status: string): Promise<IProposal[]> {return listProposalsByStatus(status);}
   
     async getRepoStats(owner: string, repo: string): Promise<{totalProposals: number; statusBreakdown: Record<string, number>; recentProposals: number;}> {
-        const proposals = await ProposalModel.find({ owner, repo }).lean();
+        const proposals = await listProposalsForRepo(owner, repo);
         const statusBreakdown: Record<string, number> = {};
         for (const proposal of proposals) {const status = proposal.status || 'Unknown'; statusBreakdown[status] = (statusBreakdown[status] || 0) + 1;}
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -454,6 +454,5 @@ export async function checkGitHubRepos() {
 }
 
 export { TRACKED_REPOS, GITHUB_CONFIG } from './config';
-export { ProposalModel, RepoCheckModel } from './model';
 export { GitHubAPIClient } from './fetcher';
 export { ProposalParser } from './parser';

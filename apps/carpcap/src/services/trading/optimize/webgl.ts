@@ -1,5 +1,5 @@
-import { connect, disconnect, model } from 'mongoose';
-import { PriceSchema } from '../models/price';
+import { closeDatabase, connectDatabase } from '../../../db/client';
+import { findPricesByChainRange } from '../../../db/prices';
 import { TradingConfig, SolanaCoreValidatedTokens, EclipseCoreValidatedTokens } from '../config';
 import { TokenData } from '../models/interfaces';
 import * as puppeteer from 'puppeteer';
@@ -456,11 +456,7 @@ class GPUOptimizer {
         
         console.log(`📅 Fetching ${network} data from ${startDate.toISOString()} to ${endDate.toISOString()}`);
         
-        const PriceModel = model('prices', PriceSchema);
-        const priceData = await PriceModel.find({
-            chain: network,
-            timestamp: { $gte: startDate, $lte: endDate }
-        }).sort({ timestamp: 1 }).lean();
+        const priceData = await findPricesByChainRange(network, startDate, endDate);
         
         // Group by token and create TokenData objects
         const tokenDataMap = new Map<string, TokenData>();
@@ -661,10 +657,9 @@ async function main() {
     
     try {
         // Connect to MongoDB
-        const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/carpcap';
-        console.log('📦 Attempting to connect to MongoDB...');
-        await connect(mongoUri);
-        console.log('📦 Connected to MongoDB');
+        console.log('Connecting to D1...');
+        await connectDatabase();
+        console.log('Connected to D1');
         
         const results = await optimizer.optimizeSignalsGPU();
         
@@ -674,17 +669,14 @@ async function main() {
         console.error('GPU optimization failed:', error);
         
         // If MongoDB connection failed, provide helpful error message
-        if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' && error.message.includes('ECONNREFUSED')) {
-            console.log('\n💡 MongoDB Connection Issue:');
-            console.log('   - Make sure MongoDB is running on localhost:27017');
-            console.log('   - Or set MONGODB_URI environment variable');
-            console.log('   - Example: MONGODB_URI=mongodb://localhost:27017/carpcap');
+        if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' && error.message.includes('CLOUDFLARE')) {
+            console.log('\nD1 is not configured. Set CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_DATABASE_ID, and CLOUDFLARE_D1_TOKEN.');
         }
     } finally {
         try {
             await optimizer.cleanup();
-            await disconnect();
-            console.log('📦 Disconnected from MongoDB');
+            await closeDatabase();
+            console.log('Disconnected from D1');
         } catch (cleanupError) {
             console.error('📦 Cleanup error:', cleanupError);
         }

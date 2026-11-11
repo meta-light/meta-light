@@ -4,7 +4,8 @@ import { fetchRSSFeedPaginated } from '../../utils/rss';
 import { fetchSubstackFeed } from '../../utils/substack';
 import { GP, searchPrompt, SP, VP } from './prompts';
 import { GeneratedTweet, PerformanceAnalysis, VerificationResult } from './interface';
-import { Tweets, ITweet } from '../../utils/twitter/schema';
+import { findTweetsByAuthor } from '../../db/tweets';
+import { ITweet } from '../../utils/twitter/schema';
 import {
   EMPLOYER_BRAND,
   FOLLOWER_GOAL,
@@ -201,25 +202,19 @@ Use the additional context when it improves specificity. Keep citations as links
   }
 
   private async getRecentTweets(limit = 12): Promise<ITweet[]> {
-    return Tweets.find({
-      'author.username': USER_PROFILE,
-      'metrics.view_count': { $gt: 0 }
-    })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .lean<ITweet[]>();
+    return findTweetsByAuthor({ username: USER_PROFILE, limit, minViews: true, sortBy: 'createdAt', sortOrder: 'desc' });
   }
 
   private async buildStyleGuide(): Promise<string> {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    const tweets = await Tweets.find({
-      'author.username': USER_PROFILE,
-      createdAt: { $gte: thirtyDaysAgo.toISOString() },
-      'metrics.view_count': { $gt: 0 }
-    })
-      .sort({ createdAt: -1 })
-      .limit(80)
-      .lean<ITweet[]>();
+    const tweets = await findTweetsByAuthor({
+      username: USER_PROFILE,
+      createdAtGte: thirtyDaysAgo.toISOString(),
+      minViews: true,
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+      limit: 80
+    });
 
     if (!tweets.length) {
       return 'No historical style data available. Use concise, high-conviction analyst tone with clear mechanism-level insight.';
@@ -406,14 +401,14 @@ Use the additional context when it improves specificity. Keep citations as links
 
   async analyzeHistoricalPerformance(): Promise<PerformanceAnalysis> {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    const tweets = await Tweets.find({
-      'author.username': USER_PROFILE,
-      createdAt: { $gte: thirtyDaysAgo.toISOString() },
-      'metrics.view_count': { $gt: 0 }
-    })
-      .sort({ createdAt: -1 })
-      .limit(50)
-      .lean<ITweet[]>();
+    const tweets = await findTweetsByAuthor({
+      username: USER_PROFILE,
+      createdAtGte: thirtyDaysAgo.toISOString(),
+      minViews: true,
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+      limit: 50
+    });
     if (tweets.length === 0) {
       throw new Error('No historical data found');
     }

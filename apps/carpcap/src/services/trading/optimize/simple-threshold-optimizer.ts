@@ -1,5 +1,5 @@
-import { connect, disconnect, model } from 'mongoose';
-import { PriceSchema } from '../models/price';
+import { closeDatabase, connectDatabase } from '../../../db/client';
+import { findPricesByChainRange } from '../../../db/prices';
 import { TradingConfig, SolanaCoreValidatedTokens, EclipseCoreValidatedTokens } from '../config';
 import { TokenData, Position } from '../models/interfaces';
 import { generateContinuousSignal } from '../trading/signals';
@@ -43,10 +43,7 @@ function buildConfigFromOverrides(base: any, network: Network, overrides: Signal
 async function loadHistoricalData(network: Network, days: number): Promise<TokenData[]> {
 	const endDate = new Date();
 	const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
-	const PriceModel = model('prices', PriceSchema);
-	const rows = await PriceModel.find({ chain: network, timestamp: { $gte: startDate, $lte: endDate } })
-		.sort({ timestamp: 1 })
-		.lean();
+	const rows = await findPricesByChainRange(network, startDate, endDate);
 	const byToken = new Map<string, TokenData>();
     const liquidityAgg = new Map<string, { sum: number; count: number }>();
     const spreadAgg = new Map<string, { sum: number; count: number }>();
@@ -426,8 +423,7 @@ async function optimize(network: Network, days: number, options?: { tokenLimit?:
 
 async function main() {
 	try {
-		const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/carpcap';
-		await connect(mongoUri);
+		await connectDatabase();
         const networkArg = (process.argv[2] as Network) || 'SOLANA';
         const days = Number(process.argv[3] || 7);
         const tokenLimit = Number(process.argv[4] || 5);
@@ -442,7 +438,7 @@ async function main() {
         if (networkArg === 'SOLANA' || networkArg === 'ECLIPSE') {await optimize(networkArg, days, opts);} else {await optimize('SOLANA', days, opts); await optimize('ECLIPSE', days, opts);} 
 	}
 	catch (e) {console.error('Optimization failed:', e);} 
-	finally {await disconnect();}
+	finally {await closeDatabase();}
 }
 
 main();

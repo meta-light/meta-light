@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "bash ../../scripts/with-secrets.sh next dev",
     "build": "next build",
     "start": "next start",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "build-css": "sass src/app/styles/scss:src/app/styles --no-source-map",
     "check-types": "tsc --noEmit",
     "test": "vitest run"
@@ -52,7 +55,8 @@
     "lucide-react": "^0.511.0",
     "lz-string": "1.5.0",
     "nanoid": "5.1.11",
-    "next": "^16.0.7",
+    "@opennextjs/cloudflare": "1.20.16",
+    "next": "16.4.6",
     "openai": "^4.56.0",
     "p-ratelimit": "^1.0.1",
     "pdfjs-dist": "^5.3.93",
@@ -69,6 +73,7 @@
     "zustand": "5.0.14"
   },
   "devDependencies": {
+    "wrangler": "^4.148.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "autoprefixer": "^10.4.20",

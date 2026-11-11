@@ -1,0 +1,12 @@
+This directory contains code derived from the QuantJourney Backtester.
+
+QuantJourney Backtester
+Copyright (c) 2026 QuantJourney
+Licensed under the Apache License, Version 2.0 (see LICENSE in this directory)
+https://github.com/QuantJourneyOrg/quantjourney-bt
+
+Modifications: the strategy examples (weights/, orders/, walkforward/) and the
+backtest engine (engine/) were translated from Python to TypeScript. The
+pandas-based code was rewritten on a small Frame matrix type (core/frame.ts),
+the cloud data client, plotting, CLI, reporting and Optuna optimizer were
+dropped, and some behavior differs; see README.md for the known differences.
