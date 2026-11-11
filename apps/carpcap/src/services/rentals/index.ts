@@ -1,7 +1,7 @@
-import { FilterQuery } from 'mongoose';
+import { countActiveRentals, deactivateUnseenRentals, findRental, insertRental, listPendingRentals, listRentals, markRentalsNotified, saveRental } from '../../db/rentals';
 import { CraigslistRentalCriteria, buildCriteriaKey, defaultCraigslistRentalCriteria, rentalsNotificationConfig, resolveRentalLocationFilter } from './config';
 import { CraigslistRentalListing, fetchCraigslistRentalListings, buildCraigslistSearchUrl } from './fetcher';
-import { IRentalListing, RentalListingModel } from './model';
+import { IRentalListing } from './model';
 import { sendRentalListingNotifications } from './telegram';
 
 export interface RentalSyncResult {
@@ -37,15 +37,15 @@ export async function syncCraigslistRentals(criteria: CraigslistRentalCriteria =
   const newListings: IRentalListing[] = [];
 
   for (const listing of matchedListings) {
-    const query = { source: listing.source, criteriaKey, listingId: listing.listingId };
-    const existing = await RentalListingModel.findOne(query);
+    const existing = await findRental(listing.source, criteriaKey, listing.listingId);
     if (existing) {
       applyListing(existing, listing, syncStartedAt);
-      await existing.save();
+      await saveRental(existing);
       continue;
     }
-    const created = await RentalListingModel.create({
+    const created = await insertRental({
       ...listing,
+      criteriaKey,
       firstSeenAt: syncStartedAt,
       lastSeenAt: syncStartedAt,
       status: 'active'
@@ -53,18 +53,8 @@ export async function syncCraigslistRentals(criteria: CraigslistRentalCriteria =
     newListings.push(created);
   }
 
-  await RentalListingModel.updateMany(
-    {
-      source: 'craigslist',
-      criteriaKey,
-      lastSeenAt: { $lt: syncStartedAt }
-    },
-    {
-      $set: { status: 'inactive' }
-    }
-  );
-
-  const active = await RentalListingModel.countDocuments({ source: 'craigslist', criteriaKey, status: 'active' });
+  await deactivateUnseenRentals(criteriaKey, syncStartedAt);
+  const active = await countActiveRentals(criteriaKey);
   return {
     criteriaKey,
     searchUrl: buildCraigslistSearchUrl(criteria),
@@ -78,11 +68,8 @@ export async function syncCraigslistRentals(criteria: CraigslistRentalCriteria =
 }
 
 export async function getRentalListings(options: RentalListingQueryOptions = {}): Promise<IRentalListing[]> {
-  const query: FilterQuery<IRentalListing> = {};
-  if (options.criteriaKey) {query.criteriaKey = options.criteriaKey;}
-  if (options.status && options.status !== 'all') {query.status = options.status;}
   const limit = Math.min(Math.max(options.limit || 20, 1), 500);
-  return RentalListingModel.find(query).sort({ postedAt: -1 }).limit(limit);
+  return listRentals({ criteriaKey: options.criteriaKey, status: options.status, limit });
 }
 
 export async function runRentalsTask(criteria: CraigslistRentalCriteria = defaultCraigslistRentalCriteria): Promise<RentalSyncResult> {
@@ -96,10 +83,7 @@ export async function runRentalsNotificationTask(criteria: CraigslistRentalCrite
   const pendingListings = await getPendingRentalNotifications(criteria);
   const notifiedListingIds = await sendRentalListingNotifications(pendingListings, criteria.name);
   if (notifiedListingIds.length > 0) {
-    await RentalListingModel.updateMany(
-      { _id: { $in: notifiedListingIds } },
-      { $set: { notifiedAt: new Date() } }
-    );
+    await markRentalsNotified(notifiedListingIds, new Date());
   }
   console.log(`[rentals] criteria=${sync.criteriaKey} fetched=${sync.fetched} matched=${sync.matched} filtered=${sync.filteredOut} new=${sync.created} pending=${pendingListings.length} notified=${notifiedListingIds.length} active=${sync.active}`);
   return {
@@ -143,18 +127,7 @@ function applyListing(existing: IRentalListing, listing: CraigslistRentalListing
 async function getPendingRentalNotifications(criteria: CraigslistRentalCriteria): Promise<IRentalListing[]> {
   const criteriaKey = buildCriteriaKey(criteria);
   const earliestFirstSeenAt = new Date(Date.now() - rentalsNotificationConfig.lookbackHours * 60 * 60 * 1000);
-  return RentalListingModel.find({
-    source: 'craigslist',
-    criteriaKey,
-    status: 'active',
-    firstSeenAt: { $gte: earliestFirstSeenAt },
-    $or: [
-      { notifiedAt: { $exists: false } },
-      { notifiedAt: null }
-    ]
-  })
-    .sort({ postedAt: -1, firstSeenAt: -1 })
-    .limit(25);
+  return listPendingRentals(criteriaKey, earliestFirstSeenAt);
 }
 
 function filterListings(listings: CraigslistRentalListing[], criteria: CraigslistRentalCriteria): CraigslistRentalListing[] {
@@ -196,4 +169,4 @@ function normalizeFilterText(value: string): string {
 
 export { buildCriteriaKey, defaultCraigslistRentalCriteria } from './config';
 export { buildCraigslistSearchUrl, fetchCraigslistRentalListings } from './fetcher';
-export { IRentalListing, RentalListingModel } from './model';
+export { IRentalListing } from './model';

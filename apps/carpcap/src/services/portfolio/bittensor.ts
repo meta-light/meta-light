@@ -1,7 +1,5 @@
-import { PortfolioWallet, PortfolioState } from './model';
+import { listPortfolioWallets, readPortfolioState, upsertPortfolioWallet, writePortfolioState } from '../../db/portfolio';
 import { telegramBot } from '../../utils/telegram';
-import mongoose from 'mongoose';
-import { MONGODB_URI } from '../../env';
 import { TAO_WALLETS, TAO_API_BASE, TAO_DECIMALS, ALPHA_DECIMALS } from './config';
 
 const STATE_KEY = 'bittensor';
@@ -48,21 +46,12 @@ type AccountResponse = {
 };
 
 export async function seedWallets() {
-  if (!MONGODB_URI) {throw new Error('MONGODB_URI not set');}
   try {
-    await mongoose.connect(MONGODB_URI);
     for (const wallet of TAO_WALLETS) {
-      await PortfolioWallet.findOneAndUpdate(
-        { address: wallet.address, netuid: wallet.netuid },
-        wallet,
-        { upsert: true, new: true }
-      );
+      await upsertPortfolioWallet(wallet);
     }
   } catch (err) {
     console.error('Error seeding wallets:', err);
-  } finally {
-    await mongoose.disconnect();
-    console.log('Disconnected from MongoDB');
   }
 }
 
@@ -72,16 +61,12 @@ async function getApiKey(): Promise<string> {
 }
 
 async function readState(): Promise<{ lastSnapshot?: Snapshot }> {
-  const stateDoc = await PortfolioState.findOne({ key: STATE_KEY });
-  if (stateDoc && stateDoc.lastSnapshot) {return { lastSnapshot: stateDoc.lastSnapshot };}
-  return {};
+  const lastSnapshot = await readPortfolioState<Snapshot>(STATE_KEY);
+  return lastSnapshot ? { lastSnapshot } : {};
 }
 
 async function writeState(state: { lastSnapshot?: Snapshot }): Promise<void> {
-  let stateDoc = await PortfolioState.findOne({ key: STATE_KEY });
-  if (!stateDoc) {stateDoc = new PortfolioState({ key: STATE_KEY });}
-  stateDoc.lastSnapshot = state.lastSnapshot;
-  await stateDoc.save();
+  await writePortfolioState(STATE_KEY, state.lastSnapshot);
 }
 
 function fromUnits(value: string | number, decimals: number): number {return Number(value) / 10 ** decimals;}
@@ -123,7 +108,7 @@ async function fetchJson<T>(apiKey: string, pathname: string, search: Record<str
 }
 
 async function loadWalletConfigs(): Promise<WalletConfig[]> {
-  const wallets = await PortfolioWallet.find({}, { _id: 0, __v: 0 }).lean<WalletConfig[]>();
+  const wallets = await listPortfolioWallets();
   if (wallets.length > 0) {return wallets;}
   console.warn('No wallets configured in PortfolioWallet collection, falling back to src/services/portfolio/config.ts');
   return TAO_WALLETS;

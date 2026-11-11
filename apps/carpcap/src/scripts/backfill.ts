@@ -1,7 +1,8 @@
 #!/usr/bin/env tsx
-import mongoose from 'mongoose';
-import { MONGODB_URI, TWITTER_API_KEY } from '../env';
-import { Tweets, ITweet } from '../utils/twitter/schema';
+import { closeDatabase, connectDatabase } from '../db/client';
+import { upsertTweets } from '../db/tweets';
+import { TWITTER_API_KEY } from '../env';
+import { ITweet } from '../utils/twitter/schema';
 import { USER_PROFILE } from '../services/social/config';
 
 interface TwitterApiResponse {tweets: any[]; has_next_page: boolean; next_cursor: string | null; success: boolean; error?: string;}
@@ -94,20 +95,20 @@ class TweetBackfiller {
 
   private async saveTweets(tweets: any[]): Promise<{ new: number; updated: number }> {
     if (tweets.length === 0) return { new: 0, updated: 0 };
-    const bulkOps: any[] = [];
+    const bulkOps: Partial<ITweet>[] = [];
     for (const tweet of tweets) {
       try {
         const processedTweet = this.processTweetData(tweet);
         if (!processedTweet.source) processedTweet.source = {} as any;
         processedTweet.source!.fetched_at = processedTweet.source!.fetched_at || new Date();
-        bulkOps.push({updateOne: {filter: { id: processedTweet.id }, update: { $set: processedTweet, $setOnInsert: { publishedAt: new Date() } }, upsert: true}});
+        bulkOps.push(processedTweet);
       } 
       catch (error) {console.error(`   Failed to process tweet ${tweet.id}:`, error);}
     }
     if (bulkOps.length === 0) return { new: 0, updated: 0 };
     try {
-      const bulkResult = await Tweets.collection.bulkWrite(bulkOps, { ordered: false });
-      return {new: bulkResult.upsertedCount, updated: bulkResult.modifiedCount};
+      const bulkResult = await upsertTweets(bulkOps);
+      return {new: bulkResult.newTweets, updated: bulkResult.updatedTweets};
     } 
     catch (error) {console.error('   Database error:', error); return { new: 0, updated: 0 };}
   }
@@ -186,16 +187,15 @@ async function main() {
 
   try {
     if (!TWITTER_API_KEY) {throw new Error('TWITTER_API_KEY not set in environment');}
-    if (!MONGODB_URI) {throw new Error('MONGODB_URI not set in environment');}
-    console.log('Connecting to MongoDB...');
-    await mongoose.connect(MONGODB_URI);
-    console.log('Connected to MongoDB\n');
+    console.log('Connecting to D1...');
+    await connectDatabase();
+    console.log('Connected to D1\n');
     const backfiller = new TweetBackfiller(TWITTER_API_KEY);
     await backfiller.backfillAll(limit);
     console.log('\nDone!');
   } 
   catch (error) {console.error('\nError:', error); process.exit(1);} 
-  finally {await mongoose.connection.close(); console.log('\n MongoDB connection closed');}
+  finally {await closeDatabase(); console.log('\nD1 connection closed');}
 }
 
 main();

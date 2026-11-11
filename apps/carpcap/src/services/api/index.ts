@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { NewsModel } from '../news/model';
-import mongoose from 'mongoose';
+import { listRecentNews } from '../../db/news';
+import { isDatabaseConnected } from '../../db/client';
 import { fetch0xMetaLightTweetsFromDb, OXMetaLightSortBy, OXMetaLightSortOrder } from '../social/utils';
 import { USER_PROFILE } from '../social/config';
 import { getRentalListings, syncCraigslistRentals } from '../rentals';
@@ -62,7 +62,7 @@ function parseBoolean(value: unknown): boolean {
 }
 
 app.get('/api/news', async (req, res) => {
-  try {const news = await NewsModel.find({}).sort({ publishedAt: -1 }).limit(30).lean(); res.json({success: true, count: news.length, data: news});} 
+  try {const news = await listRecentNews(30); res.json({success: true, count: news.length, data: news});} 
   catch (error) {console.error('Error fetching news:', error); res.status(500).json({success: false, error: 'Failed to fetch news items'});}
 });
 
@@ -113,8 +113,8 @@ app.get('/api/rentals', async (req, res) => {
 });
 
 const healthCheck = (req: express.Request, res: express.Response) => {
-  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), mongo: mongoStatus});
+  const database = isDatabaseConnected() ? 'connected' : 'disconnected';
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), database });
 };
 
 app.get('/api/health', healthCheck);

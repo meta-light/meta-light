@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-import { MONGODB_URI } from '../env';
+import { closeDatabase, connectDatabase } from '../db/client';
 import { buildCriteriaKey, getRentalListings, syncCraigslistRentals, defaultCraigslistRentalCriteria } from '../services/rentals';
 
 interface CliOptions {
@@ -43,7 +42,7 @@ Usage: npm run test:rentals -- [options]
 
 Options:
   --limit=10         Max rows to print from stored listings
-  --stored-only      Skip the Craigslist sync and only read MongoDB
+  --stored-only      Skip the Craigslist sync and only read D1
   --json             Print JSON output
   --help, -h         Show this help
   `.trim());
@@ -55,9 +54,7 @@ async function main() {
     printHelp();
     return;
   }
-  if (!MONGODB_URI) {throw new Error('MONGODB_URI not set');}
-
-  await mongoose.connect(MONGODB_URI);
+  await connectDatabase();
   try {
     const syncResult = options.storedOnly ? null : await syncCraigslistRentals(defaultCraigslistRentalCriteria);
     const listings = await getRentalListings({
@@ -106,7 +103,7 @@ async function main() {
     else {console.log('No rentals found for the configured criteria.');}
   }
   finally {
-    await mongoose.disconnect();
+    await closeDatabase();
   }
 }
 

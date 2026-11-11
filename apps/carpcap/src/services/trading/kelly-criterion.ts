@@ -58,57 +58,51 @@ export function kellyCriterionNewton(
     throw new Error('Odds and probabilities must be non-empty arrays with equal length.');
   }
 
-  const b = [...odds];
-  const p = normalizeProbabilities([...probabilities]);
+  const normalized = normalizeProbabilities(probabilities);
+  // Zero-probability outcomes contribute nothing to growth and must not limit the domain.
+  const live = odds.map((odd, i) => ({ b: odd, p: normalized[i] })).filter((o) => o.p > 0);
+  const b = live.map((o) => o.b);
+  const p = live.map((o) => o.p);
 
-  // Equivalent to the Python profitability check.
-  const weightedReturn = sum(b.map((odd, index) => odd * p[index]));
-  if (weightedReturn <= 0) {
-    return { optimalFraction: 0, expectedValue: 0 };
+  // g(f) = sum p * ln(1 + b f) is concave, so g'(f) is decreasing. If g'(0) <= 0, don't bet.
+  if (sum(b.map((odd, i) => odd * p[i])) <= 0) {
+    return { optimalFraction: 0, expectedValue: 1 };
   }
 
-  let pastValue = 0;
-  let nextValue = initialValue;
-  let bumpOccurred = false;
-  let iterations = 0;
+  const maxLoss = Math.max(0, ...b.map((odd) => -odd));
+  if (maxLoss === 0) {
+    throw new Error('No outcome loses money, so the Kelly fraction is unbounded.');
+  }
 
-  while (Math.abs(pastValue - nextValue) > threshold) {
-    if (iterations >= maxIterations) {
-      throw new Error(`Newton method did not converge within ${maxIterations} iterations.`);
-    }
-    iterations += 1;
+  // The optimum lies in (0, 1 / maxLoss): g' > 0 at 0 and g' -> -infinity at the domain edge.
+  // Newton steps that leave the bracket fall back to bisection, so f always stays in-domain.
+  let lo = 0;
+  let hi = 1 / maxLoss;
+  let f = initialValue > lo && initialValue < hi ? initialValue : (lo + hi) / 2;
 
-    pastValue = nextValue;
-    let numerator = 0;
-    let denominator = 0;
-
+  for (let iterations = 0; iterations < maxIterations; iterations += 1) {
+    let slope = 0;
+    let curvature = 0;
     for (let i = 0; i < b.length; i += 1) {
-      const base = 1 + b[i] * pastValue;
-      if (base <= 0) {
-        // Keep iteration in-domain for log(1 + b * f).
-        nextValue = 0;
-        bumpOccurred = true;
-        break;
-      }
-      numerator += (p[i] * b[i]) / base;
-      denominator += (-b[i] * b[i] * p[i]) / (base * base);
+      const base = 1 + b[i] * f;
+      slope += (p[i] * b[i]) / base;
+      curvature -= (p[i] * b[i] * b[i]) / (base * base);
     }
 
-    if (bumpOccurred && nextValue === 0) {
-      continue;
-    }
+    if (slope > 0) lo = f;
+    else hi = f;
 
-    nextValue = pastValue - numerator / denominator;
+    let next = f - slope / curvature;
+    if (!(next > lo && next < hi)) next = (lo + hi) / 2;
 
-    if (nextValue < 0 && !bumpOccurred) {
-      nextValue = 0;
-      bumpOccurred = true;
+    if (Math.abs(next - f) <= threshold || slope === 0) {
+      f = slope === 0 ? f : next;
+      return { optimalFraction: f, expectedValue: Math.exp(expectedLogGrowth(f, b, p)) };
     }
+    f = next;
   }
 
-  const growth = expectedLogGrowth(nextValue, b, p);
-  const expectedValue = Number.isFinite(growth) ? Math.exp(growth) : 0;
-  return { optimalFraction: nextValue, expectedValue };
+  throw new Error(`Kelly solver did not converge within ${maxIterations} iterations.`);
 }
 
 export function buildKellyLandscape(
@@ -194,13 +188,13 @@ export async function main(): Promise<void> {
     console.log('\nDetailed Growth Rate Calculation for Full Kelly:');
     for (let i = 0; i < odds.length; i += 1) {
       const b = odds[i];
-      const p = probs[i];
+      const p = normalizedProbs[i];
       const term = p * Math.log(1 + b * fullKelly);
       console.log(`Outcome ${i + 1}: p=${p}, b=${b}`);
       console.log(`  Term = ${p} * ln(1 + ${b} * ${fullKelly.toFixed(4)}) = ${term.toFixed(4)}`);
     }
 
-    const growthRate = calculateGrowthRate(fullKelly, odds, probs);
+    const growthRate = calculateGrowthRate(fullKelly, odds, normalizedProbs);
     console.log(`\nTotal growth rate (sum): ${growthRate.toFixed(4)}`);
     console.log(`Final EV = e^(${growthRate.toFixed(4)}) = ${fullKellyEv.toFixed(4)}`);
 

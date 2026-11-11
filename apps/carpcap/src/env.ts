@@ -8,9 +8,9 @@ export const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 export const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 export const ALLOWED_CHANNEL_ID = process.env.DISCORD_ALLOWED_CHANNEL_ID;
 export const HELIUS_KEY = process.env.HELIUS_KEY; 
-export const MONGODB_URI = process.env.MONGODB_URI;
+
 export const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID;
-export const FLUXBEAM_API_KEY = process.env.FLUXBEAM_KEY;
+export const FLUXBEAM_API_KEY = process.env.FLUXBEAM_API_KEY || process.env.FLUXBEAM_KEY;
 export const XAI_BEARER_TOKEN = process.env.XAI_BEARER_TOKEN;
 export const NEWS_API_ORG_KEY = process.env.NEWS_API_ORG_KEY;
 export const CRYPTO_PANIC_KEY = process.env.CRYPTO_PANIC_KEY;
@@ -32,7 +32,9 @@ export const SOLANA_RPCS = [
   `https://eu.rpc.fluxbeam.xyz/?key=${FLUXBEAM_API_KEY}`
 ];
 export const ECLIPSE_RPCS = ['https://eclipse.helius-rpc.com'];
-export const POSTGRES_URI = process.env.POSTGRES_URI!;
+export const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
+export const CLOUDFLARE_DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID;
+export const CLOUDFLARE_D1_TOKEN = process.env.CLOUDFLARE_D1_TOKEN;
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 export const SUBSTACK_TOKEN = process.env.SUBSTACK_TOKEN!;
 export const CHATGPT_REFRESH_TOKEN = process.env.CHATGPT_REFRESH_TOKEN!;

@@ -1,7 +1,8 @@
 import { fetchLatestTweets } from '../../utils/twitter';
 import { X_TRACKING, HOURS_TO_ANALYZE, USER_PROFILE } from './config';
 import { TrackedProfileTweet} from './interface';
-import { Tweets, ITweet } from '../../utils/twitter/schema';
+import { findNewsProfileTweets, findTweetsByAuthor, findUnanalyzedTweets } from '../../db/tweets';
+import { ITweet } from '../../utils/twitter/schema';
 
 export function escapeMarkdown(text: string): string {return text.replace(/\*/g, '\\*').replace(/_/g, '\\_').replace(/`/g, '\\`').replace(/\[/g, '\\[');}
 export function truncateText(text: string, maxLength: number): string {if (text.length <= maxLength) return text; return text.substring(0, maxLength) + '...';}
@@ -14,8 +15,7 @@ export async function fetchTweetsForAnalysis(): Promise<ITweet[]> {
   try {
     const now = new Date();
     const cutoffTime = new Date(now.getTime() - HOURS_TO_ANALYZE * 60 * 60 * 1000);
-    const tweets = await Tweets.find({createdAt: { $lte: cutoffTime.toISOString() }, 'metrics.view_count': { $exists: true, $gt: 0 }, $or: [{ analyzed: { $exists: false } }, { analyzed: false }]}).sort({ createdAt: -1 }).lean<ITweet[]>();      
-    return tweets;
+    return findUnanalyzedTweets(cutoffTime.toISOString());
   } 
   catch (error) {console.error('Error fetching tweets for analysis:', error); return [];}
 }
@@ -67,16 +67,6 @@ export interface Fetch0xMetaLightTweetsOptions {
   sortOrder?: OXMetaLightSortOrder;
 }
 
-const OXMETALIGHT_SORT_FIELD_MAP: Record<OXMetaLightSortBy, string> = {
-  createdAt: 'createdAt',
-  likes: 'metrics.like_count',
-  comments: 'metrics.reply_count',
-  retweets: 'metrics.retweet_count',
-  quotes: 'metrics.quote_count',
-  views: 'metrics.view_count',
-  engagement: 'performance.engagement_rate'
-};
-
 function normalize0xMetaLightFetchOptions(options: Fetch0xMetaLightTweetsOptions): Required<Fetch0xMetaLightTweetsOptions> {
   const safeLimit = Math.min(Math.max(Math.floor(options.limit || 20), 1), 500);
   const sortBy = options.sortBy || 'createdAt';
@@ -88,11 +78,7 @@ export async function fetch0xMetaLightTweetsFromDb(options: number | Fetch0xMeta
   try {
     const normalizedInput = typeof options === 'number' ? { limit: options } : options;
     const { limit, sortBy, sortOrder } = normalize0xMetaLightFetchOptions(normalizedInput);
-    const sortField = OXMETALIGHT_SORT_FIELD_MAP[sortBy];
-    const sortDirection: 1 | -1 = sortOrder === 'asc' ? 1 : -1;
-    const sortSpec: Record<string, 1 | -1> = { [sortField]: sortDirection };
-    if (sortField !== 'createdAt') {sortSpec.createdAt = -1;}
-    const tweets = await Tweets.find({ 'author.username': USER_PROFILE }).sort(sortSpec).limit(limit).lean<ITweet[]>();
+    const tweets = await findTweetsByAuthor({ username: USER_PROFILE, limit, sortBy, sortOrder });
     return tweets.map((tweet) => ({
       id: tweet.id,
       text: tweet.text,
@@ -113,7 +99,7 @@ export async function fetch0xMetaLightTweetsFromDb(options: number | Fetch0xMeta
         following_count: tweet.author?.following_count || 0
       },
       followerCount: tweet.author?.followers_count || 0,
-      fetchedAt: tweet.source?.fetched_at
+      fetchedAt: tweet.source?.fetched_at ? new Date(tweet.source.fetched_at) : undefined
     }));
   } 
   catch (error) {console.error('Error fetching 0xMetaLight tweets from database:', error); return [];}
@@ -123,7 +109,7 @@ export async function fetchNewsTweetsFromDb(): Promise<TrackedProfileTweet[]> {
   try {
     const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const newsProfiles = X_TRACKING.filter(account => account.type === 'news').map(account => account.profile);
-    const tweets = await Tweets.find({'author.username': { $in: newsProfiles }, 'source.fetched_at': { $gte: cutoffTime }}).sort({ 'source.fetched_at': -1 }).limit(100).lean<ITweet[]>();
+    const tweets = await findNewsProfileTweets(newsProfiles, cutoffTime, 100);
     const trackedTweets: TrackedProfileTweet[] = tweets.map(tweet => ({id: tweet.id, text: tweet.text, author: tweet.author.username, createdAt: tweet.createdAt, metrics: {like_count: tweet.metrics?.like_count || 0, retweet_count: tweet.metrics?.retweet_count || 0, view_count: tweet.metrics?.view_count || 0}}));
     return trackedTweets;
   } 

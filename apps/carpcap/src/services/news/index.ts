@@ -1,5 +1,6 @@
+import { findNewsByUrl, insertNews, updateNewsByUrl } from '../../db/news';
 import { queryNewsAPI } from './fetcher';
-import { NewsModel, NewsTransformer } from './model';
+import { NewsTransformer } from './model';
 import { scrapeLatestNews } from './scraper';
 import { telegramService } from '../../utils/telegram';
 
@@ -23,10 +24,10 @@ export async function scrapeNews() {
       try {
         if (newsItem.url === '#') {newsItem.url = undefined;}
         let existing = null;
-        if (newsItem.url) {existing = await NewsModel.findOne({ url: newsItem.url });}
-        if (existing) {await NewsModel.findOneAndUpdate({ url: newsItem.url }, { $set: { votes: newsItem.votes, scrapedAt: new Date() }}); updatedCount++;} 
+        if (newsItem.url) {existing = await findNewsByUrl(newsItem.url);}
+        if (existing && newsItem.url) {await updateNewsByUrl(newsItem.url, newsItem.votes, new Date()); updatedCount++;} 
         else {
-          await NewsModel.create(newsItem);
+          await insertNews(newsItem);
           newCount++;
           if (newsItem.impact === 'high') {newHighImpactNews.push(newsItem);}
         }

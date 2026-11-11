@@ -1,4 +1,4 @@
-import { PortfolioState } from './model';
+import { readPortfolioState, writePortfolioState } from '../../db/portfolio';
 import { telegramBot } from '../../utils/telegram';
 import { SOLANA_WALLETS } from './config';
 
@@ -51,16 +51,12 @@ function signed(value: number, digits = 2): string {
 }
 
 async function readState(): Promise<{ lastSnapshot?: Snapshot }> {
-  const stateDoc = await PortfolioState.findOne({ key: STATE_KEY });
-  if (stateDoc?.lastSnapshot) {return { lastSnapshot: stateDoc.lastSnapshot as Snapshot };}
-  return {};
+  const lastSnapshot = await readPortfolioState<Snapshot>(STATE_KEY);
+  return lastSnapshot ? { lastSnapshot } : {};
 }
 
 async function writeState(state: { lastSnapshot?: Snapshot }): Promise<void> {
-  let stateDoc = await PortfolioState.findOne({ key: STATE_KEY });
-  if (!stateDoc) {stateDoc = new PortfolioState({ key: STATE_KEY });}
-  stateDoc.lastSnapshot = state.lastSnapshot;
-  await stateDoc.save();
+  await writePortfolioState(STATE_KEY, state.lastSnapshot);
 }
 
 async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
 import * as cron from 'node-cron';
-import { MONGODB_URI, ENABLE_TRADING } from './env';
+import { ENABLE_TRADING } from './env';
+import { connectDatabase } from './db/client';
 import { initTelegram } from './utils/telegram';
 import { startApiServer } from './services/api';
 import { checkGitHubRepos } from './services/github';
@@ -25,11 +25,10 @@ export const schedule: ISchedule[] = [
 export async function startCarpServer() {
   await seedWallets();
   await bootstrapRemoteAuth();
-  if (!MONGODB_URI) {throw new Error('MONGODB_URI not set');}
   const connectWithRetry = async () => {
     try {
-      await mongoose.connect(MONGODB_URI!);  
-      console.log('Mongoose connected successfully');
+      await connectDatabase();
+      console.log('D1 connected successfully');
       startApiServer();
       await initTelegram();
       if (ENABLE_TRADING === 'true') {startTradingBot();}
@@ -38,7 +37,7 @@ export async function startCarpServer() {
       console.log('Cron schedulers started');
     } 
     catch (error) {
-      console.error('MongoDB connection unsuccessful, retry after 5 seconds.', error);
+      console.error('D1 connection unsuccessful, retry after 5 seconds.', error);
       setTimeout(connectWithRetry, 5000);
     }
   };

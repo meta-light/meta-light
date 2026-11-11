@@ -1,29 +1,37 @@
-import mongoose from "mongoose";
 import "dotenv/config";
 import fs from "fs/promises";
 import path from "path";
-import { connect } from '../utils/database'
+import { closeDatabase, connectDatabase, queryObjects } from '../db/client';
 
-async function main() {
-  const SOURCE_MONGODB_URI = '';
-  const BACKUP_DIR = path.join(process.cwd(), "backups");
-  if (!SOURCE_MONGODB_URI) {console.error("Missing SOURCE_MONGODB_URI."); process.exit(1);}
-  await fs.mkdir(BACKUP_DIR, { recursive: true });
-  const sourceConn = await connect("SOURCE", SOURCE_MONGODB_URI);
-  const sourceDb = sourceConn.db!;
-  const collections = await sourceDb.listCollections().toArray();
-  const names = collections.map((c: any) => c.name).filter((name) => name !== "prices").sort();
-  console.log(`Found ${names.length} collections in SOURCE (excluding 'prices').`);
-  for (const collName of names) {
-    console.log(`\n=== Backing up collection: ${collName} ===`);
-    const srcColl = sourceDb.collection(collName);
-    const documents = await srcColl.find({}).toArray();
-    const filePath = path.join(BACKUP_DIR, `${collName}.json`);
-    await fs.writeFile(filePath, JSON.stringify(documents, null, 2), "utf8");
-    console.log(`Done: ${collName} (${documents.length} documents saved to ${filePath}).`);
-  }
-  console.log("\nBackup completed.");
-  await sourceConn.close();
+const SKIPPED_TABLES = new Set(['prices']);
+
+function quoteIdent(name: string): string {
+  if (!/^[a-z_][a-z0-9_]*$/.test(name)) throw new Error(`Unexpected table name: ${name}`);
+  return `"${name}"`;
 }
 
-main().catch((err) => {console.error("\n❌ Backup failed:", err); process.exit(1);});
+async function main() {
+  const backupDir = path.join(process.cwd(), "backups");
+  await fs.mkdir(backupDir, { recursive: true });
+  await connectDatabase();
+  const tables = await queryObjects<{ name: string }>(
+    "select name from sqlite_master where type = 'table' and name not like 'sqlite_%' and name not like '\\_cf\\_%' escape '\\' order by name",
+  );
+  const names = tables.map((row) => row.name).filter((name) => !SKIPPED_TABLES.has(name));
+  console.log(`Found ${names.length} tables (excluding prices).`);
+  for (const tableName of names) {
+    console.log(`\n=== Backing up table: ${tableName} ===`);
+    const rows = await queryObjects<Record<string, unknown>>(`select * from ${quoteIdent(tableName)}`);
+    const filePath = path.join(backupDir, `${tableName}.json`);
+    await fs.writeFile(filePath, JSON.stringify(rows, null, 2), "utf8");
+    console.log(`Done: ${tableName} (${rows.length} rows saved to ${filePath}).`);
+  }
+  console.log("\nBackup completed.");
+  await closeDatabase();
+}
+
+main().catch(async (err) => {
+  console.error("\nBackup failed:", err);
+  await closeDatabase().catch(() => undefined);
+  process.exit(1);
+});

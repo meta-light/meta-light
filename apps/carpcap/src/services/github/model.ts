@@ -1,6 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
-
-export interface IProposal extends Document {
+export interface IProposal {
+  id: string;
   proposalId: string;
   owner: string;
   repo: string;
@@ -31,43 +30,8 @@ export interface IProposal extends Document {
   csvHeaders?: string[];
 }
 
-const ProposalSchema = new Schema<IProposal>({
-  proposalId: { type: String, required: true, unique: true, index: true },
-  owner: { type: String, required: true, index: true },
-  repo: { type: String, required: true, index: true },
-  branch: { type: String, required: true },
-  filePath: { type: String, required: true },
-  fileName: { type: String, required: true },
-  lastCommitSha: { type: String, required: true },
-  lastCommitDate: { type: Date, required: true, index: true },
-  lastCommitAuthor: { type: String, required: true },
-  proposalNumber: { type: String, index: true },
-  title: { type: String },
-  status: { type: String, index: true },
-  author: { type: String },
-  created: { type: Date },
-  type: { type: String },
-  category: { type: String },
-  content: { type: String, required: true },
-  contentMarkdown: { type: String, required: true },
-  summary: { type: String },
-  motivation: { type: String },
-  specification: { type: String },
-  githubUrl: { type: String, required: true },
-  rawUrl: { type: String, required: true },
-  firstSeenAt: { type: Date, default: Date.now, index: true },
-  lastUpdatedAt: { type: Date, default: Date.now },
-  notified: { type: Boolean, default: false },
-  updateCount: { type: Number, default: 0 },
-  csvHeaders: { type: [String] }
-}, {timestamps: true});
-
-ProposalSchema.index({ owner: 1, repo: 1, lastUpdatedAt: -1 });
-ProposalSchema.index({ status: 1, lastUpdatedAt: -1 });
-ProposalSchema.index({ proposalNumber: 1, owner: 1 });
-export const ProposalModel = mongoose.model<IProposal>('GovernanceProposal', ProposalSchema);
-
-export interface IRepoCheck extends Document {
+export interface IRepoCheck {
+  id: string;
   owner: string;
   repo: string;
   branch: string;
@@ -78,18 +42,3 @@ export interface IRepoCheck extends Document {
   errorCount: number;
   lastError?: string;
 }
-
-const RepoCheckSchema = new Schema<IRepoCheck>({
-  owner: { type: String, required: true },
-  repo: { type: String, required: true },
-  branch: { type: String, required: true },
-  lastCheckAt: { type: Date, default: Date.now },
-  lastCommitSha: { type: String },
-  lastCommitDate: { type: Date },
-  proposalCount: { type: Number, default: 0 },
-  errorCount: { type: Number, default: 0 },
-  lastError: { type: String }
-}, {timestamps: true});
-
-RepoCheckSchema.index({ owner: 1, repo: 1, branch: 1 }, { unique: true });
-export const RepoCheckModel = mongoose.model<IRepoCheck>('GovernanceRepoCheck', RepoCheckSchema);

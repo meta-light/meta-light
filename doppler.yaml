@@ -1,0 +1,10 @@
+setup:
+  - project: meta-light
+    config: dev_carpcap
+    path: apps/carpcap
+  - project: meta-light
+    config: dev_crm
+    path: apps/crm
+  - project: meta-light
+    config: dev_web
+    path: apps/web

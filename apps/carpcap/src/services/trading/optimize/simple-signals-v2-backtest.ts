@@ -1,5 +1,5 @@
-import { connect, disconnect, model } from 'mongoose';
-import { PriceSchema } from '../models/price';
+import { closeDatabase, connectDatabase } from '../../../db/client';
+import { findPricesByChainRange } from '../../../db/prices';
 import { TradingConfig, SolanaCoreValidatedTokens, EclipseCoreValidatedTokens } from '../config';
 import { TokenData, Position } from '../models/interfaces';
 import { generateContinuousSignalV2 } from '../trading/signals_v2';
@@ -19,10 +19,7 @@ function cloneDeep<T>(obj: T): T {return JSON.parse(JSON.stringify(obj));}
 async function loadHistoricalData(network: Network, days: number): Promise<TokenData[]> {
   const endDate = new Date();
   const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
-  const PriceModel = model('prices', PriceSchema);
-  const rows = await PriceModel.find({ chain: network, timestamp: { $gte: startDate, $lte: endDate } })
-    .sort({ timestamp: 1 })
-    .lean();
+  const rows = await findPricesByChainRange(network, startDate, endDate);
   const byToken = new Map<string, TokenData>();
   const liquidityAgg = new Map<string, { sum: number; count: number }>();
   const spreadAgg = new Map<string, { sum: number; count: number }>();
@@ -195,8 +192,7 @@ function runBacktestV2(tokens: TokenData[], cfg: any, network: Network, options?
 
 async function main() {
   try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/carpcap';
-    await connect(mongoUri);
+    await connectDatabase();
     const networkArg = (process.argv[2] as Network) || 'SOLANA';
     const days = Number(process.argv[3] || 14);
     const tokenLimit = Number(process.argv[4] || 5);
@@ -213,7 +209,7 @@ async function main() {
   } catch (e) {
     console.error('Backtest failed:', e);
   } finally {
-    await disconnect();
+    await closeDatabase();
   }
 }
 

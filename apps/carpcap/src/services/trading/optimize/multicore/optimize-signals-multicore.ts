@@ -1,5 +1,5 @@
-import { connect, disconnect, model } from 'mongoose';
-import { PriceSchema } from '../../models/price';
+import { closeDatabase, connectDatabase } from '../../../../db/client';
+import { findPricesByChainRange } from '../../../../db/prices';
 import { TradingConfig, SolanaCoreValidatedTokens, EclipseCoreValidatedTokens } from '../../config';
 import { TokenData } from '../../models/interfaces';
 import { Worker } from 'worker_threads';
@@ -203,11 +203,7 @@ class MulticoreOptimizer {
         
         console.log(`📅 Fetching ${network} data from ${startDate.toISOString()} to ${endDate.toISOString()}`);
         
-        const PriceModel = model('prices', PriceSchema);
-        const priceData = await PriceModel.find({
-            chain: network,
-            timestamp: { $gte: startDate, $lte: endDate }
-        }).sort({ timestamp: 1 }).lean();
+        const priceData = await findPricesByChainRange(network, startDate, endDate);
         
         // Group by token and create TokenData objects
         const tokenDataMap = new Map<string, TokenData>();
@@ -322,8 +318,7 @@ class MulticoreOptimizer {
 async function main() {
     try {
         // Connect to MongoDB
-        const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/carpcap';
-        await connect(mongoUri);
+        await connectDatabase();
         console.log('📦 Connected to MongoDB');
         
         const optimizer = new MulticoreOptimizer();
@@ -334,7 +329,7 @@ async function main() {
     } catch (error) {
         console.error('Multi-core optimization failed:', error);
     } finally {
-        await disconnect();
+        await closeDatabase();
         console.log('📦 Disconnected from MongoDB');
     }
 }
