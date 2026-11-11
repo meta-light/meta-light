@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Inject Doppler secrets when this repo's personal Doppler config is set up.
+# Inject Doppler secrets for the app directory this script is run from.
+# apps/carpcap uses the carpcap project. apps/web uses meta-light-web.
 # Falls through to the process environment and .env files otherwise.
 set -euo pipefail
 CONFIG_DIR="${META_LIGHT_DOPPLER_CONFIG_DIR:-$HOME/.doppler-meta-light}"
