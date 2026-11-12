@@ -1,12 +1,16 @@
-### Projects
-- [Eclipse XRAY](https://github.com/ParameterResearch/eclipse-xray): An Eclipse implimentation of the XRAY Solana Explorer.
-- [DePIN Pulse](https://depinpulse.app): A DePIN ecosystem opportunities aggregator and research tool.
-- [Coldfront](https://github.com/meta-lite/coldfront): A simple weather app that displays current conditions, as well as relevant news and information about Razorbacks Baseball.
-- [MultiNode](https://twitter.com/0xMetaLight/status/1630989599488049154?s=20): Research around the application of low-power cluster computing in blockchain node operation.
+# Nick Carpinito
+Distributed infrastructure analyst covering economics, governance and transparency. I split my time between research and building: reports and data on one side, the tools and pipelines behind them on the other.
 
-### Contributions
-- [awesome-depin](https://github.com/iotexproject/awesome-depin): A curated list of all DePIN research, projects and resources.
-- [token-list](https://github.com/jup-ag/token-list): Jupiter Exchanges SPL token verification repository.
-- [helium/hip](https://github.com/helium/HIP): Helium Improvement Proposals.
-- [helius/xray](https://github.com/helius-labs/xray): Xray Explorer.
-- [nexus-xyz](https://github.com/nexus-xyz/network-api): High-performance interface for supplying compute to the Nexus network.
+## Projects
+- **[DePIN Pulse](https://depinpulse.app/)**: Distributed infrastructure network analytics and financials. 
+- **[betterlists](https://github.com/meta-light/betterlists)**: Chrome extension that removes retweets from X lists.
+- **[Eclipse XRAY](https://eclipsexray.id/)**: First community-built block explorer for Eclipse.
+- **[Black Box Store](https://github.com/meta-light/black-box-store)**: App store for the DAWN Black Box.
+
+## Contributions
+- [awesome-depin](https://github.com/): Curated list of DePIN research, projects and resources
+- [helium/hip](https://github.com/helium/HIP): Helium Improvement Proposals
+- [helius-labs/xray](https://github.com/helius-labs/xray): XRAY Solana explorer
+- [jup-ag/token-list](https://github.com/jup-ag/token-list): Jupiter's SPL token verification list
+- [nexus-xyz](https://github.com/nexus-xyz): Interface for supplying compute to the Nexus network
+- [0xarchive-mcp](https://github.com/0xArchiveIO/0xarchive-mcp): Hosted MCP for Hyperliquid and Lighter market data. 
