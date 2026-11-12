@@ -38,12 +38,12 @@ function usePersistedFilters(): [ChatFilters, (f: Partial<ChatFilters>) => void]
   });
 
   function update(partial: Partial<ChatFilters>) {
-    setFilters((prev) => {
-      const next = { ...prev, ...partial };
-      localStorage.setItem('chatFilters', JSON.stringify(next));
-      return next;
-    });
+    setFilters((prev) => ({ ...prev, ...partial }));
   }
+
+  useEffect(() => {
+    localStorage.setItem('chatFilters', JSON.stringify(filters));
+  }, [filters]);
 
   return [filters, update];
 }
