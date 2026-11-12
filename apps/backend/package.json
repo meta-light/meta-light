@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
+  "packageManager": "bun@1.2.21",
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
