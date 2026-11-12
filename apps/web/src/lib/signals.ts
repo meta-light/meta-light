@@ -1,4 +1,4 @@
-// Ported from apps/backend/src/trading/trading/signals.ts (+ the two helpers it
+// Ported from apps/carpcap/src/services/trading/trading/signals.ts (+ the two helpers it
 // imports from ../utils). Kept as a faithful copy of the indicator math so results match
 // carpcap. Omitted from the port: calculateArbitrageOpportunities (Helium treasury specific)
 // and generateContinuousTokenScores (depends on the carpcap token registry / PerformanceTracker).
@@ -67,7 +67,7 @@ export interface ChainConfig {
     TEMPORAL_WEIGHTING?: { recentSignalBonus: number; timeframeAlignment: number; momentumDecay: number };
 }
 
-// Defaults lifted from apps/backend/src/trading/config.ts
+// Defaults lifted from apps/carpcap/src/services/trading/config.ts
 export const DEFAULT_CHAIN_CONFIG: ChainConfig = {
     SIGNAL_CONFIG: [
         { name: 'SMA_Crossover', signal_threshold: 0.5, signal_weight: 1.0, enabled: true },
