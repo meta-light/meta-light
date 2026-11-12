@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.build.json",
     "deploy": "bunx wrangler deploy",
+    "secrets:sync": "doppler --config-dir \"${META_LIGHT_DOPPLER_CONFIG_DIR:-$HOME/.doppler-meta-light}\" secrets download --project carpcap --config prd --no-file --format json | bunx wrangler secret bulk",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "bash ../../scripts/with-secrets.sh bun src/main.ts",
     "start:dev": "bash ../../scripts/with-secrets.sh bun --watch src/main.ts",
@@ -50,7 +51,6 @@
     "bs58": "^6.0.0",
     "cheerio": "^1.2.0",
     "cors": "^2.8.5",
-    "csv-parse": "^6.1.0",
     "csv-parser": "^3.2.0",
     "csv-stringify": "^6.6.0",
     "decimal.js": "^10.5.0",
@@ -76,7 +76,7 @@
     "tesseract.js": "^5.1.1",
     "tsx": "^4.20.6",
     "worker-threads": "^1.0.0",
-    "zod": "^3.24.2"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.0",

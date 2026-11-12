@@ -5,6 +5,16 @@ const SLEEP_AFTER_MS = 60_000;
 
 interface Env {
   BACKEND: DurableObjectNamespace<BackendContainer>;
+  [key: string]: unknown;
+}
+
+function containerEnv(env: Env): Record<string, string> {
+  const vars: Record<string, string> = {};
+  for (const [key, value] of Object.entries(env)) {
+    if (typeof value === 'string') vars[key] = value;
+  }
+  vars.PORT = String(PORT);
+  return vars;
 }
 
 export class BackendContainer extends DurableObject<Env> {
@@ -30,7 +40,7 @@ export class BackendContainer extends DurableObject<Env> {
         image: container.images.base,
         instance: 'lite',
         enableInternet: true,
-        env: { PORT: String(PORT) },
+        env: containerEnv(this.env),
       });
     }
     await container.setInactivityTimeout(SLEEP_AFTER_MS);
