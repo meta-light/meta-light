@@ -40,6 +40,7 @@
   ],
   "exclude": [
     "node_modules",
+    "src/crm",
     ".open-next",
     ".wrangler"
   ]

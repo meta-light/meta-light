@@ -17,5 +17,16 @@
   ],
   "observability": {
     "enabled": true
+  },
+  "build": {
+    "command": "bunx opennextjs-cloudflare build"
+  },
+  "previews": {
+    "services": [
+      {
+        "binding": "WORKER_SELF_REFERENCE",
+        "service": "meta-light"
+      }
+    ]
   }
 }

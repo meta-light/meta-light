@@ -2,6 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.2.21",
   "scripts": {
     "dev": "bash ../../scripts/with-secrets.sh next dev",
     "build": "next build",

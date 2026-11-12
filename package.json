@@ -5,8 +5,8 @@
   "packageManager": "bun@1.2.21",
   "workspaces": [
     "apps/web",
-    "apps/crm",
-    "apps/carpcap",
+
+    "apps/backend",
     "packages/*"
   ],
   "scripts": {
