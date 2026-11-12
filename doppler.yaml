@@ -1,7 +1,7 @@
 setup:
   - project: meta-light
     config: dev_carpcap
-    path: apps/carpcap
+    path: apps/backend
   - project: meta-light
     config: dev_crm
     path: apps/crm

@@ -45,7 +45,7 @@ upload() {
   fi
 }
 
-upload apps/carpcap dev_carpcap apps/carpcap/.env
+upload apps/backend dev_carpcap apps/backend/.env
 upload apps/crm dev_crm apps/crm/.env.local
 upload apps/web dev_web apps/web/.env
 echo "Doppler project meta-light is ready."
