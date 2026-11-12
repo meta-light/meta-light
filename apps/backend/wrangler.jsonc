@@ -28,5 +28,23 @@
       "type": "durable-object",
       "storage": "sqlite"
     }
+  },
+  "previews": {
+    "containers": [
+      {
+        "class_name": "BackendContainer",
+        "image": "./Dockerfile",
+        "instance_type": "lite",
+        "max_instances": 1
+      }
+    ],
+    "durable_objects": {
+      "bindings": [
+        {
+          "name": "BACKEND",
+          "class_name": "BackendContainer"
+        }
+      ]
+    }
   }
 }
