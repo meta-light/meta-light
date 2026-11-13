@@ -1,7 +1,6 @@
 // Ported from backtester/walkforward/statistics/interpretation.py (QuantJourney Backtester, Apache 2.0)
 //
-// Green / yellow / red traffic lights for walk-forward metrics. The
-// thresholds are practitioner rules of thumb, not calibrated statistical
+// The thresholds are practitioner rules of thumb, not calibrated statistical
 // tests: treat verdicts as indicative, never as formal inference.
 
 export type Signal = 'green' | 'yellow' | 'red';

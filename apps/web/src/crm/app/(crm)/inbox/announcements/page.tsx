@@ -18,7 +18,6 @@ export default function AnnouncementsPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
           <Rss className="w-4 h-4 text-primary" />
@@ -37,7 +36,6 @@ export default function AnnouncementsPage() {
         </button>
       </div>
 
-      {/* Feed */}
       <ScrollArea className="flex-1 min-h-0">
         {isLoading ? (
           <div className="flex flex-col divide-y divide-border">
@@ -89,7 +87,6 @@ function PostCard({ post }: { post: AnnouncementPost }) {
 
   return (
     <div className="px-5 py-4 hover:bg-muted/30 transition-colors">
-      {/* Channel row */}
       <div className="flex items-center gap-2 mb-2">
         <div
           className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-semibold shrink-0"
@@ -101,7 +98,6 @@ function PostCard({ post }: { post: AnnouncementPost }) {
         <span className="text-[11px] text-muted-foreground ml-auto shrink-0">{timeLabel}</span>
       </div>
 
-      {/* Body */}
       {post.mediaDescription && !post.text && (
         <p className="text-sm text-muted-foreground italic">{post.mediaDescription}</p>
       )}

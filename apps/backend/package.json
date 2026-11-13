@@ -8,7 +8,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "build": "tsc --noEmit -p tsconfig.build.json",
+    "build": "tsc --noEmit",
     "deploy": "bunx wrangler deploy",
     "secrets:sync": "doppler --config-dir \"${META_LIGHT_DOPPLER_CONFIG_DIR:-$HOME/.doppler-meta-light}\" secrets download --project carpcap --config prd --no-file --format json | bunx wrangler secret bulk",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,7 +17,7 @@
     "start:debug": "bash ../../scripts/with-secrets.sh bun --inspect src/main.ts",
     "start:prod": "bash ../../scripts/with-secrets.sh bun src/main.ts",
     "db:ready": "bash ../../scripts/with-secrets.sh bun src/database/ready.ts",
-    "lint": "oxlint --type-aware src/main.ts src/app.module.ts src/app.controller.ts src/app.service.ts src/common src/auth src/github/github.module.ts src/github/github.service.ts src/portfolio/portfolio.module.ts src/portfolio/portfolio.service.ts src/rentals/rentals.module.ts src/rentals/rentals.service.ts src/social/social.module.ts src/social/social.service.ts src/telegram src/trading/trading.module.ts src/trading/trading.service.ts test/",
+    "lint": "oxlint --type-aware --ignore-pattern \"src/trading/legacy-code/**\" src test",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
@@ -25,6 +25,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
+    "@meta-light/utils": "workspace:*",
     "@0dotxyz/p0-ts-sdk": "^2.1.0",
     "@composio/core": "^0.6.3",
     "@composio/openai": "^0.6.3",

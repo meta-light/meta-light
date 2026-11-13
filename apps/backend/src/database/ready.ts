@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { closeDatabase, connectDatabase, getDb, queryObjects } from './client';
-import { prices } from '../trading/schema';
+import { prices } from './schema';
 
 async function main() {
   await connectDatabase();

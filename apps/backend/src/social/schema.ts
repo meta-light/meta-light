@@ -1,12 +1,5 @@
-import {
-  index,
-  integer,
-  real,
-  sqliteTable,
-  text,
-  uniqueIndex,
-} from 'drizzle-orm/sqlite-core';
-import { id } from '../database/columns';
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import type { ITweet } from '@meta-light/utils/twitter-api';
 
 export const tweets = sqliteTable(
   'tweets',
@@ -24,15 +17,15 @@ export const tweets = sqliteTable(
     inReplyToId: text('in_reply_to_id'),
     inReplyToUsername: text('in_reply_to_username'),
     conversationId: text('conversation_id'),
-    metrics: text('metrics', { mode: 'json' }).$type<TweetMetrics>(),
+    metrics: text('metrics', { mode: 'json' }).$type<ITweet['metrics']>(),
     urls: text('urls', { mode: 'json' }).$type<string[]>(),
-    media: text('media', { mode: 'json' }).$type<TweetMedia[]>(),
-    author: text('author', { mode: 'json' }).$type<TweetAuthor>(),
-    analysis: text('analysis', { mode: 'json' }).$type<TweetAnalysis>(),
+    media: text('media', { mode: 'json' }).$type<ITweet['media']>(),
+    author: text('author', { mode: 'json' }).$type<ITweet['author']>(),
+    analysis: text('analysis', { mode: 'json' }).$type<ITweet['analysis']>(),
     performance: text('performance', {
       mode: 'json',
-    }).$type<TweetPerformance>(),
-    source: text('source', { mode: 'json' }).$type<TweetSource>(),
+    }).$type<ITweet['performance']>(),
+    source: text('source', { mode: 'json' }).$type<ITweet['source']>(),
     analyzed: integer('analyzed', { mode: 'boolean' }).notNull().default(false),
     analyzedAt: integer('analyzed_at', { mode: 'timestamp_ms' }),
     analysisResults: text('analysis_results', { mode: 'json' }),
@@ -61,50 +54,3 @@ export const scrapedTweets = sqliteTable('scraped_tweets', {
     .notNull()
     .$defaultFn(() => new Date()),
 });
-
-export interface TweetMetrics {
-  like_count: number;
-  retweet_count: number;
-  reply_count: number;
-  quote_count: number;
-  view_count: number;
-}
-
-export interface TweetMedia {
-  type: string;
-  url: string;
-  media_url: string;
-}
-
-export interface TweetAuthor {
-  id: string;
-  username: string;
-  name: string;
-  verified: boolean;
-  followers_count: number;
-  following_count: number;
-}
-
-export interface TweetAnalysis {
-  sentiment?: string;
-  topics?: string[];
-  hashtags?: string[];
-  mentions?: string[];
-  language?: string;
-  word_count?: number;
-  character_count?: number;
-}
-
-export interface TweetPerformance {
-  engagement_rate: number;
-  performance_score: number;
-  viral_potential: number;
-  last_metrics_update?: Date | string;
-}
-
-export interface TweetSource {
-  api?: string;
-  fetched_at?: Date | string;
-  processed?: boolean;
-  processing_errors?: string[];
-}

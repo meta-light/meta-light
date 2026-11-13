@@ -66,7 +66,6 @@ export function ChatList() {
     if (data?.chats) setChats(data.chats);
   }, [data, setChats]);
 
-  // Close filters dropdown on outside click
   useEffect(() => {
     function onMouseDown(e: MouseEvent) {
       if (filtersRef.current && !filtersRef.current.contains(e.target as Node)) {
@@ -94,12 +93,10 @@ export function ChatList() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="px-4 py-3 border-b border-border shrink-0">
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-semibold text-base">Messages</h1>
           <div className="flex items-center gap-1">
-            {/* Filters button */}
             <div className="relative" ref={filtersRef}>
               <button
                 onClick={() => setFiltersOpen((v) => !v)}
@@ -172,12 +169,10 @@ export function ChatList() {
         </div>
       </div>
 
-      {/* Announcements newsfeed entry */}
       {!isLoading && channels.length > 0 && (
         <AnnouncementsRow channels={channels} active={pathname === '/inbox/announcements'} />
       )}
 
-      {/* Chat list */}
       <ScrollArea className="flex-1 min-h-0">
         {isLoading ? (
           <div className="flex flex-col gap-1 p-2">

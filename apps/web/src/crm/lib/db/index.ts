@@ -86,7 +86,6 @@ async function initSchema(client: ReturnType<typeof createClient>) {
     )`, args: [] },
   ], 'write');
 
-  // Seed default pipeline stages
   const result = await client.execute('SELECT COUNT(*) as count FROM pipeline_stages');
   const count = Number(result.rows[0]?.count ?? 0);
   if (count === 0) {

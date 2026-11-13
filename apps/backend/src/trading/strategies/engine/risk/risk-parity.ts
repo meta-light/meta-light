@@ -5,14 +5,13 @@
 // active set and the sign of each position; magnitudes are re-derived from
 // the trailing covariance. Original gross exposure is preserved.
 
-import { type Frame, isNum } from '../../../../services/trading/strategies/core';
+import { type Frame, isNum } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, cloneFrame, rescoreMask, sign } from './util';
 
 export interface RiskParityOptions {
   /** Rolling window (bars) for covariance estimation. Must be >= 2. */
   lookback?: number;
-  /** Maximum iterations for the ERC solver. */
   maxIter?: number;
   /** Convergence tolerance on weight change. */
   tol?: number;

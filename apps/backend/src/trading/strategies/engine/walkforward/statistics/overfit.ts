@@ -1,8 +1,6 @@
 // Ported from backtester/walkforward/statistics/overfit.py (QuantJourney Backtester, Apache 2.0)
-//
-// Pure overfit diagnostics on scalars or per-fold metric lists.
 
-import { mean } from '../../../../../services/trading/strategies/core';
+import { mean } from '../../../core/index';
 
 /**
  * IS Sharpe / OOS Sharpe. Above 1.5 is caution, above 2.5 likely overfit.

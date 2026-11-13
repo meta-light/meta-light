@@ -4,7 +4,7 @@
 // which in Python are three near-identical copies differing only in where the
 // IS window starts and how the minimum-IS check treats an empty window.
 
-import type { FoldWindow } from '../../../../../services/trading/strategies/core';
+import type { FoldWindow } from '../../../core/index';
 import type { ResolvedWalkForwardConfig } from '../config';
 import { addDays, addMonths, datesBetween } from '../internal';
 import { computePreOosPurge } from './purge';
@@ -22,13 +22,7 @@ export interface Fold extends FoldWindow {
   purgeEnd: string | null;
 }
 
-/** Fold generator interface (Python `FoldScheme` protocol). */
 export interface FoldScheme {
-  /**
-   * @param start First available trading date.
-   * @param end Last available trading date.
-   * @param tradingDates Sorted ISO trading dates.
-   */
   generateFolds(
     start: string,
     end: string,

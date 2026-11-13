@@ -1,8 +1,4 @@
 /**
- * Selection → chunk: find the top-level pattern statement at a doc position
- * and break it into the pieces the UI layers act on (head fn, mini-notation
- * string, method chain with arg ranges).
- *
  * Strudel programs are plain JS: `$: s("bd")` is a LabeledStatement,
  * bare patterns are ExpressionStatements.
  */
@@ -62,7 +58,6 @@ export function docParses(doc: string): boolean {
   return parseTopLevel(doc) !== null;
 }
 
-/** Is `pos` inside a string literal of the statement at `pos` (mini string or any string arg)? */
 export function insideStringLiteral(doc: string, pos: number): boolean {
   const chunk = detectChunk(doc, pos);
   if (!chunk) return false;
@@ -87,7 +82,6 @@ export function detectChunk(doc: string, pos: number): ChunkInfo | null {
   return null;
 }
 
-/** the statement-head `stack(...)` arguments, or the expression itself */
 function voiceCandidates(expr: any): any[] {
   let head: any = expr;
   while (head?.type === 'CallExpression' && head.callee.type === 'MemberExpression') {
@@ -179,7 +173,6 @@ export function firstEditablePos(doc: string, within?: [number, number] | null):
   return null;
 }
 
-/** Top-level statement nodes, or null when the doc doesn't parse. */
 export function parseTopLevel(doc: string): any[] | null {
   try {
     const program = parse(doc, {
@@ -247,11 +240,9 @@ export function buildChunkFromExpression(
   return info;
 }
 
-// ---------------------------------------------------------------------------
 // Voice shape matchers for the arrangement recognizer (Tier 2):
 //   (a) "<timeline>".pickRestart([...] | {...})  — optionally under more chain
 //   (b) arrange([n, pat], ...)
-// ---------------------------------------------------------------------------
 
 export interface VoiceVariant {
   /** object key, or the array index as a string */
@@ -275,7 +266,6 @@ export interface VoiceMatch {
   variants: VoiceVariant[];
 }
 
-/** Match `"<timeline>".pickRestart(...)` (with any trailing chain) or null. */
 export function matchVoice(doc: string, expr: any): VoiceMatch | null {
   // descend the member-call spine; the last call before the root is the
   // first chained call, i.e. literal.pickRestart(...)
@@ -362,7 +352,6 @@ export interface ArrangeMatch {
   totalCycles: number;
 }
 
-/** Match `arrange([n, pat], ...)` (with any trailing chain) or null. */
 export function matchArrange(doc: string, expr: any): ArrangeMatch | null {
   let head = expr;
   while (head?.type === 'CallExpression' && head.callee.type === 'MemberExpression') {
@@ -426,11 +415,9 @@ function collectChain(doc: string, expr: any): ChainCall[] {
   return calls.reverse();
 }
 
-// ---------------------------------------------------------------------------
 // Lane scanning for the timeline: rows are top-level statements, or the
 // arguments of a statement-head stack(...). Definitions (`const x = ...`)
 // aren't rows themselves but feed hap attribution via the refs usage graph.
-// ---------------------------------------------------------------------------
 
 export interface LaneScan {
   lanes: LaneSource[];
@@ -470,7 +457,6 @@ export function detectLanes(doc: string): LaneScan | null {
     if (body.type !== 'ExpressionStatement') return;
     const expr = body.expression;
 
-    // walk the member-call spine down to the head, e.g. stack(...).cpm(128/4)
     let headNode: any = expr;
     while (headNode?.type === 'CallExpression' && headNode.callee.type === 'MemberExpression') {
       headNode = headNode.callee.object;
@@ -529,7 +515,6 @@ function lcm(a: number, b: number): number {
   return (a / g) * b;
 }
 
-/** Human label for a lane: explicit $label, else sound name, else color, else head fn. */
 function laneLabel(doc: string, node: any, label: string | null): string | null {
   if (label && label !== '$') return label;
   const src = doc.slice(node.start, node.end);
@@ -547,7 +532,6 @@ function laneLabel(doc: string, node: any, label: string | null): string | null 
   return label;
 }
 
-/** Identifier names referenced in a subtree (skipping member/property name positions). */
 function collectRefs(root: any): string[] {
   const names = new Set<string>();
   (function walk(node: any): void {
@@ -620,12 +604,10 @@ function hintFromNode(doc: string, root: any): number | null {
   return best;
 }
 
-/** Weight sum of a whole-string `<...>` alternation, or null if not one. */
 export function angleWeightSum(src: string): number | null {
   const trimmed = src.trim();
   if (!trimmed.startsWith('<') || !trimmed.endsWith('>')) return null;
   const inner = trimmed.slice(1, -1);
-  // split into top-level tokens, respecting nested brackets
   const tokens: string[] = [];
   let depth = 0;
   let cur = '';

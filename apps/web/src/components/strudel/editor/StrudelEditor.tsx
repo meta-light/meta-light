@@ -11,7 +11,6 @@ import { writeSource } from '@/lib/strudel/codemirror/writeback';
 import { EditorView, type ViewUpdate } from '@codemirror/view';
 import { StateEffect } from '@codemirror/state';
 
-/** how long after the last keystroke a typed edit re-evaluates, while playing */
 const TYPED_EVAL_DELAY = 500;
 
 interface Props {
@@ -162,7 +161,6 @@ export default function StrudelEditor({ initialCode, onDocChange }: Props) {
     });
     setBpm(Math.round(engine.getBpm()));
 
-    // follow the cursor to keep currentChunk in sync
     engine.view.dispatch({
       effects: StateEffect.appendConfig.of(
         EditorView.updateListener.of((update: ViewUpdate) => {

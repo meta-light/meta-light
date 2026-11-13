@@ -1,10 +1,9 @@
 // Ported from backtester/engines/benchmark.py (QuantJourney Backtester, Apache 2.0).
 //
-// Benchmark returns and the comparison stats in the report. The warehouse SDK
-// and yfinance fetchers are not ported; pass prices in from whatever data
-// client you already use.
+// The warehouse SDK and yfinance fetchers are not ported; pass prices in from
+// whatever data client you already use.
 
-import { isNum } from '../../../../services/trading/strategies/core';
+import { isNum } from '../../core/index';
 import {
   dropNaN,
   nanProd,
@@ -14,13 +13,11 @@ import {
   toMs,
 } from './series';
 
-/** A price table for one symbol: column name -> values on a shared date index. */
 export interface PriceTable {
   index: string[];
   columns: Record<string, number[]>;
 }
 
-/** Prefer adjusted prices, fall back to raw close. Null when neither exists. */
 export function selectBenchmarkPrice(
   df: PriceTable | null | undefined,
 ): Series | null {
@@ -69,7 +66,6 @@ export function alignBenchmarkReturns(
   };
 }
 
-/** Benchmark returns from locally held prices (`adj_close`, else close). */
 export function localBenchmarkReturns(
   prices: PriceTable | null | undefined,
   returnsIndex: readonly string[],
@@ -121,7 +117,6 @@ export function computeBenchmarkSummary(
   };
 }
 
-/** Pairs of strategy/benchmark returns on dates where both are present. */
 function alignPair(
   strategy: Series,
   benchmark: Series,

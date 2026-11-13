@@ -1,12 +1,10 @@
 // Ported from backtester/portfolio/_time.py (QuantJourney Backtester, Apache 2.0)
 //
-// Small pandas-equivalent helpers shared by the portfolio modules. Dates are
-// ISO strings ("YYYY-MM-DD" or "YYYY-MM-DDTHH:MM:SS[Z|+hh:mm]"), so the tz
-// normalization in _time.py reduces to exact-label reindexing here.
+// Dates are ISO strings ("YYYY-MM-DD" or "YYYY-MM-DDTHH:MM:SS[Z|+hh:mm]"), so
+// the tz normalization in _time.py reduces to exact-label reindexing here.
 
-import { Frame } from '../../../../services/trading/strategies/core';
+import { Frame } from '../../core/index';
 
-/** A labelled 1-D series (pandas Series stand-in). */
 export interface SeriesLike {
   readonly index: readonly string[];
   readonly values: readonly number[];

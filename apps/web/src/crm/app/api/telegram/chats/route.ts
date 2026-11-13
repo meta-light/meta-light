@@ -33,7 +33,6 @@ function peerKey(peer: Api.TypeInputPeer | Api.TypePeer): string | null {
 interface FolderDef {
   name: string;
   peerKeys: Set<string>;
-  // categorical flags
   allBroadcasts: boolean;
   allGroups: boolean;
   allBots: boolean;
@@ -49,14 +48,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Fetch normal + archived dialogs in parallel alongside folder filters
     const [normalDialogs, archivedDialogs, filtersResult] = await Promise.all([
       client.getDialogs({ limit: 100 }),
       client.getDialogs({ limit: 100, archived: true }),
       client.invoke(new Api.messages.GetDialogFilters()),
     ]);
 
-    // Build folder definitions
     const folders: FolderDef[] = [];
     const filterList = Array.isArray(filtersResult) ? filtersResult : (filtersResult as { filters: Api.TypeDialogFilter[] }).filters ?? [];
 
@@ -133,7 +130,6 @@ export async function GET() {
         lastMessageDate = msg.date;
       }
 
-      // Determine folders this chat belongs to
       const chatFolders = folders
         .filter((f) => {
           if (f.peerKeys.has(id)) return true;

@@ -15,7 +15,6 @@ const SQRT_PI = Math.sqrt(Math.PI);
 const SQRT2 = Math.SQRT2;
 const SQRT_2PI = Math.sqrt(2 * Math.PI);
 
-/** Complementary error function. */
 export function erfc(x: number): number {
   if (Number.isNaN(x)) return NaN;
   if (x < 0) return 2 - erfc(-x);
@@ -50,7 +49,6 @@ export function erfc(x: number): number {
   return Math.exp(-x * x) / (SQRT_PI * f);
 }
 
-/** Standard normal CDF. */
 export function normCdf(z: number): number {
   return 0.5 * erfc(-z / SQRT2);
 }

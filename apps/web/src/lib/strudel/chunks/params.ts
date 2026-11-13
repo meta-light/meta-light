@@ -1,4 +1,3 @@
-/** Knob definitions and bindings into a chunk's method chain. */
 import type { ChunkInfo } from './detect';
 
 export interface ParamSpec {

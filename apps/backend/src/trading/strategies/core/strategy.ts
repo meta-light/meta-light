@@ -1,6 +1,5 @@
-// Base classes for the ported strategies. A backtest engine is expected to
-// set `data` (and, for order strategies, `broker`) before calling the
-// compute hooks, the same way the Python Backtester base class did.
+// A backtest engine is expected to set `data` (and, for order strategies,
+// `broker`) before calling the compute hooks.
 
 import type { Frame } from './frame';
 import type {
@@ -16,10 +15,8 @@ export interface InstrumentData {
   getFeature(name: string): Frame;
 }
 
-/** Engine services an order strategy can call. */
 export interface Broker {
   fillEngine: FillEngine;
-  /** Average entry price of the open position, if any. */
   getAverageEntryPrice(instrument: string): number | null;
   contractSpec(instrument: string): ContractSpec;
 }
@@ -34,7 +31,6 @@ export abstract class Strategy {
   }
 }
 
-/** Produce target weights; the engine's rebalance policy trades them. */
 export abstract class WeightsStrategy extends Strategy {
   /** Set by the engine from `computeSignals()` before `computeWeights()`. */
   signals!: Frame;
@@ -43,7 +39,6 @@ export abstract class WeightsStrategy extends Strategy {
   abstract computeWeights(): Frame;
 }
 
-/** Submit explicit orders bar by bar. */
 export abstract class OrdersStrategy extends Strategy {
   broker!: Broker;
 
@@ -66,14 +61,13 @@ export abstract class OrdersStrategy extends Strategy {
     this.broker.fillEngine.cancelAll({ instrument });
   }
 
-  /** Whether the instrument has a live pending order. */
   protected hasPending(instrument: string): boolean {
     return this.broker.fillEngine.pendingOrders.some(
       (o) => o.instrument === instrument && o.isActive,
     );
   }
 
-  /** Signed market order: positive buys, negative sells. */
+  /** Positive buys, negative sells. */
   protected orderMarket(instrument: string, quantity: number, tag = ''): void {
     if (quantity === 0) return;
     this.submit({

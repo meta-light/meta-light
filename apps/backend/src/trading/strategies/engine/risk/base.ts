@@ -1,12 +1,7 @@
 // Ported from backtester/risk/base.py (QuantJourney Backtester, Apache 2.0).
-//
-// A risk model sits between computeWeights() and the rebalance engine:
-// signals -> weights -> riskModel.adjust(weights, returns) -> rebalance -> execution.
-// Models can be composed with RiskModelChain.
 
-import { Frame } from '../../../../services/trading/strategies/core';
+import { Frame } from '../../core/index';
 
-/** Extra context passed to risk models. */
 export interface RiskMetadata {
   /** Bars per year, used for annualising vol. Defaults to 252. */
   periodsPerYear?: number;

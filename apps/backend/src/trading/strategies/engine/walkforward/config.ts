@@ -1,12 +1,6 @@
 // Ported from backtester/walkforward/config.py (QuantJourney Backtester, Apache 2.0)
-//
-// The core `WalkForwardConfig` covers fold geometry only. Python's config also
-// carries purge, optimisation, statistics, cost and execution settings, so
-// this module adds `WalkForwardOptions` (every field optional, Python
-// defaults) and `ResolvedWalkForwardConfig` (validated, defaults filled,
-// derived values precomputed). A resolved config is a valid core config.
 
-import type { WalkForwardConfig } from '../../../../services/trading/strategies/core';
+import type { WalkForwardConfig } from '../../core/index';
 
 export type WalkForwardScheme = WalkForwardConfig['scheme'] | 'cpcv';
 
@@ -27,7 +21,6 @@ export interface WalkForwardOptions {
   embargoPct?: number;
   /** When set, purge = max(purgeDays, maxHoldingPeriodDays). */
   maxHoldingPeriodDays?: number;
-  /** Optimizer settings, passed through to the runner. */
   optimization?: Record<string, unknown>;
   computeDeflatedSharpe?: boolean;
   /** Effective independent trials for DSR (finite, >= 1). */
@@ -75,7 +68,6 @@ export interface ResolvedWalkForwardConfig extends WalkForwardConfig {
   nJobsOptimizer: number;
   verbose: boolean;
   seed: number;
-  // Derived (Python properties)
   /** True when `stepMonths` was not given and defaulted to `testMonths`. */
   stepMonthsDefaulted: boolean;
   rankStabilityEnabled: boolean;
@@ -83,7 +75,6 @@ export interface ResolvedWalkForwardConfig extends WalkForwardConfig {
   resolvedExtraPreOosPurgePct: number;
 }
 
-/** Apply Python defaults, validate, and precompute derived values. */
 export function resolveWalkForwardConfig(
   options: WalkForwardOptions = {},
 ): ResolvedWalkForwardConfig {

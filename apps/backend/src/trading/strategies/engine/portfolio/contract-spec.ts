@@ -1,14 +1,12 @@
 // Ported from backtester/execution/contract_spec.py (QuantJourney Backtester, Apache 2.0)
 //
-// Local subset of ContractSpec: only the fields and math the portfolio ledger
-// needs. Kept here (not imported from engine/execution) so portfolio
+// Local subset of the execution ContractSpec, kept here so portfolio
 // accounting has no dependency on the execution module. Any object carrying
 // `multiplier` (such as the core ContractSpec) is accepted and filled with
 // the Python defaults.
 
 export type AssetClass = 'equity' | 'future' | 'fx' | 'crypto' | 'option';
 
-/** Resolved contract economics used by the ledger. */
 export interface PortfolioContractSpec {
   symbol: string;
   assetClass: AssetClass;

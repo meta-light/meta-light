@@ -19,6 +19,7 @@
         "@invariant-labs/sdk-eclipse": "^0.0.122",
         "@jup-ag/api": "^6.0.38",
         "@mendable/firecrawl-js": "^4.15.1",
+        "@meta-light/utils": "workspace:*",
         "@nestjs/common": "^12.0.1",
         "@nestjs/core": "^12.0.1",
         "@nestjs/platform-express": "^12.0.1",

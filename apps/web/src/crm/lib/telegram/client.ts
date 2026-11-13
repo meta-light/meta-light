@@ -47,7 +47,6 @@ export async function getClient(): Promise<TelegramClient> {
 
   await _client.connect();
 
-  // Set up update handler for real-time SSE
   _client.addEventHandler((update: object) => {
     broadcastUpdate(update);
   });

@@ -80,7 +80,6 @@ export default function Knob({ label, value, min, max, scale, ghost, disabled, o
               : 'cursor-ns-resize border-line-bright'
         } bg-surface-2 outline-none focus-visible:border-acid-dim`}
       >
-        {/* tick */}
         <div className="absolute inset-0 flex items-start justify-center" style={{ transform: `rotate(${angle}deg)` }}>
           <div className={`mt-[3px] h-3 w-[2px] rounded-full ${ghost || disabled ? 'bg-text-faint' : 'bg-text'}`} />
         </div>

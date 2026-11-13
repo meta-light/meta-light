@@ -1,10 +1,9 @@
 // Ported from backtester/portfolio/calc/returns.py and calc/risk.py
 // (QuantJourney Backtester, Apache 2.0).
 //
-// A dated 1-D series plus the pandas reductions the metrics rely on. pandas
-// skips NaN in sum/prod/mean/std/min/max/cumprod/cummax, so these do too.
+// pandas skips NaN in sum/prod/mean/std/min/max/cumprod/cummax, so these do too.
 
-import { isNum } from '../../../../services/trading/strategies/core';
+import { isNum } from '../../core/index';
 
 /** A pandas Series with a date index. Missing values are NaN. */
 export interface Series {
@@ -33,7 +32,6 @@ export function dropNaN(s: Series): Series {
   return { index, values };
 }
 
-/** Sort a series by its date index. */
 export function sortSeries(s: Series): Series {
   const order = s.index
     .map((_, i) => i)
@@ -102,8 +100,6 @@ export function cummax(xs: readonly number[]): number[] {
   let acc = -Infinity;
   return xs.map((v) => (isNum(v) ? (acc = Math.max(acc, v)) : NaN));
 }
-
-// --- Dates ------------------------------------------------------------------
 
 /** Parse an ISO date as UTC, so "2024-01-02" and "2024-01-02T09:30" agree. */
 export function toMs(raw: string): number {

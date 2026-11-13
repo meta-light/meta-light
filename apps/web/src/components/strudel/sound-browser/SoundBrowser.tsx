@@ -79,7 +79,6 @@ export default function SoundBrowser() {
     setLastPlayed(kit.bank ?? 'default');
   };
 
-  /** Primary action for an individual-sound row. */
   const actionFor = (sound: SoundInfo): { label: string; run: () => void } => {
     const current = usePlayerStore.getState().currentChunk;
     const engine = getEngine();
@@ -89,7 +88,6 @@ export default function SoundBrowser() {
     return { label: 'insert', run: () => insertAtCursor(sound.name) };
   };
 
-  /** Primary action for a kit row. */
   const kitActionFor = (kit: KitInfo): { label: string; warn?: string; run: () => void } => {
     const engine = getEngine();
     const current = usePlayerStore.getState().currentChunk;

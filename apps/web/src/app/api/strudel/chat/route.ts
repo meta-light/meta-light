@@ -1,7 +1,4 @@
 /**
- * Streaming chat endpoint for the Strudel editor's AI panel.
- *
- * Talks to OpenRouter through the OpenAI-compatible client already in the tree.
  * The key is server-only (`OPENROUTER_KEY`, no NEXT_PUBLIC_ prefix), so the
  * browser never sees it.
  */

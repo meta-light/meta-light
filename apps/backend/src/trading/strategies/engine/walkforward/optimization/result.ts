@@ -10,9 +10,7 @@ export interface TrialRecord {
   number: number;
   params: Params;
   value: number;
-  /** Multi-objective values. */
   values?: number[] | null;
-  /** Full metrics snapshot. */
   metrics?: Record<string, number> | null;
   durationSeconds: number;
   pruned: boolean;

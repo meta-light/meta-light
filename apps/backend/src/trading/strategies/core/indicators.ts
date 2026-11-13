@@ -1,5 +1,3 @@
-// Indicator and sizing helpers shared by more than one template.
-
 import { Frame, isNum } from './frame';
 
 /** Average true range over `window` bars (simple mean of the true range). */
@@ -25,7 +23,6 @@ export function round2(x: number): number {
   return Math.round(x * 100) / 100;
 }
 
-/** `YYYY-MM-DD` -> `YYYYMMDD`, for building order ids. */
 export function compactDate(date: string): string {
   return date.slice(0, 10).replace(/-/g, '');
 }

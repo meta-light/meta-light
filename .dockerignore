@@ -1,0 +1,15 @@
+# Build context for apps/backend/Dockerfile. Allowlist: only what the backend image needs.
+*
+!package.json
+!bun.lock
+!apps/web/package.json
+!apps/backend
+!packages/utils
+**/node_modules
+**/dist
+**/dist-carp
+**/coverage
+**/.wrangler
+**/.env
+**/.env.*
+**/*.md

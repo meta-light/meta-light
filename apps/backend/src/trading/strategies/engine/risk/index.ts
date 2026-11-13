@@ -1,10 +1,6 @@
 // Ported from backtester/risk/__init__.py (QuantJourney Backtester, Apache 2.0).
-//
-// Risk overlays plus buildRiskModel(), which turns a StrategyConfig.riskModel
-// spec into an overlay, and defaultRiskModel(), which mirrors the engine's
-// fallback when only maxPositionSize is set.
 
-import type { RiskModel as RiskModelSpec, StrategyConfig } from '../../../../services/trading/strategies/core';
+import type { RiskModel as RiskModelSpec, StrategyConfig } from '../../core/index';
 import { type RiskModel, RiskModelChain } from './base';
 import { InverseVolModel } from './inverse-vol';
 import { PositionLimitModel } from './position-limit';
@@ -55,7 +51,6 @@ export type ExtendedRiskModelSpec =
     }
   | { type: 'chain'; models: (ExtendedRiskModelSpec | RiskModelSpec)[] };
 
-/** Turn a risk model config into an overlay. */
 export function buildRiskModel(
   spec: ExtendedRiskModelSpec | RiskModelSpec,
 ): RiskModel {

@@ -42,7 +42,6 @@ export default function ContactsPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="px-6 py-4 border-b border-border shrink-0">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -73,7 +72,6 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      {/* Table */}
       <ScrollArea className="flex-1 min-h-0">
         {isLoading ? (
           <div className="flex flex-col divide-y divide-border">
@@ -100,7 +98,6 @@ export default function ContactsPage() {
           </div>
         ) : (
           <div className="flex flex-col">
-            {/* Header row */}
             <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 px-6 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide border-b border-border">
               <div className="w-9" />
               <div>Name</div>
@@ -123,7 +120,6 @@ function ContactRow({ contact }: { contact: ContactRow }) {
 
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 px-6 py-3 items-center hover:bg-muted/40 transition-colors border-b border-border/50 group">
-      {/* Avatar */}
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-medium shrink-0"
         style={{ backgroundColor: contact.avatarColor }}
@@ -131,7 +127,6 @@ function ContactRow({ contact }: { contact: ContactRow }) {
         {fullName.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?'}
       </div>
 
-      {/* Name */}
       <div>
         <p className="text-sm font-medium leading-tight">{fullName || 'Unknown'}</p>
         {contact.lastContactedAt && (
@@ -141,7 +136,6 @@ function ContactRow({ contact }: { contact: ContactRow }) {
         )}
       </div>
 
-      {/* Username / Phone */}
       <div className="flex flex-col gap-0.5">
         {contact.username && (
           <span className="text-sm text-muted-foreground">@{contact.username}</span>
@@ -151,7 +145,6 @@ function ContactRow({ contact }: { contact: ContactRow }) {
         )}
       </div>
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-1">
         {contact.contactTags.slice(0, 3).map(({ tag }) => (
           <span
@@ -169,7 +162,6 @@ function ContactRow({ contact }: { contact: ContactRow }) {
         )}
       </div>
 
-      {/* Actions */}
       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {contact.telegramId && (
           <Link href={`/inbox/user-${contact.id.replace('tg-', '')}`}>

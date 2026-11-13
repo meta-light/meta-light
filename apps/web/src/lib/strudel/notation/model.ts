@@ -1,5 +1,3 @@
-/** Structured models the visual editors own; parsed from / serialized to mini-notation. */
-
 export interface StepGridModel {
   /** number of columns (total, across all bars) */
   steps: number;

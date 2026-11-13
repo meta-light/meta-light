@@ -1,9 +1,8 @@
-// Slippage models: pluggable fill-price adjustments. Buys pay up, sells
-// receive less.
+// Buys pay up, sells receive less.
 //
 // Ported from backtester/execution/slippage.py (QuantJourney Backtester, Apache 2.0)
 
-import type { SlippageModel as SlippageConfig } from '../../../../services/trading/strategies/core';
+import type { SlippageModel as SlippageConfig } from '../../core/index';
 import type { BarData, OrderSide } from './order-types';
 
 export interface Slippage {
@@ -33,10 +32,7 @@ export class FixedBpsSlippage implements Slippage {
   }
 }
 
-/**
- * Spread proportional to the bar's (high - low) / close. The fill engine
- * passes the previous completed bar for opening fills.
- */
+/** Spread from (high - low) / close. The fill engine passes the previous completed bar for opening fills. */
 export class VolatilitySlippage implements Slippage {
   constructor(readonly volFactor = 0.1) {}
 
@@ -70,7 +66,7 @@ export class MarketImpactSlippage implements Slippage {
   }
 }
 
-/** Build a model from a strategy config's `slippage` field. Not in the Python module. */
+/** Not in the Python module. */
 export function slippageFromConfig(cfg: SlippageConfig | undefined): Slippage {
   if (!cfg) return new NoSlippage();
   return new FixedBpsSlippage(cfg.bps);

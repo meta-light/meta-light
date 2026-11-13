@@ -1,10 +1,9 @@
 // Ported from backtester/portfolio/instr_data.py and the indicator step in
 // backtester/core.py (QuantJourney Backtester, Apache 2.0).
 //
-// BarData turns per-instrument OHLC bars into the date x instrument frames a
-// strategy reads through getFeature(). The SMA, EMA and RSI kernels below match
-// quantjourney_ti (_indicator_kernels.py), so feature values match what the
-// Python engine fed the original strategies, NaN handling included.
+// The SMA, EMA and RSI kernels below match quantjourney_ti
+// (_indicator_kernels.py), so feature values match what the Python engine fed
+// the original strategies, NaN handling included.
 //
 // About NaN: those kernels are compiled with numba fastmath, which drops their
 // isnan checks. The SMA window check still works, but EMA and RSI go NaN from
@@ -17,10 +16,9 @@ import {
   Frame,
   type IndicatorSpec,
   type InstrumentData,
-} from '../../../services/trading/strategies/core';
+} from '../core/index';
 import { toMs } from './metrics/series';
 
-/** A bar with an optional split/dividend-adjusted close. */
 export type DataBar = Bar & { adjClose?: number };
 
 export type BarFetcher = (instrument: string) => Promise<DataBar[]>;
@@ -34,8 +32,6 @@ const PRICE_FIELDS = [
   'adj_close',
 ] as const;
 type PriceField = (typeof PRICE_FIELDS)[number];
-
-// --- quantjourney_ti kernels -----------------------------------------------
 
 /** Run `kernel` on the prices before the first NaN and pad the rest with NaN. */
 function untilFirstNaN(
@@ -139,11 +135,9 @@ const KERNELS: Record<
   RSI: rsi,
 };
 
-// --- BarData ---------------------------------------------------------------
-
 /**
- * Instrument data built from OHLC bars. Dates are the sorted union across
- * instruments; an instrument with no bar on a date gets NaN there.
+ * Dates are the sorted union across instruments; an instrument with no bar
+ * on a date gets NaN there.
  *
  * Features: open, high, low, close, volume, adj_close (falls back to close),
  * plus one `${FN}_${period}_${col}` frame per configured indicator, e.g.

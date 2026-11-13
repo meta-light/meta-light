@@ -1,7 +1,6 @@
 // Ported from backtester/engines/blotter.py (QuantJourney Backtester, Apache 2.0).
 //
-// An in-memory audit ledger of orders and fills. CSV save/load is not ported;
-// the records are plain objects, so serialize them however you like.
+// CSV save/load is not ported.
 
 import { randomUUID } from 'node:crypto';
 
@@ -87,7 +86,6 @@ export class Blotter {
     this.orders = [];
   }
 
-  /** Record one order and return its id. */
   recordOrder(
     instrument: string,
     orderType: string,
@@ -119,7 +117,6 @@ export class Blotter {
     );
   }
 
-  /** Record many orders from parallel arrays. */
   recordOrdersBulk(args: {
     instruments: string[];
     orderTypes: string[];

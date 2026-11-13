@@ -6,11 +6,14 @@
   "exports": {
     ".": "./src/index.ts",
     "./node": "./src/node.ts",
-    "./coingecko": "./src/coingecko.ts",
-    "./defillama": "./src/defillama.ts",
-    "./transcripts": "./src/transcripts.ts",
-    "./youtube-transcript": "./src/youtube-transcript.ts",
-    "./scraper": "./src/scraper.ts"
+    "./coingecko": "./src/providers/coingecko.ts",
+    "./defillama": "./src/providers/defillama.ts",
+    "./transcripts": "./src/tools/transcripts.ts",
+    "./youtube-transcript": "./src/tools/youtube-transcript.ts",
+    "./scraper": "./src/tools/scraper.ts",
+    "./scraping": "./src/tools/scraping.ts",
+    "./telegram": "./src/providers/telegram.ts",
+    "./twitter-api": "./src/providers/twitter-api.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit"

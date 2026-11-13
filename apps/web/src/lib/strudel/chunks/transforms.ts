@@ -1,4 +1,3 @@
-/** Quick structured rewrites on a chunk: effects, speed, reverse. */
 import type { EditorView } from '@codemirror/view';
 import { deleteRange, insertAt, replaceRange, type WriteSource } from '@/lib/strudel/codemirror/writeback';
 import { isChunkFresh, type ChunkInfo } from './detect';
@@ -74,7 +73,6 @@ export function setInstrument(view: EditorView, chunk: ChunkInfo, name: string) 
   insertAt(view, chunk.exprRange[1], `.s("${name}")`, 'chunk.transform');
 }
 
-/** Set the chunk's drum-machine kit via `.bank("…")`. */
 export function setBank(view: EditorView, chunk: ChunkInfo, bank: string) {
   if (!fresh(view, chunk)) return;
   const call = chunk.chain.slice(1).find((c) => c.name === 'bank');
@@ -94,7 +92,6 @@ export function removeBank(view: EditorView, chunk: ChunkInfo) {
   if (call) deleteRange(view, call.range, 'chunk.transform');
 }
 
-/** Toggle `.rev()` on the chunk. */
 export function toggleReverse(view: EditorView, chunk: ChunkInfo) {
   if (!fresh(view, chunk)) return;
   const existing = findCall(chunk, 'rev');

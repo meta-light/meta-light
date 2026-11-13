@@ -4,7 +4,6 @@ import { registerSseClient, getClient } from '@/crm/lib/telegram/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  // Ensure client is connected
   try {
     await getClient();
   } catch {}
@@ -26,7 +25,6 @@ export async function GET() {
 
       const unregister = registerSseClient(send);
 
-      // Clean up on disconnect
       const cleanup = () => {
         clearInterval(heartbeat);
         unregister();

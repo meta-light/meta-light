@@ -1,10 +1,6 @@
 // Ported from backtester/portfolio/weight_cost.py (QuantJourney Backtester, Apache 2.0)
-//
-// Weight-mode transaction cost models. Weight strategies submit no orders, but
-// a rebalance still implies trades: target weights become implied quantity
-// deltas, and costs are charged on the resulting trade values.
 
-import { Frame } from '../../../../services/trading/strategies/core';
+import { Frame } from '../../core/index';
 import { diffRowsKeepFirst, isClose, reindexFrame } from './frame-utils';
 
 export interface WeightCostBreakdown {
@@ -37,7 +33,6 @@ export interface WeightCostModel {
   compute(input: WeightCostInput): WeightCostBreakdown;
 }
 
-/** Fixed-bps cost on every implied trade value. */
 export class FixedBpsWeightCostModel implements WeightCostModel {
   /**
    * @param totalBps cost in basis points per unit of traded notional (1 = 1 bp)

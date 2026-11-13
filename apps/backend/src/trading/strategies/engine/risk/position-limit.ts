@@ -1,10 +1,9 @@
 // Ported from backtester/risk/position_limit.py (QuantJourney Backtester, Apache 2.0).
 //
-// Enforces per-instrument caps, an optional per-instrument floor, sector
-// limits and a total gross leverage cap. Capped excess is redistributed to
-// active instruments with room; inactive instruments never gain exposure.
+// Capped excess is redistributed to active instruments with room; inactive
+// instruments never gain exposure.
 
-import { type Frame, isNum } from '../../../../services/trading/strategies/core';
+import { type Frame, isNum } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, cloneFrame, sign } from './util';
 
@@ -76,7 +75,6 @@ export class PositionLimitModel extends RiskModel {
       : row;
   }
 
-  /** Cap each weight at maxWeight, redistributing until no cap is breached. */
   applyCap(row: readonly number[]): number[] {
     const max = this.maxWeight;
     const capped = [...row];
@@ -125,7 +123,6 @@ export class PositionLimitModel extends RiskModel {
     });
   }
 
-  /** Scale each over-limit sector down to its limit. */
   applySectorLimits(
     row: readonly number[],
     columns: readonly string[],

@@ -1,7 +1,6 @@
-// A small date x instrument matrix, enough to port the pandas DataFrame code
-// the strategies use. Missing values are NaN, and NaN propagates the same way
-// it does in pandas (comparisons with NaN are false, rolling windows with too
-// few valid values give NaN).
+// Missing values are NaN, and NaN propagates the same way it does in pandas
+// (comparisons with NaN are false, rolling windows with too few valid values
+// give NaN).
 
 export type Cell = (value: number, row: number, col: number) => number;
 
@@ -12,7 +11,6 @@ export class Frame {
     readonly values: number[][],
   ) {}
 
-  /** A frame of the given shape filled with one value. */
   static full(
     index: readonly string[],
     columns: readonly string[],
@@ -25,7 +23,6 @@ export class Frame {
     );
   }
 
-  /** Build a frame from one array per column. */
   static fromColumns(
     index: readonly string[],
     cols: Record<string, readonly number[]>,
@@ -54,7 +51,6 @@ export class Frame {
     return this.rowIndex(date) >= 0;
   }
 
-  /** One column as an array (`df[name]`). */
   col(name: string): number[] {
     const j = this.colIndex(name);
     if (j < 0) throw new Error(`Unknown column ${name}`);

@@ -1,6 +1,6 @@
 ---
 name: strategy-reviewer
-description: Review a carpcap trading strategy (apps/backend/src/trading/strategies) for look-ahead bias, data handling, exposure, cost realism and weights-vs-orders mode fit before trusting its backtest. Use when writing, changing or reviewing a WeightsStrategy or OrdersStrategy, or when a backtest result looks too good.
+description: Review a carpcap trading strategy (apps/backend/src/trading-v2/strategies) for look-ahead bias, data handling, exposure, cost realism and weights-vs-orders mode fit before trusting its backtest. Use when writing, changing or reviewing a WeightsStrategy or OrdersStrategy, or when a backtest result looks too good.
 ---
 
 # Strategy Reviewer
@@ -10,7 +10,7 @@ section. Verify each claim against the code, not against what the strategy's
 comments say it does.
 
 Adapted from the QuantJourney Backtester's `qj-strategy-reviewer` skill
-(Apache 2.0, see `apps/backend/src/trading/strategies/NOTICE`).
+(Apache 2.0, see `apps/backend/src/trading-v2/strategies/NOTICE`).
 
 ## Timing and look-ahead
 

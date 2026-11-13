@@ -68,7 +68,6 @@ export default function TimelineStrip() {
 
   const zoomBy = (factor: number) => setZoom(Math.min(MAX_PX, Math.max(MIN_PX, pxPerCycle * factor)));
 
-  // ── canvas pointer logic: click = seek, drag on ruler = loop region ──
   const cycleAt = (e: React.PointerEvent | React.MouseEvent): number => {
     const canvas = e.currentTarget as HTMLElement;
     const rect = canvas.getBoundingClientRect();
@@ -111,7 +110,6 @@ export default function TimelineStrip() {
     if ((e.target as HTMLElement).closest('[data-ruler]')) void applyLoopRegion(null);
   };
 
-  // ── right-click: structural edits on the recognized arrangement ──
   const arrangementEditable =
     shared !== null && arrangement !== null && arrangement.voices.every((v) => v.match.kind !== 'arrange');
 
@@ -140,7 +138,7 @@ export default function TimelineStrip() {
     }
   };
 
-  // ── lane gutter actions (ranges are doc offsets — gated while stale) ──
+  // ranges are doc offsets — gated while stale
   const selectLane = (lane: TimelineLane) => {
     const engine = getEngine();
     if (!engine || timelineStale || !lane.source.range) return;
@@ -171,7 +169,6 @@ export default function TimelineStrip() {
 
   return (
     <div className="border-b border-line bg-surface">
-      {/* header */}
       <div className="flex h-7 items-center gap-3 border-b border-line px-4">
         <span className="silkscreen">song</span>
         <span className="text-[10px] text-text-dim tabular-nums">
@@ -246,7 +243,6 @@ export default function TimelineStrip() {
 
       {!degenerate && (
         <div className="flex">
-          {/* lane label gutter */}
           <div className="w-36 shrink-0 border-r border-line">
             <div className="h-6 border-b border-line" />
             {lanes.map((lane) => {
@@ -291,7 +287,6 @@ export default function TimelineStrip() {
             })}
           </div>
 
-          {/* scrollable canvas */}
           <div ref={scrollRef} className="min-w-0 flex-1 overflow-x-auto">
             <div
               className="relative"
@@ -312,7 +307,6 @@ export default function TimelineStrip() {
                 <TimelineLaneRow key={lane.source.id} lane={lane} pxPerCycle={pxPerCycle} displayCycles={displayCycles} />
               ))}
 
-              {/* 4-cycle gridlines + section boundaries */}
               {Array.from({ length: Math.ceil(displayCycles / 4) }, (_, i) => (
                 <div
                   key={`g${i}`}
@@ -330,7 +324,6 @@ export default function TimelineStrip() {
                 />
               ))}
 
-              {/* Tier-2: boundary handles + slot segments for recognized voices */}
               {arrangement && arrangement.voices.length > 0 && (
                 <ArrangementOverlay
                   arrangement={arrangement}
@@ -342,7 +335,6 @@ export default function TimelineStrip() {
                 />
               )}
 
-              {/* loop region */}
               {region && (
                 <div
                   aria-hidden
@@ -357,7 +349,6 @@ export default function TimelineStrip() {
         </div>
       )}
 
-      {/* right-click menu: delete a cycle (or the whole section) everywhere */}
       {cycleMenu && shared && (
         <>
           <div

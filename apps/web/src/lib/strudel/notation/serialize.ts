@@ -48,8 +48,6 @@ function serializeGridBars(model: StepGridModel, bars: number): string {
   return `<${slots.join(' ')}>`;
 }
 
-/* ── piano roll ─────────────────────────────────────────────── */
-
 interface RollGroup {
   pitches: string[];
   duration: number;

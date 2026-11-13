@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { enabled, load } from '../common/run.js';
+import { enabled } from '../env';
 
 @Injectable()
 export class TelegramService implements OnModuleInit {
@@ -7,10 +7,7 @@ export class TelegramService implements OnModuleInit {
 
   async onModuleInit() {
     if (!enabled('ENABLE_TELEGRAM')) return;
-    const { initTelegram } = await load<{ initTelegram: () => Promise<void> }>(
-      import.meta.url,
-      '../utils/telegram/index.ts',
-    );
+    const { initTelegram } = await import('@meta-light/utils/telegram');
     await initTelegram();
     this.logger.log('Telegram service enabled');
   }

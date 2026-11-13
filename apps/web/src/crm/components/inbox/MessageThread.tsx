@@ -23,7 +23,6 @@ export function MessageThread({ chatId }: { chatId: string }) {
 
   const chat = chats.find((c) => c.id === chatId);
 
-  // Resolve contact ID from chat
   const contactId = chatId.startsWith('user-') ? `tg-${chatId.slice(5)}` : null;
 
   useEffect(() => {
@@ -84,9 +83,7 @@ export function MessageThread({ chatId }: { chatId: string }) {
 
   return (
     <div className="flex h-full">
-      {/* Chat column */}
       <div className="flex flex-col flex-1 min-w-0 h-full">
-        {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
           <div className="flex items-center gap-3">
             {chat && (
@@ -125,7 +122,6 @@ export function MessageThread({ chatId }: { chatId: string }) {
           )}
         </div>
 
-        {/* Messages */}
         <ScrollArea className="flex-1 min-h-0 px-4 py-4">
           {isLoading ? (
             <div className="flex flex-col gap-3">
@@ -166,7 +162,6 @@ export function MessageThread({ chatId }: { chatId: string }) {
           )}
         </ScrollArea>
 
-        {/* Compose */}
         <div className="px-4 py-3 border-t border-border shrink-0">
           <form onSubmit={handleSend} className="flex gap-2 items-end">
             <Textarea
@@ -189,7 +184,6 @@ export function MessageThread({ chatId }: { chatId: string }) {
         </div>
       </div>
 
-      {/* CRM Panel */}
       {contactId && contactPanelOpen && (
         <div className="w-72 shrink-0 border-l border-border overflow-hidden">
           <ContactPanel contactId={contactId} />

@@ -46,7 +46,6 @@ async function _disabledPost(req: NextRequest) {
     return NextResponse.json({ error: 'API credentials not configured in .env.local' }, { status: 500 });
   }
 
-  // Step 1: send code
   if (action === 'start' || action === 'resend') {
     const phone = body.phone ?? pendingPhone;
     if (!phone) return NextResponse.json({ error: 'Phone required' }, { status: 400 });
@@ -59,7 +58,6 @@ async function _disabledPost(req: NextRequest) {
       const msg = (e as { errorMessage?: string; message?: string }).errorMessage
         ?? (e as Error).message
         ?? String(e);
-      // Surface flood wait clearly
       const floodMatch = msg.match(/FLOOD_WAIT_(\d+)/);
       if (floodMatch) {
         const secs = parseInt(floodMatch[1], 10);
@@ -78,7 +76,6 @@ async function _disabledPost(req: NextRequest) {
     return NextResponse.json({ status: 'reset' });
   }
 
-  // Step 2: verify code
   if (action === 'verify_code') {
     const { code } = body;
     if (!pendingClient || !pendingPhone || !pendingPhoneCodeHash) {
@@ -127,7 +124,6 @@ async function _disabledPost(req: NextRequest) {
     }
   }
 
-  // Step 3 (optional): 2FA password
   if (action === 'verify_password') {
     const { password } = body;
     if (!pendingClient) {
