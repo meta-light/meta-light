@@ -1,21 +1,14 @@
 // Ported from backtester/portfolio/rebalance.py (QuantJourney Backtester, Apache 2.0)
 //
-// Conditional rebalancing for weight-based strategies.
-//
 // Trigger composition (OR, then gated):
 //   rebalance = (Calendar OR Drift OR Tracking-Error OR Signal-change OR Risk-breaker)
 //               AND Cost-gate
-//
-// RebalanceEngine.run simulates drift and rebalancing over a whole target
-// weight frame (fast weight accounting). ExecutionRebalanceEngine is the
-// stateful, bar-by-bar evaluator for order-driven execution, which decides
-// from realized ledger state instead of assuming an ideal snap to target.
 //
 // Calendar anchors matter: the original authors measured Sharpe 0.494 with
 // "BME" against 0.538 with "BMS" on the same strategy. Treat the anchor as a
 // parameter to sensitivity-test.
 
-import { Frame, type RebalancePolicy } from '../../../../services/trading/strategies/core';
+import { Frame, type RebalancePolicy } from '../../core/index';
 import { calendarFlags } from './calendar';
 import {
   finiteOr0,
@@ -48,7 +41,6 @@ export interface PortfolioRebalancePolicy extends Omit<
   shortTermDays?: number;
 }
 
-/** A policy with every Python default filled in. */
 export interface ResolvedRebalancePolicy {
   rebalanceAt: RebalanceAt;
   frequency: string | null;
@@ -99,7 +91,6 @@ export function resolvePolicy(
   };
 }
 
-/** Common institutional configurations. */
 export const RebalancePresets = {
   DAILY: {} as PortfolioRebalancePolicy,
   WEEKLY: { frequency: 'W', weekday: 4 } as PortfolioRebalancePolicy,
@@ -153,8 +144,6 @@ export function minTradeWeight(
   if (reason === 'circuit_breaker' || reason === 'post_cooldown') return 0;
   return Math.max(policy.minTradeSize ?? 0, 0);
 }
-
-// ── Shared weight primitives ──────────────────────────────────────────────
 
 const clean = (w: readonly number[]): number[] => w.map(finiteOr0);
 
@@ -268,8 +257,6 @@ function pushRing(ring: number[], value: number, maxlen = 252): void {
   if (ring.length > maxlen) ring.shift();
 }
 
-// ── Fast weight accounting ────────────────────────────────────────────────
-
 export interface RebalanceStats {
   rebalance_count: number;
   calendar_count: number;
@@ -293,7 +280,6 @@ export interface RebalanceResult {
   /** Asset returns aligned to the target, missing values as 0. */
   accountingReturns: Frame;
   portfolioReturns: number[];
-  /** cumprod(1 + portfolioReturns). */
   relativeNav: number[];
   stats: RebalanceStats | Record<string, never>;
 }
@@ -304,10 +290,8 @@ export interface RebalanceEngineOptions {
 }
 
 /**
- * Evaluates a rebalance policy over a target weight frame and produces
- * rebalance flags, drifted weights and stats. Targets are assumed already
- * shifted for look-ahead. Missing asset returns mark the asset untradeable
- * for that bar: its weight is frozen and earns 0.
+ * Targets are assumed already shifted for look-ahead. Missing asset returns
+ * mark the asset untradeable for that bar: its weight is frozen and earns 0.
  */
 export class RebalanceEngine {
   readonly policy: ResolvedRebalancePolicy;

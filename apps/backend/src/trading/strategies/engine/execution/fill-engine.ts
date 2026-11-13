@@ -1,8 +1,3 @@
-// Fill engine: a stateful order book that processes pending orders against
-// OHLCV bars. Supports market, limit, stop, stop-limit, trailing stop,
-// trailing stop-limit, OCO and bracket orders, with slippage, commission,
-// volume participation caps and time-in-force expiry.
-//
 // Same-bar convention: daily bars do not reveal the intrabar path, so stops
 // are evaluated before limits, and limits before markets. Opening fills see
 // only the previous bar's HLCV for slippage and the lagged mean volume for
@@ -16,7 +11,7 @@ import type {
   Order,
   OrderType,
   TimeInForce,
-} from '../../../../services/trading/strategies/core';
+} from '../../core/index';
 import { type CommissionModel, ZeroCommission } from './commission';
 import {
   type BarData,
@@ -140,8 +135,6 @@ export class FillEngine implements CoreFillEngine {
     this.volumeHistory = new Map();
   }
 
-  // Submit
-
   private ordersFor(instrument: string): ExecOrder[] {
     let list = this.orders.get(instrument);
     if (!list) {
@@ -151,7 +144,6 @@ export class FillEngine implements CoreFillEngine {
     return list;
   }
 
-  /** Submit an order and return its id. Plain core orders are wrapped in an `ExecOrder`. */
   submit(
     input: Order | OrderInit | ExecOrder,
     opts: { bypassPreSubmit?: boolean } = {},
@@ -174,7 +166,6 @@ export class FillEngine implements CoreFillEngine {
     return order.orderId;
   }
 
-  /** Record a pre-trade rejection without adding a pending order. */
   reject(input: Order | OrderInit | ExecOrder, reason: string): string {
     const order = ExecOrder.from(input);
     order.status = 'rejected';

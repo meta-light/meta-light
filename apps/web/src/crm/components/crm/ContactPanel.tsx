@@ -126,7 +126,6 @@ export function ContactPanel({ contactId }: { contactId: string }) {
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col gap-0 p-4">
-        {/* Contact header */}
         <div className="flex flex-col items-center gap-2 py-4 text-center">
           <div
             className="w-14 h-14 rounded-full flex items-center justify-center text-white text-lg font-semibold"
@@ -150,7 +149,6 @@ export function ContactPanel({ contactId }: { contactId: string }) {
 
         <Separator className="my-2" />
 
-        {/* Pipeline stage */}
         <Section icon={<GitBranch className="w-3.5 h-3.5" />} title="Pipeline Stage">
           <Select
             value={contact.pipelineStageId ?? ''}
@@ -175,7 +173,6 @@ export function ContactPanel({ contactId }: { contactId: string }) {
 
         <Separator className="my-2" />
 
-        {/* Tags */}
         <Section icon={<Tag className="w-3.5 h-3.5" />} title="Tags">
           <div className="flex flex-wrap gap-1.5 mb-2">
             {contact.contactTags.map(({ tag }) => (
@@ -213,7 +210,6 @@ export function ContactPanel({ contactId }: { contactId: string }) {
 
         <Separator className="my-2" />
 
-        {/* Notes */}
         <Section
           icon={<StickyNote className="w-3.5 h-3.5" />}
           title="Notes"

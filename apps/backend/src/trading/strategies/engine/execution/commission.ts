@@ -1,8 +1,6 @@
-// Commission schemes: pluggable per-fill cost models.
-//
 // Ported from backtester/execution/commission.py (QuantJourney Backtester, Apache 2.0)
 
-import type { CommissionScheme as CommissionConfigCore } from '../../../../services/trading/strategies/core';
+import type { CommissionScheme as CommissionConfigCore } from '../../core/index';
 
 export interface CommissionModel {
   compute(price: number, quantity: number, notional: number): number;

@@ -1,11 +1,11 @@
 // Ported from backtester/portfolio/portf_calc.py and the metric assembly in
 // backtester/engines/performance.py (QuantJourney Backtester, Apache 2.0).
 //
-// Portfolio-level metrics over a daily return series. Result keys keep the
-// Python snake_case names so the report config in formatters.ts can address
-// them by the same dotted paths. Plots, HTML/JSON/CSV output are not ported.
+// Result keys keep the Python snake_case names so the report config in
+// formatters.ts can address them by the same dotted paths. Plots, HTML/JSON/CSV
+// output are not ported.
 
-import { type Frame, isNum, rolling } from '../../../../services/trading/strategies/core';
+import { type Frame, isNum, rolling } from '../../core/index';
 import {
   cummax,
   cumprod,
@@ -43,7 +43,6 @@ export interface PortfolioSeries {
   returns: Series;
   /** Observed returns for metrics, excluding that first 0. Defaults to `returns`. */
   returnsForMetrics?: Series;
-  /** Target weights, dates x instruments. Needed for turnover. */
   weights?: Frame | null;
   /** Overrides `daysPerYear` when no config is passed (e.g. intraday books). */
   periodsPerYear?: number;
@@ -149,7 +148,6 @@ export function sharpeRatio(
   return annualize ? ratio * Math.sqrt(daysPerYear) : ratio;
 }
 
-/** Thin facade over a portfolio's return and weight history. */
 export class PortfolioCalculations {
   readonly tradingDays: number;
   readonly riskFreeRate: number;
@@ -181,8 +179,6 @@ export class PortfolioCalculations {
   get weights(): Frame | null {
     return this.data.weights ?? null;
   }
-
-  // --- Returns -------------------------------------------------------------
 
   computeReturns(method: 'simple' | 'log' = 'simple'): Series {
     const r = this.metricReturns;
@@ -254,8 +250,6 @@ export class PortfolioCalculations {
     };
   }
 
-  // --- Risk and ratios -----------------------------------------------------
-
   computeDrawdowns(): Series {
     return {
       index: [...this.returns.index],
@@ -295,8 +289,6 @@ export class PortfolioCalculations {
     return annualize ? ratio * Math.sqrt(this.tradingDays) : ratio;
   }
 
-  // --- Turnover and exposure -----------------------------------------------
-
   /** Gross weight churn: sum(|diff(weights)|) per date, 0 on the first row. */
   computeGrossWeightChange(): Series {
     const w = this.weights;
@@ -318,8 +310,6 @@ export class PortfolioCalculations {
     const g = this.computeGrossWeightChange();
     return { index: g.index, values: g.values.map((v) => v / 2) };
   }
-
-  // --- Rolling -------------------------------------------------------------
 
   /** Rolling Sortino using only the negative returns in each window. */
   computeRollingSortino(
@@ -414,7 +404,6 @@ export class PortfolioCalculations {
     return maxDd === 0 ? Infinity : this.computeAnnualizedReturn() / maxDd;
   }
 
-  /** Turnover analytics from target-weight changes. */
   computeAdvancedTurnover():
     AdvancedTurnover | { status: 'error'; message: string } {
     if (!this.weights) return { status: 'error', message: 'No weights data' };

@@ -14,7 +14,6 @@
  */
 import type { Frac, PeriodInfo } from './types';
 
-/** A single onset: exact rational time plus a discrete signature key. */
 export interface OnsetInput {
   /** time in cycles = n/d */
   n: number;

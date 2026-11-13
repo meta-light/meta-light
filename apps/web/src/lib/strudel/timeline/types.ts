@@ -12,7 +12,6 @@ export interface Frac {
 
 export type LaneKind = 'statement' | 'stackArg' | 'definition' | 'other';
 
-/** A row of the timeline, found statically in the doc (or synthesized). */
 export interface LaneSource {
   /** 'stmt:2' | 'stack:0' | 'def:crdpart' | 'other' */
   id: string;
@@ -27,9 +26,7 @@ export interface LaneSource {
   refs: string[];
 }
 
-/** Per-lane, per-cycle activity summary. */
 export interface LaneActivityCell {
-  /** onset count in this cycle */
   onsets: number;
   /** fraction of the cycle covered by sounding events, 0..1 */
   coverage: number;

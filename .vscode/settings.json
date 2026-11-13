@@ -10,7 +10,7 @@
     "source.fixAll.eslint": "never"
   },
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "[typescript]": {
     "editor.formatOnSave": false,
     "editor.defaultFormatter": "vscode.typescript-language-features"

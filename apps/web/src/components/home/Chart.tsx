@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 
-// Register Chart.js components
 Chart.register(...registerables);
 
 export interface ChartDataset {
@@ -43,7 +42,6 @@ export default function ChartComponent({
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // Destroy existing chart if it exists
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -51,7 +49,6 @@ export default function ChartComponent({
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
 
-    // Default options
     const defaultOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -72,7 +69,6 @@ export default function ChartComponent({
       }
     };
 
-    // Merge default options with provided options
     const mergedOptions = {
       ...defaultOptions,
       ...options,
@@ -90,7 +86,6 @@ export default function ChartComponent({
 
     chartRef.current = new Chart(ctx, config);
 
-    // Cleanup function
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();

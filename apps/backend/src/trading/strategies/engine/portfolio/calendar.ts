@@ -18,7 +18,6 @@ const LEGACY_FREQ: Record<string, string> = {
   BAS: 'BYS',
 };
 
-/** Map deprecated pandas aliases to their modern names. */
 export function normalizeFreq(freq: string): string {
   return LEGACY_FREQ[freq] ?? freq;
 }
@@ -29,9 +28,7 @@ const weekdayOf = (ms: number): number => (new Date(ms).getUTCDay() + 6) % 7;
 interface PeriodRule {
   /** Months (1-12) on which the period ends or starts. */
   months: readonly number[];
-  /** Anchor at the start (true) or end (false) of the month. */
   start: boolean;
-  /** Snap to a weekday (business offsets). */
   business: boolean;
   /** Period used to validate forward snaps of start schedules. */
   period: 'M' | 'Q' | 'Y';

@@ -1,8 +1,0 @@
-node_modules
-dist
-dist-carp
-.env
-.env.*
-*.md
-coverage
-.wrangler

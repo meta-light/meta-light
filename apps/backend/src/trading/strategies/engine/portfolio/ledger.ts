@@ -1,10 +1,6 @@
 // Ported from backtester/portfolio/accounting/ledger.py (QuantJourney Backtester, Apache 2.0)
-//
-// Deterministic portfolio accounting. PortfolioLedger is the stateful owner
-// of cash, positions, marks and average entry prices for order simulation;
-// buildWeightLedger publishes the same result schema for target-weight mode.
 
-import { Frame, type OrderSide } from '../../../../services/trading/strategies/core';
+import { Frame, type OrderSide } from '../../core/index';
 import {
   type ContractSpecResolver,
   marginRequired,
@@ -26,7 +22,6 @@ import {
   type WeightCostModel,
 } from './weight-cost';
 
-/** Minimal fill the ledger consumes (subset of the execution Fill). */
 export interface LedgerFill {
   instrument: string;
   side: OrderSide;
@@ -35,7 +30,6 @@ export interface LedgerFill {
   commission: number;
 }
 
-/** Immutable pre-trade view of the simulated portfolio. */
 export interface PortfolioSnapshot {
   cash: number;
   nav: number;
@@ -45,7 +39,6 @@ export interface PortfolioSnapshot {
   buyingPower: number;
 }
 
-/** Accounting values produced while applying one fill. */
 export interface FillAccounting {
   tradeNotional: number;
   transactionCashValue: number;
@@ -54,7 +47,6 @@ export interface FillAccounting {
   newPosition: number;
 }
 
-/** Common accounting result returned by every simulation mode. */
 export interface LedgerResult {
   nav: number[];
   cash: number[];
@@ -79,7 +71,6 @@ export type PriceMap = Readonly<Record<string, number | null | undefined>>;
 
 const EPS = 1e-12;
 
-/** Single owner of cash, positions, marks and average entry prices. */
 export class PortfolioLedger {
   readonly initialCash: number;
   readonly instruments: readonly string[];
@@ -118,7 +109,6 @@ export class PortfolioLedger {
     this.reset();
   }
 
-  /** Reset all per-run state while preserving configuration. */
   reset(): void {
     this.cash = this.initialCash;
     this.positions = {};
@@ -154,7 +144,6 @@ export class PortfolioLedger {
     this.marginRows = [];
   }
 
-  /** Resolve (and cache) the validated contract specification. */
   contractSpec(instrument: string): PortfolioContractSpec {
     let spec = this.specs.get(instrument);
     if (spec === undefined) {
@@ -205,7 +194,6 @@ export class PortfolioLedger {
     return Math.abs(quantity) * price * spec.multiplier * spec.lotSize;
   }
 
-  /** Mark a signed position using its contract convention. */
   signedPositionValue(
     instrument: string,
     quantity: number,
@@ -255,7 +243,6 @@ export class PortfolioLedger {
     };
   }
 
-  /** Per-instrument quantity-based valuation helper shared by the marks below. */
   private perInstrument(
     prices: PriceMap,
     fn: (instrument: string, quantity: number, price: number) => number,
@@ -289,7 +276,6 @@ export class PortfolioLedger {
     return { nav, positionValues };
   }
 
-  /** Current collateral requirement per instrument. */
   marginByInstrument(prices: PriceMap = {}): Record<string, number> {
     return this.perInstrument(prices, (i, q, p) =>
       marginRequired(this.contractSpec(i), q, p),
@@ -320,7 +306,6 @@ export class PortfolioLedger {
     return out;
   }
 
-  /** Immutable view for pre-trade checks. */
   snapshot(
     options: { prices?: PriceMap; nav?: number } = {},
   ): PortfolioSnapshot {

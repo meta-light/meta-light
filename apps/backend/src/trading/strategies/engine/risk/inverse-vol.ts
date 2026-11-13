@@ -4,7 +4,7 @@
 // keep the original gross exposure. With blendAlpha the raw weight acts as
 // conviction (w_i / vol_i); without it only the sign of the raw weight is kept.
 
-import { type Frame, isNum, rolling, shift } from '../../../../services/trading/strategies/core';
+import { type Frame, isNum, rolling, shift } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, annFactorFor, cloneFrame, nanStd, sign } from './util';
 

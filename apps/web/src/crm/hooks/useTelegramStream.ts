@@ -12,7 +12,6 @@ export function useTelegramStream() {
     es.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data);
-        // Handle new message updates
         if (data.className === 'UpdateNewMessage' && data.message) {
           const msg = data.message;
           const peerId = msg.peerId;

@@ -13,33 +13,19 @@ export const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID;
 export const FLUXBEAM_API_KEY =
   process.env.FLUXBEAM_API_KEY || process.env.FLUXBEAM_KEY;
 export const XAI_BEARER_TOKEN = process.env.XAI_BEARER_TOKEN;
-export const NEWS_API_ORG_KEY = process.env.NEWS_API_ORG_KEY;
-export const CRYPTO_PANIC_KEY = process.env.CRYPTO_PANIC_KEY;
 export const FINANCIAL_MODEL_PREP_KEY = process.env.FINANCIAL_MODEL_PREP_KEY;
 export const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 export const TELEGRAM_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
 export const TELEGRAM_USE_BOT_CHAT = process.env.TELEGRAM_USE_BOT_CHAT;
-export const RENTALS_LOCATION_ALLOWLIST =
-  process.env.RENTALS_LOCATION_ALLOWLIST;
-export const RENTALS_LOCATION_BLOCKLIST =
-  process.env.RENTALS_LOCATION_BLOCKLIST;
-export const RENTALS_NOTIFICATION_LOOKBACK_HOURS =
-  process.env.RENTALS_NOTIFICATION_LOOKBACK_HOURS;
-export const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
-export const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-export const TOKENKEG_PROGRAM_ID =
-  'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 export const NODE_ENV = process.env.NODE_ENV;
 export const ENABLE_TRADING = process.env.ENABLE_TRADING;
-export const SOLANA_RPCS = [
-  `https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`,
-  'https://api.mainnet-beta.solana.com',
-  `https://eu.rpc.fluxbeam.xyz/?key=${FLUXBEAM_API_KEY}`,
-];
-export const ECLIPSE_RPCS = ['https://eclipse.helius-rpc.com'];
 export const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 export const CLOUDFLARE_DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID;
 export const CLOUDFLARE_D1_TOKEN = process.env.CLOUDFLARE_D1_TOKEN;
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 export const SUBSTACK_TOKEN = process.env.SUBSTACK_TOKEN!;
 export const CHATGPT_REFRESH_TOKEN = process.env.CHATGPT_REFRESH_TOKEN!;
+
+export function enabled(flag: string): boolean {
+  return process.env[flag] === 'true';
+}

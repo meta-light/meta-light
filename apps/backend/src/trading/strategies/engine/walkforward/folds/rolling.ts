@@ -1,6 +1,4 @@
 // Ported from backtester/walkforward/folds/rolling.py (QuantJourney Backtester, Apache 2.0)
-//
-// Fixed-width rolling IS window of trainMonths; each fold slides forward by stepMonths.
 
 import type { ResolvedWalkForwardConfig } from '../config';
 import { type Fold, type FoldScheme, generateWindowFolds } from './base';

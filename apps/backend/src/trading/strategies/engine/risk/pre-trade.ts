@@ -1,10 +1,9 @@
 // Ported from backtester/risk/pre_trade.py (QuantJourney Backtester, Apache 2.0).
 //
-// Checks applied immediately before an order reaches the fill engine. The
-// default configuration is pass-through; margin, leverage and short limits
+// The default configuration is pass-through; margin, leverage and short limits
 // only bind when explicitly configured because they depend on account and venue.
 
-import type { ContractSpec, Order } from '../../../../services/trading/strategies/core';
+import type { ContractSpec, Order } from '../../core/index';
 
 /**
  * Minimal portfolio state the checks need (a local stand-in for the ledger's
@@ -21,7 +20,6 @@ export interface PortfolioSnapshot {
   buyingPower?: number;
 }
 
-/** Contract details the checks need (margin, notional, asset class). */
 export interface RiskContractSpec {
   marginRequired(quantity: number, price: number): number;
   notional(quantity: number, price: number): number;

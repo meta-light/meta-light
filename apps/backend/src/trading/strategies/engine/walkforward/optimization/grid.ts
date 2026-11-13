@@ -1,11 +1,11 @@
 // Ported from backtester/walkforward/optimization/grid.py (QuantJourney Backtester, Apache 2.0)
 //
-// Exhaustive grid search over a parameter grid. Grids larger than
-// `maxCombinations` are randomly subsampled with a seeded RNG. That RNG is
-// not Python's `random.Random`, so for oversized grids the sampled subset
-// differs from the Python original (full grids are evaluated identically).
+// Grids larger than `maxCombinations` are randomly subsampled with a seeded
+// RNG. That RNG is not Python's `random.Random`, so for oversized grids the
+// sampled subset differs from the Python original (full grids are evaluated
+// identically).
 
-import { mean, std } from '../../../../../services/trading/strategies/core';
+import { mean, std } from '../../../core/index';
 import { sampleWithoutReplacement, seededRandom } from '../internal';
 import type { Objective, OptimizeOptions, Optimizer } from './base';
 import {

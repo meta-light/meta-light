@@ -4,7 +4,6 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-/** Read and parse a JSON file, or return null if it's missing or invalid. */
 export async function readJsonFile<T>(filePath: string): Promise<T | null> {
   try {
     const raw = await readFile(filePath, "utf8");
@@ -14,7 +13,6 @@ export async function readJsonFile<T>(filePath: string): Promise<T | null> {
   }
 }
 
-/** Whether a file exists and is accessible. */
 export async function hasFile(filePath: string): Promise<boolean> {
   try {
     await access(filePath);
@@ -24,7 +22,6 @@ export async function hasFile(filePath: string): Promise<boolean> {
   }
 }
 
-/** Write a file, creating parent directories as needed. */
 export function write_file_safe(
   path: string,
   content: string,

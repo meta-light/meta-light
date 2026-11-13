@@ -1,6 +1,4 @@
 /**
- * Chat state for the AI panel.
- *
  * The request lives here rather than in the component so a reply keeps
  * streaming while the user switches to the sound browser or closes the panel.
  */

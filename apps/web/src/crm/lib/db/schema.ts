@@ -54,7 +54,6 @@ export const integrationConfigs = sqliteTable('integration_configs', {
   enabled: integer('enabled').notNull().default(0),
 });
 
-// Relations
 export const contactsRelations = relations(contacts, ({ many, one }) => ({
   contactTags: many(contactTags),
   notes: many(notes),

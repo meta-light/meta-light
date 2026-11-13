@@ -32,7 +32,6 @@ export default function AuthPage() {
   }
 
   async function handleStartOver() {
-    // Tell the server to reset pending state
     await fetch('/api/telegram/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

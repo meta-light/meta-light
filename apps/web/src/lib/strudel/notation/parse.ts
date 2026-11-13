@@ -48,7 +48,6 @@ function gridDivision(steps: Step[]): number {
   return steps.reduce((l, s) => lcm(l, unitsOf(s)), 1);
 }
 
-/** index of the `]` closing the `[` at `open`, or -1 */
 function matchingBracket(src: string, open: number): number {
   let depth = 0;
   for (let i = open; i < src.length; i++) {
@@ -75,7 +74,6 @@ function splitTopLevel(src: string): string[] {
   return parts;
 }
 
-/** inner content when the entire trimmed string is one `<...>` alternation */
 function wholeAlternation(mini: string): string | null {
   const t = mini.trim();
   return t.length >= 2 && t.startsWith('<') && t.endsWith('>') ? t.slice(1, -1) : null;
@@ -113,7 +111,6 @@ function tokenizeSteps(mini: string): { ok: true; steps: Step[] } | { ok: false;
       steps.push(step);
       continue;
     }
-    // bare atom
     const match = src.slice(i).match(/^[^\s[\]@,]+/);
     if (!match) return { ok: false, reason: `unsupported character "${src[i]}"` };
     const atom = parseAtom(match[0]);
@@ -127,7 +124,6 @@ function tokenizeSteps(mini: string): { ok: true; steps: Step[] } | { ok: false;
   return { ok: true, steps };
 }
 
-/** the contents of one `[...]`: a `[a,b]` stack or a sub-sequence of slots */
 function parseGroup(inner: string, elongation: number): Step | { reason: string } {
   if (splitTopLevel(inner).length > 1) {
     // `[bd,hh]` — simultaneous stack
@@ -209,8 +205,6 @@ function readElongation(
   if (!match) return { ok: false, reason: 'invalid elongation', next: i };
   return { ok: true, value: parseInt(match[0], 10), next: i + 1 + match[0].length };
 }
-
-/* ── drum grid ──────────────────────────────────────────────── */
 
 function gridRejectsElongation(steps: Step[]): boolean {
   return steps.some((s) => s.elongation !== 1 || (s.sub !== null && s.sub.some((p) => p.units !== 1)));
@@ -310,8 +304,6 @@ function parseGridStack(parts: string[]): ParseResult<StepGridModel> {
   });
   return { ok: true, model: { steps: total, lanes } };
 }
-
-/* ── piano roll ─────────────────────────────────────────────── */
 
 export function parsePianoRoll(mini: string): ParseResult<PianoRollModel> {
   const alt = wholeAlternation(mini);

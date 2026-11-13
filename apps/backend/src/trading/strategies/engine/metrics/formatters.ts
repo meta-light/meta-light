@@ -1,8 +1,7 @@
 // Ported from backtester/metrics/formatters.py, metrics/utils.py and
 // metrics/configs/portfolio_perf.py (QuantJourney Backtester, Apache 2.0).
 //
-// Turns the computeMetricResults() dict into display strings, section by
-// section. Console colouring and tables are not ported.
+// Console colouring and tables are not ported.
 
 type Formatter = (v: unknown) => string;
 

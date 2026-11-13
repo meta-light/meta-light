@@ -1,10 +1,3 @@
-// Config and order types for the strategy templates. These mirror the
-// QuantJourney backtester's Python API (camelCase here) so the ported
-// strategies keep their original settings. Nothing here runs a backtest; an
-// engine still has to consume these.
-
-// --- Market data ----------------------------------------------------------
-
 export interface Bar {
   timestamp: string;
   open: number;
@@ -14,7 +7,6 @@ export interface Bar {
   volume?: number;
 }
 
-/** Per-instrument contract details supplied by the data provider. */
 export interface ContractSpec {
   /** Price multiplier (futures point value, FX units per price point). */
   multiplier: number;
@@ -31,8 +23,6 @@ export interface IndicatorSpec {
   params: { periods: number[] };
 }
 
-// --- Execution costs ------------------------------------------------------
-
 export type SlippageModel = { type: 'fixed_bps'; bps: number };
 
 export type CommissionScheme =
@@ -43,8 +33,6 @@ export type CommissionScheme =
       minPerOrder: number;
       maxPct?: number;
     };
-
-// --- Portfolio rules ------------------------------------------------------
 
 /**
  * When the weights engine rebalances. Frequencies use pandas offset codes:
@@ -79,8 +67,6 @@ export type RiskModel =
   | { type: 'position_limit'; maxWeight: number }
   | { type: 'chain'; models: RiskModel[] };
 
-// --- Strategy config ------------------------------------------------------
-
 export type ExecutionMode = 'weights' | 'orders';
 
 export interface StrategyConfig {
@@ -102,8 +88,6 @@ export interface StrategyConfig {
   slippage?: SlippageModel;
   commission?: CommissionScheme;
 }
-
-// --- Orders ---------------------------------------------------------------
 
 export type OrderSide = 'buy' | 'sell';
 
@@ -139,14 +123,12 @@ export interface Order {
   orderType: OrderType;
   limitPrice?: number;
   stopPrice?: number;
-  /** Limit offset for stop_trail_limit orders. */
   limitOffset?: number;
   /** Absolute trailing distance. */
   trailAmount?: number;
   /** Fractional trailing distance (0.02 = 2%). */
   trailPercent?: number;
   bracket?: BracketSpec;
-  /** Links two orders as a one-cancels-other pair. */
   ocoPairId?: string;
   timeInForce?: TimeInForce;
   expiresAfterBars?: number;
@@ -158,14 +140,11 @@ export interface PendingOrder extends Order {
   isActive: boolean;
 }
 
-/** The engine-side order book a strategy submits to. */
 export interface FillEngine {
   readonly pendingOrders: readonly PendingOrder[];
   submit(order: Order): void;
   cancelAll(filter?: { instrument?: string }): void;
 }
-
-// --- Walk-forward ---------------------------------------------------------
 
 export interface WalkForwardConfig {
   scheme: 'rolling' | 'expanding' | 'anchored';
@@ -184,7 +163,6 @@ export interface WalkForwardConfig {
  */
 export type WalkForwardMode = 'slice_diagnostics' | 'per_fold_refit';
 
-/** Shape the engine passes to a per-fold strategy factory. */
 export interface FoldWindow {
   foldId: number;
   trainStart: string;

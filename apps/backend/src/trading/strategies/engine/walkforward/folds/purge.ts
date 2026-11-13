@@ -1,9 +1,9 @@
 // Ported from backtester/walkforward/folds/purge.py (QuantJourney Backtester, Apache 2.0)
 //
-// Pre-OOS purge shared across all fold schemes. Removes the last N trading
-// days from IS to prevent label leakage; an optional percentage extends that
-// same exclusion window. This is not a classical post-test embargo. When
-// `maxHoldingPeriodDays` is set, purge = max(purgeDays, holding).
+// Removes the last N trading days from IS to prevent label leakage; an
+// optional percentage extends that same exclusion window. This is not a
+// classical post-test embargo. When `maxHoldingPeriodDays` is set,
+// purge = max(purgeDays, holding).
 
 import { datesBetween, lastDateBefore, warnOnce } from '../internal';
 

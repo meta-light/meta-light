@@ -1,8 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-# Monorepo root .gitignore — patterns are unanchored so they apply to every package
-# (web, crm, carpcap, swap rate, ...). Package-specific rules are scoped by path below.
-
-# dependencies
 node_modules/
 /.pnp
 .pnp.*
@@ -13,68 +8,31 @@ node_modules/
 !.yarn/releases
 !.yarn/versions
 .yarn/install-state.gz
-
-# testing / coverage
 coverage/
-
-# next.js
 .next/
 out/
 .open-next/
 .wrangler/
-
-# production / build output
 build/
 dist/
-
-# misc
 .DS_Store
 Thumbs.db
 *.pem
-
-# editors
 .idea/
 *.swp
 *.swo
-
-# logs / debug
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files
 .env
 .env*.local
 .doppler.yaml
-
-# vercel
 .vercel
-
-# typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# root scratch
 /repos
-
-# turborepo
 .turbo/
-
-# ---- carpcap (Node + Rust + OCR/PDF tooling) ----
-apps/carpcap/.tesseract/
-apps/carpcap/pdfjs-dist/
-apps/carpcap/rust/target/
-apps/carpcap/rust/Cargo.lock
-apps/carpcap/src/backups/
-apps/carpcap/src/services/ventures/
-!apps/carpcap/documents/.gitkeep
-!apps/carpcap/output/.gitkeep
-
-# ---- crm ----
-apps/crm/crm.db
-
-# ---- agents ----
-.claude/twitter-accounts.json
+tasks/

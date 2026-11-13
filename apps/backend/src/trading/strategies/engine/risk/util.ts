@@ -1,9 +1,7 @@
 // Ported from backtester/risk/base.py (QuantJourney Backtester, Apache 2.0).
-// Shared pandas-equivalent helpers used by the risk models (NaN-skipping sums, std, rescore dates).
 
-import { Frame, isNum } from '../../../../services/trading/strategies/core';
+import { Frame, isNum } from '../../core/index';
 
-/** Deep copy of a frame's values. */
 export function cloneFrame(f: Frame): Frame {
   return new Frame(
     f.index,

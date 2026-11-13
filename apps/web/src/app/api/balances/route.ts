@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
 
     const url = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
     
-    // Get native SOL balance
     const solBalanceResponse = await fetch(url, {
       method: 'POST',
       headers: {
@@ -37,7 +36,6 @@ export async function POST(request: NextRequest) {
     
     const solBalanceData = await solBalanceResponse.json();
     
-    // Get token accounts
     const tokenAccountsResponse = await fetch(url, {
       method: 'POST',
       headers: {

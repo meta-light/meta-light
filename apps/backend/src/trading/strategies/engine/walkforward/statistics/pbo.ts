@@ -5,18 +5,10 @@
 //
 // Canonical CSCV PBO needs trial-level OOS data on symmetric combinatorial
 // splits. The rolling walk-forward top-K pipeline does not do CSCV, so its
-// output must not be reported as canonical PBO. This module provides:
-// - selectedTrialRankLogit / walkForwardTopKRankFailureRate: per fold, the
-//   IS-selected trial's relative OOS rank among the top-K re-tested trials,
-//   and the fraction of folds where it landed in the bottom half.
-// - probabilityOfBacktestOverfitting: deprecated, always NaN (the old
-//   fold-level version had no trials, selection or rank).
-// - isOosTransferDistribution: IS to OOS transfer ratios across fold splits,
-//   for plotting only.
+// output must not be reported as canonical PBO. isOosTransferDistribution is
+// for plotting only.
 
 import { sampleWithoutReplacement, seededRandom, warnOnce } from '../internal';
-
-// --- Rolling top-K OOS rank-stability diagnostic ---------------------------
 
 /**
  * Logit of the IS-selected trial's relative OOS rank among all K candidates
@@ -70,8 +62,6 @@ export function pboFromSelectedRanks(
   return walkForwardTopKRankFailureRate(logits);
 }
 
-// --- Deprecated fold-level pseudo-PBO --------------------------------------
-
 /**
  * @deprecated Not the CSCV PBO; always returns NaN. Fold-level Sharpes
  * contain no trials, selection or rank. Set `rankStabilityTrials` >= 2 with
@@ -94,8 +84,6 @@ export function probabilityOfBacktestOverfitting(
   );
   return NaN;
 }
-
-// --- Diagnostic transfer-ratio distribution (plotting only) -----------------
 
 function nChooseK(n: number, k: number): number {
   let r = 1;

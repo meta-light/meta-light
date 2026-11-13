@@ -25,7 +25,6 @@ function fresh(doc: string, arr: SongArrangement): boolean {
   return arr.doc === doc;
 }
 
-/** weights-only view of a voice's slots */
 function weights(match: VoiceMatch | ArrangeMatch): { token: string; weight: number }[] {
   if (isPickVoice(match)) return match.slots.map((s) => ({ token: s.token, weight: s.weight }));
   return match.slots.map((s, i) => ({ token: String(i), weight: s.weight }));
@@ -46,7 +45,6 @@ export function dragBoundary(doc: string, arr: SongArrangement, boundary: number
   if (!fresh(doc, arr)) return fail('arrangement is stale');
   if (!Number.isInteger(delta)) return fail('delta must be whole cycles');
 
-  // collect participating voices and the global clamp
   const participants: { voice: ArrangedVoice; index: number }[] = [];
   let dMin = -Infinity;
   let dMax = Infinity;
@@ -146,7 +144,6 @@ function sectionAligned(arr: SongArrangement, start: number, end: number): boole
   });
 }
 
-/** Delete the [start, end) section from every voice's timeline. */
 export function deleteSection(doc: string, arr: SongArrangement, start: number, end: number): EditResult {
   if (!fresh(doc, arr)) return fail('arrangement is stale');
   if (!arr.shared) return fail('voices do not share a timeline');
@@ -217,7 +214,6 @@ export function duplicateSection(doc: string, arr: SongArrangement, start: numbe
       at += slot.weight;
       out.push(slot);
       if (at === end) {
-        // append a copy of the covered slots right after the section
         let inner = 0;
         for (const s of weights(match)) {
           const ia = inner;

@@ -2,7 +2,7 @@
 // No single Python counterpart: replaces dateutil.relativedelta month math,
 // pandas DatetimeIndex slicing, Python/numpy seeded RNGs and warnings.warn.
 
-// --- ISO dates (YYYY-MM-DD, compared lexically) ---------------------------
+// ISO dates (YYYY-MM-DD) are compared lexically.
 
 function parseIso(date: string): [number, number, number] {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);

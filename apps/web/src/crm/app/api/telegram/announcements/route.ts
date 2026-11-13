@@ -77,7 +77,6 @@ export async function GET() {
 
     const dialogs = await client.getDialogs({ limit: 100 });
 
-    // Find all broadcast channels (not megagroups)
     const channels: { id: string; numId: number; name: string }[] = [];
     for (const dialog of dialogs) {
       const entity = dialog.entity;
@@ -95,7 +94,6 @@ export async function GET() {
       }
     }
 
-    // Fetch recent posts from each channel (up to 20 channels, 10 posts each)
     const posts: AnnouncementPost[] = [];
 
     await Promise.all(
@@ -146,7 +144,6 @@ export async function GET() {
       })
     );
 
-    // Sort newest first
     posts.sort((a, b) => b.date - a.date);
 
     return NextResponse.json({ posts });

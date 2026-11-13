@@ -1,15 +1,15 @@
 // Ported from backtester/portfolio/book.py (QuantJourney Backtester, Apache 2.0)
 //
-// Portfolio-of-strategies accounting. StrategyBook treats each strategy NAV as
-// a tradeable sleeve: a capital allocator, not a security-level merger, so it
-// never nets offsetting underlying positions across strategies.
+// StrategyBook is a capital allocator over strategy NAV sleeves, not a
+// security-level merger, so it never nets offsetting underlying positions
+// across strategies.
 //
 // Allocation timestamps are point-in-time. Dynamic allocations are
 // forward-filled onto sleeve timestamps and never backfilled. The rebalance
 // engine applies a target at the close of its timestamp, so it can affect
 // returns only from the following period.
 
-import { Frame } from '../../../../services/trading/strategies/core';
+import { Frame } from '../../core/index';
 import { dateMs, isClose, type SeriesLike } from './frame-utils';
 import {
   type PortfolioRebalancePolicy,
@@ -25,7 +25,6 @@ import {
 
 export type SleeveSeriesKind = 'nav' | 'returns';
 
-/** A sleeve is a bare series (kind from seriesKind) or an object exposing a NAV series. */
 export type SleeveSource = SeriesLike | { netAssetValue: SeriesLike };
 
 export interface StrategyBookOptions {
@@ -34,7 +33,6 @@ export interface StrategyBookOptions {
   /** Cost on implied sleeve-unit trades. Defaults to zero cost. */
   weightCostModel?: WeightCostModel;
   initialCapital?: number;
-  /** "nav" or "returns" for every bare series, or a mapping by sleeve. */
   seriesKind?: SleeveSeriesKind | Readonly<Record<string, SleeveSeriesKind>>;
   periodsPerYear?: number;
 }
@@ -83,7 +81,6 @@ const isSeries = (x: unknown): x is SeriesLike =>
   Array.isArray((x as SeriesLike).index) &&
   Array.isArray((x as SeriesLike).values);
 
-/** Allocate capital across independently simulated strategy sleeves. */
 export class StrategyBook {
   private readonly names: string[];
   private readonly sleeves: Readonly<Record<string, SleeveSource>>;
@@ -96,7 +93,6 @@ export class StrategyBook {
   private readonly periodsPerYear: number;
 
   /**
-   * @param sleeves stable sleeve name to series or NAV-bearing object
    * @param allocations static weights, or a point-in-time Frame (columns may be sparse, each forward-filled)
    */
   constructor(
@@ -128,7 +124,6 @@ export class StrategyBook {
     this.periodsPerYear = ppy;
   }
 
-  /** Run the book and return aligned allocation and accounting output. */
   run(): StrategyBookResult {
     const sleeveNav = this.prepareSleeveNav();
     const index = sleeveNav.index;

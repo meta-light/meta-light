@@ -1,9 +1,9 @@
 // Ported from backtester/risk/vol_target.py (QuantJourney Backtester, Apache 2.0).
 //
 // Scales ALL weights by one scalar so the portfolio's realised volatility
-// matches a target. The common institutional vol-targeting overlay.
+// matches a target.
 
-import type { Frame } from '../../../../services/trading/strategies/core';
+import type { Frame } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, annFactorFor, cloneFrame, nanStd, rescoreMask } from './util';
 
@@ -43,7 +43,6 @@ export class VolTargetModel extends RiskModel {
     const out = cloneFrame(weights);
     const ann = annFactorFor(this.annFactor, metadata?.periodsPerYear);
     const isRescore = rescoreMask(weights.index, this.rebalanceFreq);
-    // Align return columns to the weight columns by name.
     const retCols = weights.columns.map((c) => returns.colIndex(c));
 
     let prevScale = 1.0;

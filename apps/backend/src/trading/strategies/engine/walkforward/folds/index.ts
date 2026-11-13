@@ -1,8 +1,4 @@
 // Ported from backtester/walkforward/folds/__init__.py (QuantJourney Backtester, Apache 2.0)
-//
-// Usage:
-//   const folds = foldSchemeFactory(resolveWalkForwardConfig({ scheme: "rolling" }))
-//     .generateFolds(start, end, tradingDates);
 
 import type { ResolvedWalkForwardConfig } from '../config';
 import { AnchoredFoldScheme } from './anchored';
@@ -28,7 +24,6 @@ const registry = {
   anchored: AnchoredFoldScheme,
 } as const;
 
-/** Instantiate the fold scheme named by `config.scheme`. */
 export function foldSchemeFactory(
   config: ResolvedWalkForwardConfig,
 ): FoldScheme {

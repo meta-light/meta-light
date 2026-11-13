@@ -20,8 +20,8 @@ export {
   type WalkForwardRun,
 } from './walkforward/runner';
 
-export * as execution from '../../../services/trading/strategies/engine/execution';
-export * as metrics from '../../../services/trading/strategies/engine/metrics';
-export * as portfolio from '../../../services/trading/strategies/engine/portfolio';
-export * as risk from '../../../services/trading/strategies/engine/risk';
-export * as walkforward from '../../../services/trading/strategies/engine/walkforward';
+export * as execution from './execution/index';
+export * as metrics from './metrics/index';
+export * as portfolio from './portfolio/index';
+export * as risk from './risk/index';
+export * as walkforward from './walkforward/index';

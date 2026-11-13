@@ -90,7 +90,6 @@ export default function ArrangementOverlay({
 
   return (
     <>
-      {/* shared boundary drag handles, on the ruler */}
       {shared?.boundaries.map((b) => {
         const dragging = handleDrag?.boundary === b;
         const x = b * pxm + (dragging ? handleDrag.dx : 0);
@@ -109,7 +108,6 @@ export default function ArrangementOverlay({
         );
       })}
 
-      {/* per-voice slot segments (top sliver of each paired lane row) */}
       {voices.map((voice, vi) => {
         const laneIndex = laneIndexById.get(voice.laneId);
         if (laneIndex === undefined) return null;
@@ -146,7 +144,6 @@ export default function ArrangementOverlay({
         });
       })}
 
-      {/* variant picker */}
       {popover && popoverVoice && isPick(popoverVoice) && (
         <>
           <div className="fixed inset-0 z-20" onClick={() => setPopover(null)} onPointerDown={(e) => e.stopPropagation()} />

@@ -24,7 +24,6 @@ function currentBank(chunk: ChunkInfo): string {
   return call?.args[0] ? stripQuotes(call.args[0].raw) : '';
 }
 
-/** Inline kit/instrument switcher shown above the grid and roll. */
 export default function InstrumentPicker({ chunk }: { chunk: ChunkInfo }) {
   const sounds = useSounds();
   const kits = useMemo(() => groupKits(sounds), [sounds]);

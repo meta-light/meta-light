@@ -1,4 +1,3 @@
-/** Classify and label entries from superdough's soundMap for the browser. */
 import { DRUM_SOUNDS } from '@/lib/strudel/chunks/classify';
 
 export type SoundKind = 'drum' | 'melodic' | 'misc';
@@ -11,7 +10,6 @@ export interface SoundInfo {
   bank: string | null;
   /** bare drum code when this is a drum hit (e.g. "bd") */
   code: string | null;
-  /** human-readable label */
   label: string;
   variants: number;
   type: string;
@@ -52,7 +50,6 @@ export interface KitInfo {
 
 const PIECE_ORDER = ['bd', 'sd', 'rim', 'cp', 'hh', 'oh', 'ht', 'mt', 'lt', 'cr', 'rd', 'sh', 'cb', 'tb', 'perc', 'misc', 'fx'];
 
-/** Collapse per-piece drum sounds into one entry per kit. */
 export function groupKits(sounds: SoundInfo[]): KitInfo[] {
   const byBank = new Map<string | null, Set<string>>();
   for (const sound of sounds) {

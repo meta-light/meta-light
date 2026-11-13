@@ -1,10 +1,8 @@
-// Instrument-level contract specification: how price changes turn into PnL,
-// notional and margin for equities, futures, FX and crypto. Static defaults
-// only; the cloud metadata lookup is not ported.
+// Static defaults only; the cloud metadata lookup is not ported.
 //
 // Ported from backtester/execution/contract_spec.py (QuantJourney Backtester, Apache 2.0)
 
-import type { ContractSpec as CoreContractSpec } from '../../../../services/trading/strategies/core';
+import type { ContractSpec as CoreContractSpec } from '../../core/index';
 
 export type AssetClass = 'equity' | 'future' | 'fx' | 'crypto' | 'option';
 const ASSET_CLASSES: readonly AssetClass[] = [

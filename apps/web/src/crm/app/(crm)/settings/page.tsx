@@ -75,7 +75,6 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col gap-6 p-6 max-w-2xl">
-        {/* Telegram */}
         <Card className="p-5">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -126,7 +125,6 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        {/* Tags */}
         <Card className="p-5">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -139,7 +137,6 @@ export default function SettingsPage() {
           </div>
           <Separator className="mb-4" />
 
-          {/* Create tag */}
           <div className="flex gap-2 mb-4">
             <Input
               placeholder="Tag name"
@@ -176,7 +173,6 @@ export default function SettingsPage() {
             </Button>
           </div>
 
-          {/* Tag list */}
           {tagsLoading ? (
             <div className="flex flex-col gap-2">
               {Array.from({ length: 3 }).map((_, i) => (
@@ -200,7 +196,6 @@ export default function SettingsPage() {
           )}
         </Card>
 
-        {/* Integrations stub */}
         <Card className="p-5 opacity-70">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center">
@@ -224,7 +219,6 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        {/* API credentials info */}
         <Card className="p-5">
           <h2 className="font-semibold text-sm mb-1">API Configuration</h2>
           <p className="text-xs text-muted-foreground mb-3">

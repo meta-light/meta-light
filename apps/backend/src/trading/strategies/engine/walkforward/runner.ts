@@ -9,20 +9,20 @@
 // persistence.py is not ported.
 
 import { createHash } from 'node:crypto';
-import type { Blotter } from '../../../../services/trading/strategies/engine/metrics';
+import type { Blotter } from '../metrics/index';
 import {
   type ResolvedWalkForwardConfig,
   type WalkForwardOptions,
   resolveWalkForwardConfig,
   walkForwardConfigToDict,
 } from './config';
-import { type Fold, foldSchemeFactory } from '../../../../services/trading/strategies/engine/walkforward/folds';
+import { type Fold, foldSchemeFactory } from './folds/index';
 import {
   type GridSearchOptimizer,
   type OptimizationResult,
   type Params,
   sharpeFromNav,
-} from '../../../../services/trading/strategies/engine/walkforward/optimization';
+} from './optimization/index';
 import { type FoldResult, WalkForwardResult } from './result';
 import {
   type DatedSeries,
@@ -37,9 +37,8 @@ import {
   selectedTrialRankLogit,
   sharpeDecay,
   walkForwardTopKRankFailureRate,
-} from '../../../../services/trading/strategies/engine/walkforward/statistics';
+} from './statistics/index';
 
-/** What a walk-forward needs from a backtest run. BacktestResult satisfies it. */
 export interface WalkForwardRun {
   dates: readonly string[];
   nav: readonly number[];

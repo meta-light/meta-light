@@ -1,6 +1,3 @@
-// Order, fill and bar types used by the fill engine. Builds on the strategy
-// core types and adds the mutable order state the engine tracks.
-//
 // Ported from backtester/execution/order_types.py (QuantJourney Backtester, Apache 2.0)
 
 import { randomUUID } from 'node:crypto';
@@ -12,7 +9,7 @@ import type {
   OrderType,
   PendingOrder,
   TimeInForce,
-} from '../../../../services/trading/strategies/core';
+} from '../../core/index';
 
 export type {
   Bar,
@@ -38,7 +35,6 @@ export interface Fill {
   fillPrice: number;
   /** Absolute slippage per unit. */
   slippage: number;
-  /** Commission charged for this fill. */
   commission: number;
   timestamp: string;
   theoreticalPrice?: number;
@@ -46,7 +42,6 @@ export interface Fill {
   orderStatus: OrderStatus;
 }
 
-/** Order fields the engine accepts on top of the core `Order`. */
 export interface OrderInit extends Order {
   orderId?: string;
   /** Timestamp of the bar the order was created on. Set on first bar if absent. */
@@ -64,10 +59,6 @@ export function bracketStopLossType(spec: BracketSpec): OrderType {
   return spec.stopLossType ?? 'stop';
 }
 
-/**
- * Mutable order tracked by the fill engine. Implements core `PendingOrder` so
- * strategies can read `pendingOrders` without knowing about this class.
- */
 export class ExecOrder implements PendingOrder {
   instrument: string;
   side: OrderSide;
@@ -92,7 +83,6 @@ export class ExecOrder implements PendingOrder {
   expireAt?: string;
   rejectionReason?: string;
 
-  // Engine-internal state.
   trailAnchor?: number;
   limitActivated = false;
   activatedLimitPrice?: number;
@@ -123,7 +113,6 @@ export class ExecOrder implements PendingOrder {
     this.expireAt = init.expireAt;
   }
 
-  /** Wrap a plain core order; pass engine orders through unchanged. */
   static from(order: Order | OrderInit | ExecOrder): ExecOrder {
     return order instanceof ExecOrder ? order : new ExecOrder(order);
   }

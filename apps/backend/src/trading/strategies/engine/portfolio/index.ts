@@ -1,7 +1,4 @@
 // Ported from backtester/portfolio/__init__.py (QuantJourney Backtester, Apache 2.0)
-//
-// Portfolio accounting and rebalancing: rebalance policy engines, weight-mode
-// cost models, the portfolio ledger and the strategy-of-strategies book.
 
 export * from './book';
 export * from './calendar';

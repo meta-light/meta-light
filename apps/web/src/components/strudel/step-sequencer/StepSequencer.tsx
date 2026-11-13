@@ -119,7 +119,6 @@ export default function StepSequencer({ chunk }: { chunk: ChunkInfo }) {
         )}
       </div>
 
-      {/* grid */}
       <div className="flex flex-col gap-1.5">
         {lanes.map((lane) => (
           <div key={`${lane.part}:${lane.sound}`} className="group/lane flex items-center gap-1.5">

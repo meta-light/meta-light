@@ -75,7 +75,6 @@ export class StrudelEngine {
 
     setOutputErrorHandler((message) => opts.onError?.(message));
 
-    // Observe all document changes (typing, write-back, undo) in one place.
     this.mirror.editor.dispatch({
       effects: StateEffect.appendConfig.of(
         EditorView.updateListener.of((update) => {
@@ -159,7 +158,6 @@ export class StrudelEngine {
 
   private evalTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /** Debounced re-evaluation for live edits (typing, knob drags, grid toggles). */
   scheduleEvaluate(delay = 200) {
     if (this.evalTimer) clearTimeout(this.evalTimer);
     this.evalTimer = setTimeout(() => {
@@ -168,7 +166,6 @@ export class StrudelEngine {
     }, delay);
   }
 
-  /** Cancel a pending scheduled re-evaluation (e.g. the doc stopped parsing). */
   cancelEvaluate() {
     if (this.evalTimer) {
       clearTimeout(this.evalTimer);
@@ -194,7 +191,6 @@ export class StrudelEngine {
     }, wait);
   }
 
-  /** Wrap the raw pattern so scheduler time maps onto the song position. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private applyTransport(pat: any): any {
     const t = this.transport;

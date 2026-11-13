@@ -95,7 +95,6 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
 
       <div className="h-5 w-px bg-line" />
 
-      {/* tempo */}
       <div className="flex items-center gap-1.5">
         <span className="silkscreen">bpm</span>
         <button
@@ -127,7 +126,6 @@ export default function TransportBar({ title, onTitleChange, onShare, onExport, 
 
       <div className="h-5 w-px bg-line" />
 
-      {/* song position */}
       <div className="flex items-center gap-1.5">
         <span className="silkscreen">cycle</span>
         <button

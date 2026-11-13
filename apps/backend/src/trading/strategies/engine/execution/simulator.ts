@@ -1,13 +1,9 @@
-// Event-driven execution simulator: owns the bar loop, routes fills to a
-// portfolio ledger and runs pre-trade risk at submit and fill time. Also
-// includes the executor that turns target weights into market orders.
-//
 // The ledger, pre-trade risk and rebalance engine live in other engine
 // folders, so this file depends only on the minimal interfaces below.
 //
 // Ported from backtester/execution/simulator.py (QuantJourney Backtester, Apache 2.0)
 
-import { Frame } from '../../../../services/trading/strategies/core';
+import { Frame } from '../../core/index';
 import type { FillEngine } from './fill-engine';
 import {
   type BarData,
@@ -16,15 +12,11 @@ import {
   type OrderInit,
 } from './order-types';
 
-// Minimal collaborator interfaces
-
-/** Contract economics the target-weight executor needs. */
 export interface ContractSpecLike {
   notional(quantity: number, price: number): number;
   roundQuantity(quantity: number): number;
 }
 
-/** Subset of PortfolioLedger used by the simulator and executor. */
 export interface LedgerLike<Snapshot = unknown, Result = unknown> {
   readonly initialCash: number;
   readonly instruments: readonly string[];
@@ -71,7 +63,6 @@ export interface PreTradeContext<Snapshot = unknown> {
   pendingOrders: readonly ExecOrder[];
 }
 
-/** Subset of PreTradeRisk used by the simulator. */
 export interface PreTradeCheck<Snapshot = unknown> {
   evaluate(
     order: ExecOrder,

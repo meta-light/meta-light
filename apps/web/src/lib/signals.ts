@@ -24,9 +24,9 @@ export interface TokenData {
 export interface ContinuousIndicatorSignal {
     score: number; // -1 to 1, where 1 = strong buy, -1 = strong sell, 0 = neutral
     strength: number; // 0 to 1, how strong the signal is
-    timeframeAlignment: boolean; // Whether timeframes align
+    timeframeAlignment: boolean;
     trendStrength: number; // 0 to 1, strength of the trend
-    rawValue?: number; // Raw indicator value (RSI, MACD, etc.)
+    rawValue?: number;
 }
 
 export interface IndicatorResult {

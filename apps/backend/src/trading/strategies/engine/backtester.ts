@@ -1,10 +1,6 @@
 // Ported from backtester/core.py (QuantJourney Backtester, Apache 2.0)
 //
-// The backtest run loop. Weights mode: signals, weights, risk overlay, a
-// one-bar lag, then the rebalance engine and the recursive weight ledger
-// ("fast"), or target-weight orders through the fill engine ("orders").
-// Orders mode: the strategy submits orders bar by bar through the execution
-// simulator. Every path ends in PortfolioCalculations metrics.
+// Weights mode lags the risk-adjusted weights one bar before trading them.
 //
 // Skipped from core.py: the data SDK client, the reporting mixin, plots and
 // the CLI. Data comes in as a BarData; reporting stays with the caller.
@@ -17,7 +13,7 @@ import {
   OrdersStrategy,
   type Strategy,
   WeightsStrategy,
-} from '../../../services/trading/strategies/core';
+} from '../core/index';
 import type { BarData } from './data';
 import {
   type CommissionModel,
@@ -35,7 +31,7 @@ import {
   commissionFromConfig,
   getContractSpec,
   slippageFromConfig,
-} from '../../../services/trading/strategies/engine/execution';
+} from './execution/index';
 import {
   Blotter,
   type BenchmarkSummary,
@@ -44,7 +40,7 @@ import {
   type Series,
   computeBenchmarkSummary,
   dropNaN,
-} from '../../../services/trading/strategies/engine/metrics';
+} from './metrics/index';
 import {
   ExecutionRebalanceEngine,
   FixedBpsWeightCostModel,
@@ -56,7 +52,7 @@ import {
   type SeriesLike,
   type WeightCostModel,
   buildWeightLedger,
-} from '../../../services/trading/strategies/engine/portfolio';
+} from './portfolio/index';
 import { ffillFrame, reindexFrame } from './portfolio/frame-utils';
 import {
   type PortfolioSnapshot as RiskSnapshot,
@@ -65,7 +61,7 @@ import {
   type RiskModel,
   defaultRiskModel,
   returnsPreserveGaps,
-} from '../../../services/trading/strategies/engine/risk';
+} from './risk/index';
 
 export type WeightExecution = 'fast' | 'orders';
 
@@ -90,7 +86,6 @@ export interface BacktesterOptions {
   riskModel?: RiskModel | null;
   /** Defaults to config.rebalancePolicy. */
   rebalancePolicy?: PortfolioRebalancePolicy;
-  /** Benchmark returns for the tracking-error trigger and the summary. */
   benchmarkReturns?: SeriesLike;
   periodsPerYear?: number;
   baseCurrency?: string;
@@ -106,10 +101,8 @@ export interface BacktestResult {
   returns: number[];
   /** Orders paths only: nav.pctChange() without the leading NaN. */
   returnsForMetrics?: Series;
-  /** Exposure weights per date. */
   weights: Frame;
   positions: Frame;
-  /** Total transaction cost per date. */
   transactionCosts: number[];
   rebalanceFlags: boolean[];
   stats: Record<string, unknown>;
@@ -141,7 +134,6 @@ function makeSpecResolver(baseCurrency: string): SpecResolver {
   };
 }
 
-/** PortfolioLedger behind the simulator's LedgerLike shape. */
 class LedgerAdapter implements LedgerLike<PortfolioSnapshot, LedgerResult> {
   constructor(
     readonly inner: PortfolioLedger,
@@ -216,7 +208,6 @@ class LedgerAdapter implements LedgerLike<PortfolioSnapshot, LedgerResult> {
   }
 }
 
-/** PreTradeRisk behind the simulator's PreTradeCheck shape. */
 class PreTradeAdapter implements PreTradeCheck<PortfolioSnapshot> {
   constructor(
     private readonly risk: PreTradeRisk,
@@ -381,8 +372,6 @@ export class Backtester {
       targetWeights,
     };
   }
-
-  // --- helpers --------------------------------------------------------------
 
   private feature(name: string): Frame {
     return reindexFrame(

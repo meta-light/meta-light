@@ -6,21 +6,17 @@ import type { SongArrangement } from '@/lib/strudel/timeline/recognize';
 export type PanelKind = 'chunk' | 'sounds' | 'ai' | null;
 
 export interface PlayerState {
-  /** scheduler is running */
   isPlaying: boolean;
   /** samples + eval scope loaded */
   ready: boolean;
-  /** last eval/scheduler error, if any */
   error: string | null;
   /** beats per minute, assuming 4 beats per cycle (cps = bpm / 240) */
   bpm: number;
   /** doc range currently being auditioned (solo), or null */
   audition: [number, number] | null;
-  /** pattern statement under the cursor */
   currentChunk: ChunkInfo | null;
   /** the document has a JS syntax error — chunk tools are paused */
   docBroken: boolean;
-  /** which side panel is open */
   panel: PanelKind;
   /** derived song-structure analysis; null until the first successful eval */
   timeline: SongTimeline | null;
@@ -30,7 +26,6 @@ export interface PlayerState {
   loopRegion: [number, number] | null;
   /** index into timeline.sections, or null */
   selectedSection: number | null;
-  /** timeline strip disclosure */
   timelineOpen: boolean;
   /** Tier-2 recognized arrangement (pickRestart/arrange voices), or null */
   arrangement: SongArrangement | null;

@@ -1,11 +1,8 @@
 // Ported from backtester/walkforward/statistics/aggregation.py (QuantJourney Backtester, Apache 2.0)
-//
-// Stitch per-fold OOS returns into one composite series and score it.
 
-import { mean, std } from '../../../../../services/trading/strategies/core';
+import { mean, std } from '../../../core/index';
 import { seededRandom } from '../internal';
 
-/** A dated series (pandas Series stand-in): `values[i]` belongs to ISO date `index[i]`. */
 export interface DatedSeries {
   index: string[];
   values: number[];
@@ -59,7 +56,6 @@ export interface CompositeMetrics {
   volatility: number;
 }
 
-/** Sharpe, CAGR, max drawdown and volatility of a composite daily return series. */
 export function computeCompositeMetrics(
   oosReturns: readonly number[],
   riskFreeRate = 0,

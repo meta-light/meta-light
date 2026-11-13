@@ -4,7 +4,6 @@ import { useMemo, useSyncExternalStore } from 'react';
 import { soundMap } from '@strudel/webaudio';
 import { classifySound, type SoundInfo } from './sounds';
 
-/** Live view of superdough's registered sounds, classified for the UI. */
 export function useSounds(): SoundInfo[] {
   const map = useSyncExternalStore(
     (cb) => soundMap.listen(cb),

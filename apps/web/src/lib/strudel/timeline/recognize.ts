@@ -58,7 +58,6 @@ export function arrangementScale(
   return 1;
 }
 
-/** Cumulative interior cut points of a voice's slots. */
 export function voiceCuts(match: VoiceMatch | ArrangeMatch): number[] {
   const cuts: number[] = [];
   let at = 0;

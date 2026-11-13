@@ -1,8 +1,5 @@
 // Ported from backtester/walkforward/result.py (QuantJourney Backtester, Apache 2.0)
 //
-// Walk-forward result data contracts. `FoldResult` holds per-fold IS/OOS
-// metrics and diagnostics; `WalkForwardResult` aggregates across folds.
-// All computation lives in the runner, the engine and `statistics/`.
 // pandas DataFrames become arrays of row objects; Series become DatedSeries.
 
 import type { Fold } from './folds/base';
@@ -11,11 +8,9 @@ import type { DatedSeries } from './statistics/aggregation';
 export type FoldStatus = 'ok' | 'failed';
 export type Row = Record<string, unknown>;
 
-/** Result for a single walk-forward fold (treat as immutable). */
 export interface FoldResult {
   readonly fold: Fold;
 
-  // IS metrics
   readonly isSharpe: number;
   readonly isCagr: number;
   readonly isMaxDd: number;
@@ -26,7 +21,6 @@ export interface FoldResult {
   readonly isAvgHoldingDays: number;
   readonly isTurnoverAnn: number;
 
-  // OOS metrics
   readonly oosSharpe: number;
   readonly oosCagr: number;
   readonly oosMaxDd: number;
