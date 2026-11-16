@@ -1,8 +1,3 @@
-// The ledger, pre-trade risk and rebalance engine live in other engine
-// folders, so this file depends only on the minimal interfaces below.
-//
-// Ported from backtester/execution/simulator.py (QuantJourney Backtester, Apache 2.0)
-
 import { Frame } from '../../core/index';
 import type { FillEngine } from './fill-engine';
 import {
@@ -28,9 +23,7 @@ export interface LedgerLike<Snapshot = unknown, Result = unknown> {
   prepareHistory(dates: readonly string[]): void;
   observeMark(instrument: string, price: number): void;
   isValidPrice(value: number, instrument: string): boolean;
-  /** Returns at least the trade notional used for turnover accounting. */
   applyFill(fill: Fill): { tradeNotional: number };
-  /** Returns [nav, positionValues]. */
   markToMarket(
     prices: Readonly<Record<string, number>>,
   ): [number, Record<string, number>];
@@ -74,7 +67,6 @@ export interface PreTradeCheck<Snapshot = unknown> {
   ): { decisions: readonly PreTradeDecisionLike[] };
 }
 
-/** Default when no pre-trade risk is configured: approve everything (the Python PreTradeRisk() with no limits). */
 export const APPROVE_ALL: PreTradeCheck = {
   evaluate: () => ({ approved: true }),
   evaluateBatch: (orders) => ({
@@ -102,16 +94,11 @@ export interface SimulatorInputs {
   open: Frame;
   high: Frame;
   low: Frame;
-  /** Instruments missing from this frame get NaN volume. */
   volume?: Frame;
   onBar: BarCallback;
   onFill?: FillCallback;
 }
 
-/**
- * Align a frame to (dates x instruments) once, like pandas `.loc[dates, cols]`.
- * Missing labels throw unless `fill` is given, in which case they get `fill`.
- */
 function align(
   frame: Frame,
   dates: readonly string[],
@@ -154,10 +141,6 @@ export class ExecutionSimulator<Snapshot = unknown, Result = unknown> {
     this.currentNav = args.ledger.initialCash;
   }
 
-  /**
-   * Run the bar loop. Phase order per bar is fixed:
-   * build bars, process pending fills, mark NAV, strategy callback, record state.
-   */
   run({
     close,
     open,
@@ -276,7 +259,6 @@ export class ExecutionSimulator<Snapshot = unknown, Result = unknown> {
     return decision.approved ? null : decision.reason || 'pre-trade rejected';
   }
 
-  /** Re-check the fill as a market order at the fill price, against the other pending orders. */
   private preFillRejectionReason(
     order: ExecOrder,
     fillPrice: number,
@@ -314,7 +296,6 @@ export class ExecutionSimulator<Snapshot = unknown, Result = unknown> {
     );
   }
 
-  /** Evaluate a trade list as one deterministic batch before adding any order. */
   submitBatch(
     input: readonly (OrderInit | ExecOrder)[],
   ): BatchSubmissionResult {
@@ -361,15 +342,12 @@ export class ExecutionSimulator<Snapshot = unknown, Result = unknown> {
   }
 }
 
-// Target-weight executor
-
 export interface RebalanceDecisionLike {
   shouldRebalance: boolean;
   persistentWeights: Readonly<Record<string, number>>;
   reason?: string | null;
 }
 
-/** Subset of the stateful rebalance engine used by the executor. */
 export interface RebalanceEngineLike {
   readonly policy: { readonly minTradeSize?: number };
   evaluate(args: {
@@ -398,7 +376,6 @@ const EMPTY: BatchSubmissionResult = {
   rejectedOrderIds: [],
 };
 
-/** Convert stateful rebalance decisions into executable market orders. */
 export class TargetWeightOrderExecutor {
   static readonly REBALANCE_TAG_PREFIX = 'rebalance:';
 
@@ -427,7 +404,6 @@ export class TargetWeightOrderExecutor {
         'Target weights contain unknown instruments: ' +
           [...unknown].sort().join(', '),
       );
-    // Reindex to ledger instruments; missing columns and NaN become 0, infinities are an error.
     const tw = args.targetWeights;
     const values = tw.values.map((row) =>
       this.instruments.map((inst) => {
@@ -627,7 +603,6 @@ export class TargetWeightOrderExecutor {
     return Math.max(this.rebalanceEngine.policy.minTradeSize ?? 0, 0);
   }
 
-  /** Market orders to reach the desired weights; reductions first, sign flips split into close then open. */
   private buildOrders(
     date: string,
     reason: string,

@@ -1,6 +1,3 @@
-// The 126-bar covariance window makes the ERC estimate steadier than the
-// multi-asset example.
-
 import {
   equalWeightActive,
   Frame,

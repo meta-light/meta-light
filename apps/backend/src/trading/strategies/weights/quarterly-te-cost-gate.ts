@@ -19,15 +19,15 @@ export const config: StrategyConfig = {
   maxPositionSize: 0.4,
   rebalancePolicy: {
     frequency: 'BQE',
-    trackingErrorThreshold: 0.06, // rebalance early if annualized TE vs benchmark > 6%
+    trackingErrorThreshold: 0.06,
     trackingErrorWindow: 63,
-    maxAnnualTurnover: 4.0, // cost gate: cap rolling 252d turnover at 4x
+    maxAnnualTurnover: 4.0,
   },
   indicators: [],
 };
 
 export class QuarterlyTECostGate extends WeightsStrategy {
-  static readonly LOOKBACK = 126; // ~6 months of trading days
+  static readonly LOOKBACK = 126;
   static readonly TOP_N = 3;
 
   constructor(cfg: StrategyConfig = config) {

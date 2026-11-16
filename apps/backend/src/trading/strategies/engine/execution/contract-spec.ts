@@ -1,7 +1,3 @@
-// Static defaults only; the cloud metadata lookup is not ported.
-//
-// Ported from backtester/execution/contract_spec.py (QuantJourney Backtester, Apache 2.0)
-
 import type { ContractSpec as CoreContractSpec } from '../../core/index';
 
 export type AssetClass = 'equity' | 'future' | 'fx' | 'crypto' | 'option';
@@ -39,7 +35,6 @@ export interface ContractSpecInit {
   tickSize?: number;
   margin?: number;
   lotSize?: number;
-  /** `null` means no quantity rounding (fractional units). */
   quantityStep?: number | null;
   minQuantity?: number;
   pipSize?: number;
@@ -55,10 +50,6 @@ export interface ContractSpecInit {
 
 type Overrides = Omit<ContractSpecInit, 'symbol'>;
 
-/**
- * Immutable, validated contract spec. Structurally satisfies the core
- * `ContractSpec` ({multiplier, margin, lotSize}) so strategies can use it.
- */
 export class FullContractSpec implements CoreContractSpec {
   readonly symbol: string;
   readonly assetClass: AssetClass;
@@ -148,7 +139,6 @@ export class FullContractSpec implements CoreContractSpec {
     Object.freeze(this);
   }
 
-  /** Fail if FX quote amounts would need a currency conversion that does not exist. */
   validateSettlementCurrency(settlementCurrency: string): void {
     if (this.assetClass !== 'fx') return;
     const settlement = currencyCode(settlementCurrency, 'settlement_currency');
@@ -225,7 +215,6 @@ export class FullContractSpec implements CoreContractSpec {
     });
   }
 
-  /** Absolute notional exposure of a position. */
   notional(quantity: number, price: number): number {
     if (this.inverse)
       return price !== 0 ? (Math.abs(quantity) * this.multiplier) / price : 0;
@@ -234,7 +223,6 @@ export class FullContractSpec implements CoreContractSpec {
     );
   }
 
-  /** Round-trip PnL. Inverse contracts use quantity * multiplier * (1/entry - 1/exit). */
   pnl(quantity: number, entryPrice: number, exitPrice: number): number {
     if (this.inverse) {
       if (entryPrice === 0 || exitPrice === 0) return 0;
@@ -256,7 +244,6 @@ export class FullContractSpec implements CoreContractSpec {
     );
   }
 
-  /** Round toward zero to the executable quantity increment. */
   roundQuantity(quantity: number): number {
     if (!Number.isFinite(quantity)) throw new Error('quantity must be finite');
     let rounded = quantity;
@@ -273,7 +260,6 @@ export class FullContractSpec implements CoreContractSpec {
   }
 }
 
-/** Python's round(): half-to-even at the given number of decimals. */
 function roundHalfEven(value: number, decimals: number): number {
   if (!Number.isFinite(value)) return value;
   const factor = 10 ** decimals;
@@ -335,10 +321,6 @@ export const COMMON_SPECS: Readonly<Record<string, FullContractSpec>> =
     ETHUSD: FullContractSpec.crypto('ETHUSD'),
   });
 
-/**
- * Build and strictly validate a spec from external metadata (snake_case keys,
- * as the Python `/bt/prepare` contract delivers them). Pure parsing, no I/O.
- */
 export function contractSpecFromMapping(
   symbol: string,
   values: Readonly<Record<string, unknown>>,
@@ -513,7 +495,8 @@ export function contractSpecFromMapping(
 
 const specCache = new Map<string, FullContractSpec>();
 
-/** Look up a spec by symbol (trimmed, uppercased, `=F`/`=X` suffix stripped); unknown symbols are equities. */
+const CRYPTO_PAIR = /^[A-Z0-9]+-(USD|USDT|USDC)$/;
+
 export function getContractSpec(symbol: string): FullContractSpec {
   const key = String(symbol).trim().toUpperCase();
   let spec = specCache.get(key);
@@ -523,7 +506,9 @@ export function getContractSpec(symbol: string): FullContractSpec {
     spec =
       COMMON_SPECS[key] ??
       COMMON_SPECS[canonical] ??
-      FullContractSpec.equity(key);
+      (CRYPTO_PAIR.test(key)
+        ? FullContractSpec.crypto(key)
+        : FullContractSpec.equity(key));
     specCache.set(key, spec);
   }
   return spec;

@@ -1,8 +1,3 @@
-// The ContractSpec comes from the data provider: one unit means one
-// 100,000-base-currency lot. FX margin, overnight swap/financing, broker
-// leverage and bid/ask quotes are not modeled. The universe is limited to
-// XXX/USD pairs so PnL is already in the base portfolio currency.
-
 import {
   averageTrueRange,
   type Bar,
@@ -72,7 +67,7 @@ export class FXMomentumLots extends OrdersStrategy {
     const { LOOKBACK, ATR_WINDOW } = FXMomentumLots;
     const close = this.data.getFeature('adj_close');
     const index = close.rowIndex(date);
-    if (index < LOOKBACK) return; // also covers a missing date (-1)
+    if (index < LOOKBACK) return;
 
     if (this.atrCache?.index !== close.index) {
       const high = this.data.getFeature('high');

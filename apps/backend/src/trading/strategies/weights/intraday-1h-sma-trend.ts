@@ -1,6 +1,3 @@
-// The backtest window is pinned like the original. Swap in `recentPeriod(60)`
-// from ../core for a rolling window.
-
 import {
   crossAbove,
   equalWeightActive,

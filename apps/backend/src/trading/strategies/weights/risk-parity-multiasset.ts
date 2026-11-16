@@ -1,5 +1,3 @@
-// ERC weights are estimated on a strictly prior covariance window (no look-ahead).
-
 import {
   equalWeightActive,
   Frame,

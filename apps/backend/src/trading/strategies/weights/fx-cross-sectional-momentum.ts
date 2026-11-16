@@ -1,7 +1,3 @@
-// This intentionally uses only XXX/USD pairs so every price move has the same
-// directional interpretation. It does not include forward carry, swaps, FX
-// margin, or executable bid/ask quotes.
-
 import {
   Frame,
   isNum,

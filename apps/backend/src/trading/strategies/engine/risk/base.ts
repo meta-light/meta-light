@@ -1,18 +1,10 @@
-// Ported from backtester/risk/base.py (QuantJourney Backtester, Apache 2.0).
-
 import { Frame } from '../../core/index';
 
 export interface RiskMetadata {
-  /** Bars per year, used for annualising vol. Defaults to 252. */
   periodsPerYear?: number;
-  /** Instrument to sector map, needed for PositionLimitModel sector limits. */
   sectors?: Record<string, string>;
 }
 
-/**
- * Receives raw target weights and historical asset returns (same shape and
- * columns, rows = dates) and returns adjusted weights of the same shape.
- */
 export abstract class RiskModel {
   abstract adjust(
     weights: Frame,
@@ -29,7 +21,6 @@ export abstract class RiskModel {
   }
 }
 
-/** Compose models sequentially: the output of model i feeds model i + 1. */
 export class RiskModelChain extends RiskModel {
   readonly models: readonly RiskModel[];
 
@@ -59,11 +50,6 @@ export class RiskModelChain extends RiskModel {
   }
 }
 
-/**
- * Returns fed to risk models (core.py `_compute_returns_preserve_gaps`):
- * simple returns with NaN gaps left in place, and 0 on the first row for
- * instruments that already have a price.
- */
 export function returnsPreserveGaps(prices: Frame): Frame {
   const values = prices.values.map((row, i) =>
     row.map((p, j) => {

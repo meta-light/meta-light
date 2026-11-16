@@ -1,5 +1,3 @@
-// Ported from backtester/walkforward/statistics/__init__.py (QuantJourney Backtester, Apache 2.0)
-
 export {
   aggregateOosReturns,
   bootstrapSharpeCi,

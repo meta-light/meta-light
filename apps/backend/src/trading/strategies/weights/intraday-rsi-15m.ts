@@ -1,6 +1,3 @@
-// The backtest window is pinned like the original. Swap in `recentPeriod(21)`
-// from ../core for a rolling window (yfinance only serves recent intraday bars).
-
 import {
   equalWeightActive,
   type Frame,

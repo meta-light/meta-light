@@ -17,7 +17,7 @@ export const config: StrategyConfig = {
 };
 
 export class MonthlyRotationOrders extends OrdersStrategy {
-  static readonly LOOKBACK = 126; // ~6 months
+  static readonly LOOKBACK = 126;
   static readonly TOP_N = 3;
 
   private lastMonth: string | null = null;
@@ -62,7 +62,7 @@ export class MonthlyRotationOrders extends OrdersStrategy {
     const perNameNav = nav / Math.max(1, target.length);
     for (const inst of target) {
       if ((positions[inst] ?? 0) === 0) {
-        const shares = Math.trunc(perNameNav / bars[inst]!.close);
+        const shares = this.unitsFor(inst, perNameNav, bars[inst]!.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

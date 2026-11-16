@@ -1,12 +1,3 @@
-// Ported from backtester/portfolio/rebalance.py (QuantJourney Backtester, Apache 2.0)
-//
-// Calendar rebalance flags (RebalanceEngine._calendar_flags). Scheduled dates
-// are generated the way pandas.date_range does for the supported offsets, then
-// snapped onto the series' own trading dates: end-of-period schedules snap
-// back to the last trading date on or before the scheduled date, start-of-
-// period schedules snap forward within the same period, and weekly schedules
-// snap inside the scheduled calendar week.
-
 import { bisectLeft, bisectRight, dateMs } from './frame-utils';
 
 const DAY_MS = 86_400_000;
@@ -22,15 +13,12 @@ export function normalizeFreq(freq: string): string {
   return LEGACY_FREQ[freq] ?? freq;
 }
 
-/** pandas weekday: Monday = 0 ... Sunday = 6. */
 const weekdayOf = (ms: number): number => (new Date(ms).getUTCDay() + 6) % 7;
 
 interface PeriodRule {
-  /** Months (1-12) on which the period ends or starts. */
   months: readonly number[];
   start: boolean;
   business: boolean;
-  /** Period used to validate forward snaps of start schedules. */
   period: 'M' | 'Q' | 'Y';
 }
 
@@ -53,7 +41,6 @@ const PERIOD_RULES: Record<string, PeriodRule> = {
   BYS: { months: [1], start: true, business: true, period: 'Y' },
 };
 
-/** Anchor day (UTC midnight ms) of `rule` in the given year/month (month 1-12). */
 function anchorDay(rule: PeriodRule, year: number, month: number): number {
   if (rule.start) {
     let ms = Date.UTC(year, month - 1, 1);
@@ -65,7 +52,6 @@ function anchorDay(rule: PeriodRule, year: number, month: number): number {
   return ms;
 }
 
-/** pandas.date_range(start, end, freq) for the month/quarter/year offsets. */
 function periodSchedule(
   rule: PeriodRule,
   startMs: number,
@@ -108,7 +94,6 @@ export interface CalendarSpec {
   calendarDates?: readonly string[];
 }
 
-/** Boolean rebalance flags aligned with `dates` (sorted ascending). */
 export function calendarFlags(
   dates: readonly string[],
   spec: CalendarSpec,

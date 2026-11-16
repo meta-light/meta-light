@@ -1,13 +1,3 @@
-// Ported from backtester/portfolio/rebalance.py (QuantJourney Backtester, Apache 2.0)
-//
-// Trigger composition (OR, then gated):
-//   rebalance = (Calendar OR Drift OR Tracking-Error OR Signal-change OR Risk-breaker)
-//               AND Cost-gate
-//
-// Calendar anchors matter: the original authors measured Sharpe 0.494 with
-// "BME" against 0.538 with "BMS" on the same strategy. Treat the anchor as a
-// parameter to sensitivity-test.
-
 import { Frame, type RebalancePolicy } from '../../core/index';
 import { calendarFlags } from './calendar';
 import {
@@ -18,25 +8,15 @@ import {
   stdDdof1,
 } from './frame-utils';
 
-/** When a target-weight rebalance executes. Fast accounting is always close-to-close. */
 export type RebalanceAt = 'open' | 'close' | 'vwap_window';
 
-/**
- * Core RebalancePolicy plus the Python fields the core type does not carry.
- * `frequency` also accepts "BYE", "<n>D" (every n bars), legacy "BM"/"BQ"/"BA",
- * start anchors "BMS"/"BQS"/"BYS"/"MS"/"QS"/"YS" and calendar "ME"/"QE"/"YE".
- * Omitted fields take the Python defaults (frequency "D", weekday 4, ...).
- */
 export interface PortfolioRebalancePolicy extends Omit<
   Partial<RebalancePolicy>,
   'frequency'
 > {
   frequency?: string | null;
-  /** Informational in fast weight mode; execution-aware weights route OPEN/CLOSE fills. */
   rebalanceAt?: RebalanceAt;
-  /** Exact rebalance dates; replaces the frequency schedule, other triggers still OR in. */
   calendarDates?: readonly string[];
-  /** Do not cut positions entered fewer than `shortTermDays` bars ago. */
   avoidShortTermGains?: boolean;
   shortTermDays?: number;
 }
@@ -122,7 +102,6 @@ export const RebalancePresets = {
     driftThreshold: 0.05,
     avoidShortTermGains: true,
   } as PortfolioRebalancePolicy,
-  /** VWAP execution remains unsupported by execution-aware weights. */
   INSTITUTIONAL: {
     frequency: 'BME',
     rebalanceAt: 'vwap_window',
@@ -133,10 +112,6 @@ export const RebalancePresets = {
   } as PortfolioRebalancePolicy,
 } as const;
 
-/**
- * Minimum absolute delta weight for order-driven rebalances
- * (execution/simulator.py `_min_trade_weight`). Risk transitions always trade.
- */
 export function minTradeWeight(
   policy: PortfolioRebalancePolicy,
   reason: string | null,
@@ -147,14 +122,12 @@ export function minTradeWeight(
 
 const clean = (w: readonly number[]): number[] => w.map(finiteOr0);
 
-/** Implicit cash or financing sleeve: cash + sum(weights) == 1. */
 export function cashSleeve(weights: readonly number[]): number {
   let total = 0;
   for (const w of weights) total += finiteOr0(w);
   return 1 - total;
 }
 
-/** Drift weights by one bar of returns, keeping explicit cash as a zero-return sleeve. */
 export function driftWithCash(
   weights: readonly number[],
   returns: readonly number[],
@@ -180,7 +153,6 @@ export function perAssetDrift(
   });
 }
 
-/** Rescale the traded sleeve so kept positions stay put and gross never exceeds the target's. */
 export function renormalizeTradedSleeve(
   newW: number[],
   targetW: readonly number[],
@@ -206,8 +178,6 @@ export function renormalizeTradedSleeve(
   }
   const maxGross = Math.max(targetGross - keptGross, 0);
   if (Math.abs(targetTotal) > 1e-12 && Math.abs(tradedTotal) > 1e-12) {
-    // Net-preserving scale, clamped at 0 so a heavy kept sleeve cannot flip signs,
-    // then capped so a near-neutral traded sleeve cannot blow up gross.
     let scale = Math.max((targetTotal - keptTotal) / tradedTotal, 0);
     if (tradedGross > 1e-12 && scale * tradedGross > maxGross + 1e-12)
       scale = maxGross / tradedGross;
@@ -222,7 +192,6 @@ export function renormalizeTradedSleeve(
   return newW;
 }
 
-/** Snap to target without trading instruments that lack a price on this bar. */
 export function rebalanceWithFrozenUnavailable(
   targetW: readonly number[],
   currentW: readonly number[],
@@ -251,7 +220,6 @@ const absDiffSum = (a: readonly number[], b: readonly number[]): number => {
 const ringSum = (ring: readonly number[]): number =>
   ring.reduce((acc, v) => acc + v, 0);
 
-/** deque(maxlen=252) append. */
 function pushRing(ring: number[], value: number, maxlen = 252): void {
   ring.push(value);
   if (ring.length > maxlen) ring.shift();
@@ -272,12 +240,9 @@ export interface RebalanceStats {
 }
 
 export interface RebalanceResult {
-  /** Realised weights after each bar's close (drifted between rebalances). */
   actualWeights: Frame;
-  /** Weights held into each bar, the basis for that bar's PnL. */
   returnWeights: Frame;
   rebalanceFlags: boolean[];
-  /** Asset returns aligned to the target, missing values as 0. */
   accountingReturns: Frame;
   portfolioReturns: number[];
   relativeNav: number[];
@@ -289,14 +254,9 @@ export interface RebalanceEngineOptions {
   warnUnsupported?: boolean;
 }
 
-/**
- * Targets are assumed already shifted for look-ahead. Missing asset returns
- * mark the asset untradeable for that bar: its weight is frozen and earns 0.
- */
 export class RebalanceEngine {
   readonly policy: ResolvedRebalancePolicy;
   readonly periodsPerYear: number;
-  /** Python UserWarnings, collected instead of printed. */
   readonly warnings: string[] = [];
 
   constructor(
@@ -346,7 +306,6 @@ export class RebalanceEngine {
     });
   }
 
-  /** Rows whose max absolute target change exceeds the threshold (NaN-skipping). */
   signalChangeFlags(weights: Frame): boolean[] {
     const n = weights.index.length;
     if (!this.policy.rebalanceOnSignalChange)
@@ -442,8 +401,6 @@ export class RebalanceEngine {
       let shouldRebal = false;
       let trigger: string | null = null;
 
-      // L4: circuit breaker. Skipped on the forced re-entry bar so a stale
-      // drawdown does not re-trigger forever while flat.
       if (
         p.maxDrawdownTrigger !== null &&
         !cbActive &&
@@ -459,7 +416,6 @@ export class RebalanceEngine {
           if (p.maxDrawdownAction === 'flatten')
             current = new Array<number>(m).fill(0);
           else current = current.map((w) => w * 0.5);
-          // Executes at the close: the day's PnL is booked on the weights held into the bar.
           returnW[i] = prev;
           actualW[i] = current;
           rebal[i] = true;
@@ -491,7 +447,6 @@ export class RebalanceEngine {
       if (forceRebalNext) {
         shouldRebal = true;
         trigger = 'post_cooldown';
-        // Reset the drawdown reference so only a new drawdown re-triggers.
         peakNav = i > 0 ? nav[i - 1]! : 1;
       }
       if (!shouldRebal && calFlags[i]) {
@@ -525,7 +480,6 @@ export class RebalanceEngine {
         }
       }
 
-      // Trades execute at the close, so a rebalance bar's PnL accrues on the pre-trade weights.
       const preRebal = current.slice();
 
       if (shouldRebal || i === 0) {
@@ -556,7 +510,6 @@ export class RebalanceEngine {
           if (p.avoidShortTermGains && i > 0) {
             const keep = new Array<boolean>(m).fill(false);
             for (let j = 0; j < m; j++) {
-              // Reducing magnitude (selling a long or covering a short).
               if (
                 Math.abs(newW[j]!) < Math.abs(current[j]!) - 1e-12 &&
                 i - entryBar[j]! < p.shortTermDays
@@ -587,7 +540,6 @@ export class RebalanceEngine {
 
           current = newW;
           rebal[i] = true;
-          // Count only executed rebalances so sub-counters reconcile with rebalance_count.
           if (trigger === 'calendar' || trigger === 'post_cooldown') calCount++;
           else if (trigger === 'signal') sigCount++;
           else if (trigger === 'drift') driftCount++;
@@ -626,7 +578,6 @@ export class RebalanceEngine {
     });
   }
 
-  /** Calendar-only policies: drift each segment between rebalances with a cumulative product. */
   private runVectorized(
     targetWeights: Frame,
     target: number[][],
@@ -641,7 +592,6 @@ export class RebalanceEngine {
     const actualW: number[][] = new Array(n);
     const returnW: number[][] = new Array(n);
 
-    // Weights held INTO the segment-start bar (cash before the first rebalance).
     let carry = new Array<number>(m).fill(0);
     starts.forEach((start, s) => {
       const end = s + 1 < starts.length ? starts[s + 1]! : n;
@@ -729,8 +679,6 @@ export class RebalanceEngine {
   }
 }
 
-// ── Execution-aware evaluator ─────────────────────────────────────────────
-
 export type RebalanceReason =
   | 'initial'
   | 'calendar'
@@ -778,7 +726,6 @@ export interface ExecutionRebalanceEngineOptions {
 export interface EvaluateInput {
   barIndex: number;
   decisionTime: string;
-  /** Next bar's timestamp; null on the last bar (observe only). */
   executionTime: string | null;
   targetWeights: Record<string, number>;
   realizedWeights: Record<string, number>;
@@ -787,11 +734,6 @@ export interface EvaluateInput {
   available: Record<string, boolean>;
 }
 
-/**
- * Stateful policy evaluator driven by realized ledger state. Unlike
- * RebalanceEngine.run it never assumes an ideal snap to target: decisions
- * use the positions, fills, NAV and exposure weights the ledger observed.
- */
 export class ExecutionRebalanceEngine {
   readonly policy: ResolvedRebalancePolicy;
   readonly dates: readonly string[];
@@ -893,7 +835,6 @@ export class ExecutionRebalanceEngine {
     };
   }
 
-  /** Record realized turnover and fill-date observability. */
   recordFill({
     timestamp,
     notional,
@@ -948,7 +889,6 @@ export class ExecutionRebalanceEngine {
     }
   }
 
-  /** Commit risk-state transitions once the executable target is met. */
   recordTargetReconciled({ reason }: { reason: string | null }): void {
     if (reason === 'circuit_breaker') {
       this.circuitBreakerExitPending = false;
@@ -963,7 +903,6 @@ export class ExecutionRebalanceEngine {
     }
   }
 
-  /** Evaluate the policy after `decisionTime` for next-bar execution. */
   evaluate(input: EvaluateInput): ExecutionRebalanceDecision {
     const { barIndex, decisionTime, executionTime, positions, nav } = input;
     if (executionTime === null) {

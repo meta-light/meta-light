@@ -1,7 +1,3 @@
-// Ported from backtester/engines/blotter.py (QuantJourney Backtester, Apache 2.0).
-//
-// CSV save/load is not ported.
-
 import { randomUUID } from 'node:crypto';
 
 export interface OrderRecord {
@@ -12,7 +8,6 @@ export interface OrderRecord {
   quantity: number;
   orderPrice: number | null;
   status: string;
-  // Set by recordEngineOrders only.
   side?: string | null;
   filledQuantity?: number;
   averageFillPrice?: number | null;
@@ -36,7 +31,6 @@ export interface TradeRecord {
   fillStatus: string | null;
 }
 
-/** The input a trade needs; everything optional gets the Python default. */
 export type TradeInput = Pick<
   TradeRecord,
   'timestamp' | 'instrument' | 'side' | 'quantity' | 'price' | 'tradeValue'
@@ -53,7 +47,6 @@ export type TradeInput = Pick<
     >
   >;
 
-/** The fields of a fill-engine order the blotter reads. Enums may be strings or `{ value }`. */
 export interface EngineOrderLike {
   orderId?: string | null;
   createdAt?: string | null;
@@ -107,7 +100,6 @@ export class Blotter {
     return orderId;
   }
 
-  /** Record one fill against an order. Unlike the bulk path, theoreticalPrice defaults to null. */
   recordTrade(trade: TradeInput & { orderId: string }): void {
     this.trades.push(
       toTradeRecord({
@@ -153,7 +145,6 @@ export class Blotter {
     }
   }
 
-  /** Upsert the final fill-engine state of each order, keyed by order id. */
   recordEngineOrders(orders: readonly EngineOrderLike[]): void {
     const existing = new Map(this.orders.map((o) => [o.orderId, o]));
     for (const order of orders) {
@@ -182,10 +173,6 @@ export class Blotter {
     }
   }
 
-  /**
-   * Record many fills. Any trade whose order id isn't on the blotter yet gets a
-   * filled market order recorded for it first (one per order id).
-   */
   recordTradesBulk(trades: readonly TradeInput[]): void {
     const rows = trades.map((t) => ({
       ...t,

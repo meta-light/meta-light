@@ -1,10 +1,3 @@
-// Ported from backtester/core.py (QuantJourney Backtester, Apache 2.0)
-//
-// Weights mode lags the risk-adjusted weights one bar before trading them.
-//
-// Skipped from core.py: the data SDK client, the reporting mixin, plots and
-// the CLI. Data comes in as a BarData; reporting stays with the caller.
-
 import {
   type Bar,
   type Broker,
@@ -66,25 +59,17 @@ import {
 export type WeightExecution = 'fast' | 'orders';
 
 export interface BacktesterOptions {
-  /** Fraction of NAV held back from target weights (default 0.05). */
   cashBuffer?: number;
-  /** "fast" = rebalance engine + weight ledger, "orders" = target-weight orders. */
   weightExecution?: WeightExecution;
-  /** Weight-mode cost model (default 1 bps fixed). */
   weightCostModel?: WeightCostModel;
-  /** Fill timing; defaults to the policy's rebalanceAt in weight-orders mode, else "open". */
   fillAt?: FillAt;
   maxVolumeParticipation?: number;
   volumeLookback?: number;
   expectedOpenVolumeFraction?: number;
-  /** Defaults to the strategy config's slippage. */
   slippage?: Slippage;
-  /** Defaults to the strategy config's commission. */
   commission?: CommissionModel;
   preTradeRisk?: PreTradeRisk;
-  /** Overlay applied to weights. Undefined uses defaultRiskModel(config); null disables. */
   riskModel?: RiskModel | null;
-  /** Defaults to config.rebalancePolicy. */
   rebalancePolicy?: PortfolioRebalancePolicy;
   benchmarkReturns?: SeriesLike;
   periodsPerYear?: number;
@@ -99,7 +84,6 @@ export interface BacktestResult {
   dates: string[];
   nav: number[];
   returns: number[];
-  /** Orders paths only: nav.pctChange() without the leading NaN. */
   returnsForMetrics?: Series;
   weights: Frame;
   positions: Frame;
@@ -113,13 +97,11 @@ export interface BacktestResult {
   benchmark: BenchmarkSummary | null;
   warnings: string[];
   signals: Frame | null;
-  /** Risk-adjusted strategy weights before the lag and cash buffer. */
   targetWeights: Frame | null;
 }
 
 type SpecResolver = (instrument: string) => FullContractSpec;
 
-/** One cached spec per symbol, settlement currency checked on every call (as core.py does). */
 function makeSpecResolver(baseCurrency: string): SpecResolver {
   const cache = new Map<string, FullContractSpec>();
   return (instrument) => {
@@ -145,7 +127,6 @@ class LedgerAdapter implements LedgerLike<PortfolioSnapshot, LedgerResult> {
   get instruments(): readonly string[] {
     return this.inner.instruments;
   }
-  // PortfolioLedger reassigns these on reset, so always read through.
   get positions(): Readonly<Record<string, number>> {
     return this.inner.positions;
   }
@@ -287,7 +268,6 @@ export class Backtester {
         ? defaultRiskModel(cfg)
         : options.riskModel;
     this.spec = makeSpecResolver(this.baseCurrency);
-    // Validate the universe up front, like the Python constructor.
     for (const inst of this.instruments) this.spec(inst);
     strategy.data = data;
   }
@@ -381,7 +361,6 @@ export class Backtester {
     );
   }
 
-  /** core.py _validate_strategy_output: exact dates, exact universe (reordered), finite values. */
   private validate(frame: Frame, name: string): Frame {
     const label = name[0]!.toUpperCase() + name.slice(1);
     if (!frame.index.length || !frame.columns.length)
@@ -413,7 +392,6 @@ export class Backtester {
     return out;
   }
 
-  /** core.py _compute_accounting_returns: gap bars stay NaN, resume bar carries the bridged move. */
   private static accountingReturns(prices: Frame): Frame {
     const filled = ffillFrame(prices).pctChange();
     return filled.map((v, r, c) => {
@@ -468,7 +446,6 @@ export class Backtester {
     const close = this.feature('close');
     const pick = (name: string): Frame => {
       const f = this.feature(name);
-      // Missing open/high/low fall back to close, like core.py.
       return f.map((v, r, c) => (Number.isNaN(v) ? close.values[r]![c]! : v));
     };
     return {
@@ -480,7 +457,6 @@ export class Backtester {
     };
   }
 
-  /** Commission plus |slippage PnL| per fill, summed by date (core.py total_transaction_costs). */
   private costsFromFills(fills: readonly Fill[]): number[] {
     const pos = new Map(this.dates.map((d, i) => [d, i]));
     const out = new Array<number>(this.dates.length).fill(0);
@@ -542,9 +518,6 @@ export class Backtester {
     };
   }
 
-  // --- paths ------------------------------------------------------------------
-
-  /** core.py _run_weight_based_simulation. */
   private runWeightsFast(weights: Frame): PathResult {
     const close = this.feature('adj_close');
     const target = weights
@@ -595,7 +568,6 @@ export class Backtester {
     };
   }
 
-  /** core.py _record_trades: implied trades from position changes, column-major then sorted by time. */
   private recordWeightTrades(changes: Frame, close: Frame, costs: Frame): void {
     const rows: Parameters<Blotter['recordTradesBulk']>[0][number][] = [];
     for (const inst of changes.columns) {
@@ -623,13 +595,11 @@ export class Backtester {
       row.orderId = `order_${i}`;
       row.tradeId = `trade_${i}`;
     });
-    // Stable sort by timestamp, like pandas sort_values(kind="mergesort") on ISO dates.
     const pos = new Map(this.dates.map((d, i) => [d, i]));
     rows.sort((a, b) => pos.get(a.timestamp)! - pos.get(b.timestamp)!);
     if (rows.length) this.blotter.recordTradesBulk(rows);
   }
 
-  /** core.py _run_order_simulation. */
   private runOrders(strategy: OrdersStrategy): PathResult {
     const fillEngine = this.makeFillEngine(this.options.fillAt ?? 'open');
     const { ledger, simulator } = this.makeSimulator(
@@ -659,7 +629,6 @@ export class Backtester {
     });
   }
 
-  /** core.py _run_weight_order_simulation: unshifted targets traded at the next bar by the executor. */
   private runWeightOrders(weights: Frame): PathResult {
     const close = this.feature('close');
     const target = weights.map((v) => v * (1 - this.cashBuffer));

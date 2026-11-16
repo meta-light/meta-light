@@ -1,10 +1,3 @@
-// The Python main() ran the full backtest, then a WalkForwardEngine over its
-// NAV. In "slice_diagnostics" mode the folds are in-sample slices of that one
-// run (indicative only); in "per_fold_refit" mode the engine rebuilds the
-// strategy per fold via buildConfig() for true out-of-sample results. It then
-// printed the summary and traffic-light verdicts for overfit ratio,
-// efficiency and Sharpe decay. Engine runs and printing are not ported.
-
 import {
   crossAbove,
   equalWeightActive,
@@ -21,7 +14,6 @@ function envFlag(name: string): boolean {
   return TRUTHY.has((process.env[name] ?? '').trim().toLowerCase());
 }
 
-/** QJ_WF_MODE=per_fold_refit|refit|true_oos or QJ_WF_REFIT=1 selects per-fold refits. */
 export function walkForwardMode(): WalkForwardMode {
   const raw = (process.env.QJ_WF_MODE ?? '').trim().toLowerCase();
   if (
@@ -42,7 +34,6 @@ export const walkForwardConfig: WalkForwardConfig = {
   extraPreOosPurgePct: 0.01,
 };
 
-/** Per-fold names follow `${name}_Fold01`, with backtestPeriod {trainStart, oosEnd}. */
 export function buildConfig({
   strategyName = 'RollingWalkForward',
   backtestPeriod = { start: '2000-01-03', end: '2026-01-01' },

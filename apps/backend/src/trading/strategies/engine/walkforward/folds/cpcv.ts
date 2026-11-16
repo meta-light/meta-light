@@ -1,7 +1,3 @@
-// Ported from backtester/walkforward/folds/cpcv.py (QuantJourney Backtester, Apache 2.0)
-//
-// Combinatorial Purged Cross-Validation: a placeholder in the Python original too.
-
 import type { ResolvedWalkForwardConfig } from '../config';
 import type { Fold, FoldScheme } from './base';
 

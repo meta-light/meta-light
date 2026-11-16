@@ -1,5 +1,3 @@
-// Ported from backtester/portfolio/accounting/ledger.py (QuantJourney Backtester, Apache 2.0)
-
 import { Frame, type OrderSide } from '../../core/index';
 import {
   type ContractSpecResolver,
@@ -52,9 +50,7 @@ export interface LedgerResult {
   cash: number[];
   positions: Frame;
   positionValues: Frame;
-  /** Signed notional exposure / NAV (alias of exposureWeights). */
   weights: Frame;
-  /** Accounting mark value / NAV. */
   bookWeights: Frame;
   exposureValues: Frame;
   exposureWeights: Frame;
@@ -63,7 +59,6 @@ export interface LedgerResult {
   marginUsed: number[];
   buyingPower: number[];
   averageEntryPrice: Readonly<Record<string, number | null>>;
-  /** NaN where no position is open. Undefined for weight mode. */
   averageEntryPriceHistory?: Frame;
 }
 
@@ -104,7 +99,6 @@ export class PortfolioLedger {
     this.instruments = options.instruments.slice();
     this.settlementCurrency = options.settlementCurrency ?? 'USD';
     this.resolver = options.contractSpecResolver;
-    // Validate the complete universe before any fill mutates cash.
     for (const instrument of this.instruments) this.contractSpec(instrument);
     this.reset();
   }
@@ -131,7 +125,6 @@ export class PortfolioLedger {
     this.lastNav = this.initialCash;
   }
 
-  /** Fix the recording index; record() then checks each date against it. */
   prepareHistory(dates: readonly string[]): void {
     this.preparedIndex = dates.slice();
     this.dates = [];
@@ -154,10 +147,6 @@ export class PortfolioLedger {
     return spec;
   }
 
-  /**
-   * Whether a mark is usable. Finite zero and negative prices are legal for
-   * non-inverse futures; everything else needs a positive price.
-   */
   isValidPrice(value: unknown, instrument?: string): boolean {
     if (typeof value !== 'number' || !Number.isFinite(value)) return false;
     if (instrument === undefined) return value > 0;
@@ -166,13 +155,11 @@ export class PortfolioLedger {
     return value > 0;
   }
 
-  /** Remember the latest usable market price, including futures zero. */
   observeMark(instrument: string, price: unknown): void {
     if (this.isValidPrice(price, instrument))
       this.lastValidPrice[instrument] = price as number;
   }
 
-  /** Resolve current, then last valid, then entry price for valuation. */
   priceForValuation(instrument: string, price: unknown): number | null {
     if (this.isValidPrice(price, instrument)) return price as number;
     const last = this.lastValidPrice[instrument];
@@ -182,12 +169,10 @@ export class PortfolioLedger {
     return null;
   }
 
-  /** Absolute exposure notional for commissions and audit. */
   tradeNotional(instrument: string, quantity: number, price: number): number {
     return notional(this.contractSpec(instrument), quantity, price);
   }
 
-  /** Unsigned-quantity transaction value carrying the market price sign. */
   tradeCashValue(instrument: string, quantity: number, price: number): number {
     const spec = this.contractSpec(instrument);
     if (spec.inverse) return notional(spec, quantity, price);
@@ -205,7 +190,6 @@ export class PortfolioLedger {
     return quantity * price * spec.multiplier * spec.lotSize;
   }
 
-  /** Apply one fill atomically to positions, average entry and cash. */
   applyFill(fill: LedgerFill): FillAccounting {
     const previousPosition = this.positions[fill.instrument] ?? 0;
     const signedQuantity = fill.side === 'buy' ? fill.quantity : -fill.quantity;
@@ -260,7 +244,6 @@ export class PortfolioLedger {
     return out;
   }
 
-  /** NAV and per-instrument values at current or frozen marks. */
   markToMarket(prices: PriceMap): {
     nav: number;
     positionValues: Record<string, number>;
@@ -282,7 +265,6 @@ export class PortfolioLedger {
     );
   }
 
-  /** Signed economic exposure, independent of accounting marks. */
   exposureValues(prices: PriceMap = {}): Record<string, number> {
     return this.perInstrument(
       prices,
@@ -290,7 +272,6 @@ export class PortfolioLedger {
     );
   }
 
-  /** Signed notional exposure divided by current NAV. */
   exposureWeights(
     options: { prices?: PriceMap; nav?: number } = {},
   ): Record<string, number> {
@@ -331,7 +312,6 @@ export class PortfolioLedger {
     };
   }
 
-  /** Append one end-of-bar accounting snapshot. */
   record(input: {
     date: string;
     nav: number;
@@ -364,7 +344,6 @@ export class PortfolioLedger {
     this.marginRows.push(this.instruments.map((i) => margin[i] ?? 0));
   }
 
-  /** Build the recorded outputs and validate the accounting identity. */
   result(): LedgerResult {
     const index = this.dates.slice();
     const cols = this.instruments;
@@ -400,7 +379,6 @@ export class PortfolioLedger {
     };
   }
 
-  /** Average entry after scale-in, reduction, close or reversal. */
   static updatedAverageEntryPrice(input: {
     previousPosition: number;
     previousAvgPrice: number | null;
@@ -430,7 +408,6 @@ export class PortfolioLedger {
   }
 }
 
-/** pct_change().fillna(0) on a NAV path. */
 function navReturns(nav: readonly number[]): number[] {
   return nav.map((v, i) => {
     if (i === 0) return 0;
@@ -439,7 +416,6 @@ function navReturns(nav: readonly number[]): number[] {
   });
 }
 
-/** Finite realized weights (value / NAV), 0 where NAV is zero. */
 export function weightsFromPositionValues(
   positionValues: Frame,
   nav: readonly number[],
@@ -471,7 +447,6 @@ function marginHistory(
 
 export interface BuildWeightLedgerInput {
   actualWeights: Frame;
-  /** Gross portfolio returns aligned to actualWeights.index. */
   portfolioReturns: readonly number[];
   prices: Frame;
   initialCapital: number;
@@ -487,11 +462,6 @@ export interface BuildWeightLedgerResult {
   positionChanges: Frame;
 }
 
-/**
- * Recursive ledger for target-weight mode. Close-to-close with implied (not
- * broker) fills, but positions, audited trades, costs and post-cost NAV all
- * come from one self-financing capital trajectory.
- */
 export function buildWeightLedger(
   input: BuildWeightLedgerInput,
 ): BuildWeightLedgerResult {
@@ -613,7 +583,6 @@ export function buildWeightLedger(
   };
 }
 
-/** Fail fast when NAV != cash + sum(position values). */
 export function assertAccountingIdentity(
   nav: readonly number[],
   cash: readonly number[],

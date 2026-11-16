@@ -1,11 +1,5 @@
-// Ported from backtester/portfolio/calc/returns.py and calc/risk.py
-// (QuantJourney Backtester, Apache 2.0).
-//
-// pandas skips NaN in sum/prod/mean/std/min/max/cumprod/cummax, so these do too.
-
 import { isNum } from '../../core/index';
 
-/** A pandas Series with a date index. Missing values are NaN. */
 export interface Series {
   index: string[];
   values: number[];
@@ -19,7 +13,6 @@ export const makeSeries = (
   values: [...values],
 });
 
-/** `s.replace([inf, -inf], nan).dropna()`. */
 export function dropNaN(s: Series): Series {
   const index: string[] = [];
   const values: number[] = [];
@@ -59,7 +52,6 @@ export function nanMean(xs: readonly number[]): number {
   return valid.length ? nanSum(valid) / valid.length : NaN;
 }
 
-/** Sample std (ddof=1) over non-NaN values. */
 export function nanStd(xs: readonly number[]): number {
   const valid = xs.filter(isNum);
   if (valid.length < 2) return NaN;
@@ -79,7 +71,6 @@ export function nanMax(xs: readonly number[]): number {
   return valid.length ? Math.max(...valid) : NaN;
 }
 
-/** `s.quantile(q)` with linear interpolation, NaN skipped. */
 export function nanQuantile(xs: readonly number[], q: number): number {
   const sorted = xs.filter(isNum).sort((a, b) => a - b);
   if (!sorted.length) return NaN;
@@ -89,26 +80,22 @@ export function nanQuantile(xs: readonly number[], q: number): number {
   return sorted[lo]! + (sorted[hi]! - sorted[lo]!) * (pos - lo);
 }
 
-/** `s.cumprod()`: NaN positions stay NaN and are skipped. */
 export function cumprod(xs: readonly number[]): number[] {
   let acc = 1;
   return xs.map((v) => (isNum(v) ? (acc *= v) : NaN));
 }
 
-/** `s.cummax()`: NaN positions stay NaN and are skipped. */
 export function cummax(xs: readonly number[]): number[] {
   let acc = -Infinity;
   return xs.map((v) => (isNum(v) ? (acc = Math.max(acc, v)) : NaN));
 }
 
-/** Parse an ISO date as UTC, so "2024-01-02" and "2024-01-02T09:30" agree. */
 export function toMs(raw: string): number {
   const date = raw.replace(' ', 'T');
   const hasZone = /([zZ]|[+-]\d\d:?\d\d)$/.test(date);
   return Date.parse(date.includes('T') && !hasZone ? `${date}Z` : date);
 }
 
-/** Whole days from `a` to `b` (`(b - a).days`). */
 export function dayDiff(a: string, b: string): number {
   return Math.floor((toMs(b) - toMs(a)) / 86_400_000);
 }
@@ -118,17 +105,11 @@ const pad = (n: number): string => String(n).padStart(2, '0');
 const isoDate = (y: number, m: number, d: number): string =>
   `${y}-${pad(m)}-${pad(d)}`;
 
-/** Last calendar day of a month (1-based month). */
 const monthEnd = (y: number, m: number): string =>
   isoDate(y, m, new Date(Date.UTC(y, m, 0)).getUTCDate());
 
 export type ResampleRule = 'ME' | 'QE' | 'YE';
 
-/**
- * `s.resample(rule).apply(agg)`. Bins run from the first to the last period
- * with no gaps, labelled with the period-end date like pandas. Empty bins get
- * `agg([])`, so `(1 + x).prod() - 1` gives 0 there, as in pandas.
- */
 export function resample(
   s: Series,
   rule: ResampleRule,
@@ -160,7 +141,6 @@ export function resample(
   return { index, values };
 }
 
-/** Start of the month, quarter and year containing `date`, keeping its time of day. */
 export function periodStarts(date: string): {
   month: number;
   quarter: number;

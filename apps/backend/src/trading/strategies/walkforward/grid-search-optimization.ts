@@ -1,9 +1,3 @@
-// The Python main() ran a GridSearchOptimizer over `paramGrid`, scoring each
-// candidate with `evaluate` below (a full backtest per candidate, -999 when
-// fast >= slow), then printed the best params, best Sharpe and the number of
-// combinations evaluated. This template has no walk-forward step, so there is
-// no WalkForwardConfig. Engine runs and printing are not ported.
-
 import {
   crossAbove,
   equalWeightActive,
@@ -31,7 +25,6 @@ export const gridSearch: GridSearchSpec = {
   objective: 'sharpe',
 };
 
-/** Score returned for invalid candidates (fast >= slow). */
 export const INVALID_SCORE = -999;
 
 export function buildConfig(fast: number, slow: number): StrategyConfig {
@@ -66,7 +59,6 @@ export function buildConfig(fast: number, slow: number): StrategyConfig {
   };
 }
 
-/** Annualized Sharpe of a NAV series (252 periods/year, zero risk-free rate). */
 export function sharpe(nav: number[]): number {
   const returns = pctChange(nav).filter(isNum);
   const sd = std(returns);

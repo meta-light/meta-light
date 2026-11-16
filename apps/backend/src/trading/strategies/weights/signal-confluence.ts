@@ -1,8 +1,3 @@
-// Entry and exit gates are from the old `simple-signals-v2-backtest.ts`
-// (MIN_SIGNAL_STRENGTH, MIN_SIGNAL_CONFIDENCE, MULTI_TIMEFRAME_FILTER).
-// Stops, take-profits, cooldowns and top-K selection from the old backtest
-// are left out; add them as a risk model if wanted.
-
 import {
   equalWeightActive,
   type Frame,
@@ -25,7 +20,6 @@ export class SignalConfluence extends WeightsStrategy {
   }
 
   computeSignals(): Frame {
-    // Raw (unadjusted) close so it stays consistent with the raw high/low.
     const close = this.data.getFeature('close');
     const high = this.data.getFeature('high');
     const low = this.data.getFeature('low');

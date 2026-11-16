@@ -1,6 +1,3 @@
-// The old signal preferred pool-liquidity and spread history when available.
-// OHLCV has neither, so this is the old price-volatility fallback only.
-
 import {
   equalWeightActive,
   type Frame,

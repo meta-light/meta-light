@@ -1,13 +1,5 @@
-// Ported from backtester/walkforward/folds/purge.py (QuantJourney Backtester, Apache 2.0)
-//
-// Removes the last N trading days from IS to prevent label leakage; an
-// optional percentage extends that same exclusion window. This is not a
-// classical post-test embargo. When `maxHoldingPeriodDays` is set,
-// purge = max(purgeDays, holding).
-
 import { datesBetween, lastDateBefore, warnOnce } from '../internal';
 
-/** [effectiveIsEnd, purgeStart, purgeEnd]; purge bounds are null when nothing is excluded. */
 export type PurgeResult = [
   effectiveIsEnd: string,
   purgeStart: string | null,
@@ -20,7 +12,6 @@ export interface PreOosPurgeArgs {
   oosStart: string;
   purgeDays: number;
   extraPreOosPurgePct: number;
-  /** Sorted ISO trading dates. */
   tradingDates: readonly string[];
   maxHoldingPeriodDays?: number | null;
 }
@@ -49,13 +40,11 @@ export function computePreOosPurge(args: PreOosPurgeArgs): PurgeResult {
   );
   const totalRemove = effectivePurge + percentageExtensionDays;
 
-  // No purge: report an empty exclusion window as null, never as the whole IS window.
   if (totalRemove === 0) return [isDates[isLength - 1]!, null, null];
 
   let effectiveIsEnd: string;
   let purgeStart: string;
   if (totalRemove >= isLength) {
-    // Combined pre-OOS purge exceeds the IS window.
     effectiveIsEnd = isDates[0]!;
     purgeStart = isDates[0]!;
   } else {
@@ -66,10 +55,6 @@ export function computePreOosPurge(args: PreOosPurgeArgs): PurgeResult {
   return [effectiveIsEnd, purgeStart, purgeEnd];
 }
 
-/**
- * @deprecated Use `computePreOosPurge`. Historical `embargoPct` extends the
- * purge before the current OOS window; it never was a post-test embargo.
- */
 export function computePurgeEmbargo(
   args: Omit<PreOosPurgeArgs, 'extraPreOosPurgePct'> & { embargoPct: number },
 ): PurgeResult {

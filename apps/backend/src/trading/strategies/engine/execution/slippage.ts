@@ -1,7 +1,3 @@
-// Buys pay up, sells receive less.
-//
-// Ported from backtester/execution/slippage.py (QuantJourney Backtester, Apache 2.0)
-
 import type { SlippageModel as SlippageConfig } from '../../core/index';
 import type { BarData, OrderSide } from './order-types';
 
@@ -23,7 +19,6 @@ export class NoSlippage implements Slippage {
   }
 }
 
-/** Constant half-spread in basis points. */
 export class FixedBpsSlippage implements Slippage {
   constructor(readonly bps = 5.0) {}
 
@@ -32,7 +27,6 @@ export class FixedBpsSlippage implements Slippage {
   }
 }
 
-/** Spread from (high - low) / close. The fill engine passes the previous completed bar for opening fills. */
 export class VolatilitySlippage implements Slippage {
   constructor(readonly volFactor = 0.1) {}
 
@@ -48,7 +42,6 @@ export class VolatilitySlippage implements Slippage {
   }
 }
 
-/** Almgren-style impact: price * eta * sigma * sqrt(quantity / ADV). */
 export class MarketImpactSlippage implements Slippage {
   constructor(
     readonly sigmaDaily = 0.02,
@@ -66,7 +59,6 @@ export class MarketImpactSlippage implements Slippage {
   }
 }
 
-/** Not in the Python module. */
 export function slippageFromConfig(cfg: SlippageConfig | undefined): Slippage {
   if (!cfg) return new NoSlippage();
   return new FixedBpsSlippage(cfg.bps);

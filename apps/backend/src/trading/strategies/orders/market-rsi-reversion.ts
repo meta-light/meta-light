@@ -38,7 +38,7 @@ export class MarketRSIReversion extends OrdersStrategy {
       const bar = bars[inst]!;
       const pos = positions[inst] ?? 0;
       if (pos === 0 && value < 35 && !this.hasPending(inst)) {
-        const shares = Math.trunc((nav * 0.12) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.12, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

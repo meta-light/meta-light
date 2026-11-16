@@ -1,20 +1,11 @@
-// Ported from backtester/risk/position_limit.py (QuantJourney Backtester, Apache 2.0).
-//
-// Capped excess is redistributed to active instruments with room; inactive
-// instruments never gain exposure.
-
 import { type Frame, isNum } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, cloneFrame, sign } from './util';
 
 export interface PositionLimitOptions {
-  /** Maximum absolute weight for any single instrument. */
   maxWeight?: number;
-  /** Minimum absolute weight for active instruments; 0 disables. */
   minWeight?: number;
-  /** Maximum sum of absolute weights. */
   maxTotalLeverage?: number;
-  /** Sector name to max aggregate absolute weight. Needs metadata.sectors. */
   sectorLimits?: Record<string, number>;
 }
 
@@ -43,7 +34,6 @@ export class PositionLimitModel extends RiskModel {
       let row = out.values[i]!;
       const abs = row.map(Math.abs);
       const rowTotal = absSum(row);
-      // Pre-screen: rows that provably satisfy every limit stay untouched.
       const validAbs = abs.filter(isNum);
       const rowMax = validAbs.length ? Math.max(...validAbs) : NaN;
       let needsWork =
@@ -91,7 +81,6 @@ export class PositionLimitModel extends RiskModel {
       const excess = targetAbsTotal - absSum(capped);
       if (excess <= 1e-10) break;
 
-      // pandas clip keeps NaN, and NaN > 1e-10 is false.
       const room = capped.map((v) => {
         const r = max - Math.abs(v);
         return Number.isNaN(r) ? NaN : Math.max(r, 0);
@@ -115,7 +104,6 @@ export class PositionLimitModel extends RiskModel {
     );
   }
 
-  /** Set active positions below minWeight to minWeight (keeping sign). */
   applyFloor(row: readonly number[]): number[] {
     return row.map((v) => {
       const a = Math.abs(v);

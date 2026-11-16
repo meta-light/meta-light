@@ -1,6 +1,3 @@
-// The stop follows price upward. When triggered, the order sells only at or
-// above the activated limit price, so gaps can leave the order open.
-
 import { type Bar, OrdersStrategy, round2, type StrategyConfig } from '../core/index';
 
 export const config: StrategyConfig = {
@@ -52,7 +49,7 @@ export class TrailingStopLimitTrend extends OrdersStrategy {
         this.hasTrailLimit[inst] = false;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

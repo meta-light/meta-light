@@ -1,5 +1,3 @@
-// Ported from backtester/walkforward/config.py (QuantJourney Backtester, Apache 2.0)
-
 import type { WalkForwardConfig } from '../../core/index';
 
 export type WalkForwardScheme = WalkForwardConfig['scheme'] | 'cpcv';
@@ -8,38 +6,24 @@ export interface WalkForwardOptions {
   scheme?: WalkForwardScheme;
   trainMonths?: number;
   testMonths?: number;
-  /** Minimum IS length; folds with fewer IS trading days are skipped. */
   minTrainMonths?: number;
-  /** Defaults to `testMonths`. */
   stepMonths?: number;
-  /** CPCV only (not implemented). */
   nSplits?: number;
   purgeDays?: number;
-  /** Extra pre-OOS purge as a fraction of IS length. Falls back to `embargoPct`. */
   extraPreOosPurgePct?: number;
-  /** @deprecated Historical alias for `extraPreOosPurgePct`. */
   embargoPct?: number;
-  /** When set, purge = max(purgeDays, maxHoldingPeriodDays). */
   maxHoldingPeriodDays?: number;
   optimization?: Record<string, unknown>;
   computeDeflatedSharpe?: boolean;
-  /** Effective independent trials for DSR (finite, >= 1). */
   dsrEffectiveNTrials?: number;
-  /** Defaults to `computePbo`. */
   computeRankStability?: boolean;
-  /** 0 disables, otherwise >= 2. Defaults to `pboTrials`. */
   rankStabilityTrials?: number;
-  /** @deprecated Use `computeRankStability`. */
   computePbo?: boolean;
-  /** @deprecated Unused by the rank-stability diagnostic. */
   pboNPartitions?: number;
-  /** @deprecated Use `rankStabilityTrials`. */
   pboTrials?: number;
   minOosSharpe?: number;
   costSensitivityBps?: number[];
-  /** Engine slippage model instance (typed by the execution module). */
   baseSlippageModel?: unknown;
-  /** Engine commission scheme instance (typed by the execution module). */
   baseCommissionScheme?: unknown;
   maxWorkers?: number;
   nJobsOptimizer?: number;
@@ -68,7 +52,6 @@ export interface ResolvedWalkForwardConfig extends WalkForwardConfig {
   nJobsOptimizer: number;
   verbose: boolean;
   seed: number;
-  /** True when `stepMonths` was not given and defaulted to `testMonths`. */
   stepMonthsDefaulted: boolean;
   rankStabilityEnabled: boolean;
   resolvedRankStabilityTrials: number;
@@ -165,7 +148,6 @@ export function resolveWalkForwardConfig(
   };
 }
 
-/** JSON-safe snapshot, like `WalkForwardConfig.to_dict()` (engine objects become class names). */
 export function walkForwardConfigToDict(
   cfg: ResolvedWalkForwardConfig,
 ): Record<string, unknown> {

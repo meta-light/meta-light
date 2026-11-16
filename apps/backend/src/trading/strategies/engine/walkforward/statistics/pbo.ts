@@ -1,21 +1,5 @@
-// Ported from backtester/walkforward/statistics/pbo.py (QuantJourney Backtester, Apache 2.0)
-//
-// Walk-forward rank-stability diagnostics and legacy PBO helpers
-// (Bailey, Borwein, Lopez de Prado and Zhu, 2017).
-//
-// Canonical CSCV PBO needs trial-level OOS data on symmetric combinatorial
-// splits. The rolling walk-forward top-K pipeline does not do CSCV, so its
-// output must not be reported as canonical PBO. isOosTransferDistribution is
-// for plotting only.
-
 import { sampleWithoutReplacement, seededRandom, warnOnce } from '../internal';
 
-/**
- * Logit of the IS-selected trial's relative OOS rank among all K candidates
- * (higher value = better). lambda = ln(w / (1 - w)), w = rank / (K + 1), with
- * average-tie ranking (1 = worst, K = best). lambda <= 0 means the selection
- * landed in the bottom half OOS. null when K < 2 or the selection is not finite.
- */
 export function selectedTrialRankLogit(
   selectedValue: number,
   candidateValues: readonly number[],
@@ -30,7 +14,6 @@ export function selectedTrialRankLogit(
   return Math.log(omega / (1 - omega));
 }
 
-/** Fraction of folds with logit <= 0, NaN when no finite logits. Not CSCV PBO. */
 export function walkForwardTopKRankFailureRate(
   logits: ReadonlyArray<number | null | undefined>,
 ): number {
@@ -41,7 +24,6 @@ export function walkForwardTopKRankFailureRate(
   return finite.filter((l) => l <= 0).length / finite.length;
 }
 
-/** @deprecated Use `selectedTrialRankLogit`. */
 export function selectedTrialLogit(
   selectedValue: number,
   candidateValues: readonly number[],
@@ -52,7 +34,6 @@ export function selectedTrialLogit(
   return selectedTrialRankLogit(selectedValue, candidateValues);
 }
 
-/** @deprecated Use `walkForwardTopKRankFailureRate`. */
 export function pboFromSelectedRanks(
   logits: ReadonlyArray<number | null | undefined>,
 ): number {
@@ -62,11 +43,6 @@ export function pboFromSelectedRanks(
   return walkForwardTopKRankFailureRate(logits);
 }
 
-/**
- * @deprecated Not the CSCV PBO; always returns NaN. Fold-level Sharpes
- * contain no trials, selection or rank. Set `rankStabilityTrials` >= 2 with
- * an optimizer to get the rolling top-K rank-failure diagnostic instead.
- */
 export function probabilityOfBacktestOverfitting(
   isSharpes: readonly number[],
   oosSharpes: readonly number[],
@@ -91,7 +67,6 @@ function nChooseK(n: number, k: number): number {
   return Math.round(r);
 }
 
-/** All k-subsets of 0..n-1 in lexicographic order (Python itertools.combinations). */
 function combinations(n: number, k: number): number[][] {
   const out: number[][] = [];
   const idx = Array.from({ length: k }, (_, i) => i);
@@ -105,13 +80,6 @@ function combinations(n: number, k: number): number[][] {
   }
 }
 
-/**
- * For each split of the folds into halves J / J-bar: mean(OOS in J-bar) /
- * mean(IS in J), with sign-based fallbacks when mean IS <= 0. Values <= 0 mark
- * splits where OOS collapsed. Empty with fewer than 4 folds. When there are
- * more than `maxCombinations` splits, a seeded random subset is used; that RNG
- * differs from numpy's, so sampled outputs differ from Python's.
- */
 export function isOosTransferDistribution(
   isSharpes: readonly number[],
   oosSharpes: readonly number[],
@@ -153,7 +121,6 @@ function indices(n: number): number[] {
   return Array.from({ length: n }, (_, i) => i);
 }
 
-/** @deprecated Use `isOosTransferDistribution`. Not a CSCV PBO logit distribution. */
 export function pboLogitDistribution(
   isSharpes: readonly number[],
   oosSharpes: readonly number[],

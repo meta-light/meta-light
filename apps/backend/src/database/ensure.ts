@@ -1,3 +1,5 @@
+import { RECORDER_SQL } from './recorder';
+
 // Keep this DDL aligned with the service schema files. Tables are created on connect.
 // Dates are unix milliseconds. JSON values are text. Booleans are 0 or 1.
 const SCHEMA_SQL = `
@@ -113,7 +115,7 @@ CREATE TABLE IF NOT EXISTS scraped_tweets (
 export async function ensureSchema(
   execute: (statement: string) => Promise<void>,
 ): Promise<void> {
-  const statements = SCHEMA_SQL.split(/;\s*\n/)
+  const statements = `${SCHEMA_SQL}\n${RECORDER_SQL}`.split(/;\s*\n/)
     .map((statement) => statement.trim())
     .filter(Boolean);
   for (const statement of statements) {

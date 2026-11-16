@@ -1,7 +1,3 @@
-// Ported from backtester/walkforward/result.py (QuantJourney Backtester, Apache 2.0)
-//
-// pandas DataFrames become arrays of row objects; Series become DatedSeries.
-
 import type { Fold } from './folds/base';
 import type { DatedSeries } from './statistics/aggregation';
 
@@ -31,36 +27,23 @@ export interface FoldResult {
   readonly oosAvgHoldingDays: number;
   readonly oosTurnoverAnn: number;
 
-  /** Daily OOS returns. */
   readonly oosReturns: DatedSeries;
-  /** OOS NAV rebased to 1.0. */
   readonly oosNav: DatedSeries;
 
-  /** IS Sharpe / OOS Sharpe. */
   readonly overfitRatio: number;
-  /** OOS CAGR / IS CAGR. */
   readonly efficiency: number;
   readonly sanityWarnings: readonly string[];
   readonly fingerprint: string;
-  /**
-   * A failed fold (empty NAV window, refit crash) carries NaN metrics, never
-   * silent zeros, and is excluded from engine aggregates.
-   */
   readonly foldStatus: FoldStatus;
 
-  // Optimization (absent when no optimizer is used)
   readonly bestParams?: Record<string, unknown> | null;
   readonly optimizerNEvals?: number | null;
   readonly optimizerBestObjective?: number | null;
-  /** Completed-trial IS objective values (annualized Sharpe): the DSR trial population. */
   readonly optimizerTrialValues?: readonly number[] | null;
 
-  /** Rolling top-K rank stability (not canonical CSCV PBO): trials' OOS objective values. */
   readonly rankStabilityCandidateOos?: readonly number[] | null;
-  /** OOS rank logit of the IS-selected trial. */
   readonly rankStabilitySelectedLogit?: number | null;
 
-  /** Cost sensitivity keyed by bps. */
   readonly costSensitivity?: Record<number, Record<string, number>> | null;
 }
 
@@ -68,7 +51,6 @@ export type WalkForwardMode = 'slice_diagnostics' | (string & {});
 
 export interface WalkForwardResultInit {
   folds: FoldResult[];
-  /** Frozen copy of `walkForwardConfigToDict(config)`. */
   configDict: Record<string, unknown>;
   oosSharpe?: number;
   oosCagr?: number;
@@ -101,39 +83,27 @@ function pct(value: number, width: number): string {
   return `${(value * 100).toFixed(1)}%`.padStart(width);
 }
 
-/** Python `{:g}` (6 significant digits, trailing zeros stripped). */
 function g(value: number): string {
   return String(Number(value.toPrecision(6)));
 }
 
-/** Aggregate walk-forward result across all folds. */
 export class WalkForwardResult {
   folds: FoldResult[];
   configDict: Record<string, unknown>;
 
-  // Aggregate OOS
   oosSharpe: number;
   oosCagr: number;
   oosMaxDd: number;
   oosReturns: DatedSeries | null;
   oosNav: DatedSeries | null;
-  /** Stationary-block-bootstrap CI for the composite Sharpe (seeded from config.seed). */
   sharpeCi5pct: number | null;
   sharpeCi95pct: number | null;
 
-  // Overfitting diagnostics
   overfitRatio: number;
   efficiency: number;
   sharpeDecay: number;
-  /** Probability in [0, 1]. */
   deflatedSharpe: number | null;
-  /** Why DSR is unavailable (when `deflatedSharpe` is null). */
   deflatedSharpeReason: string | null;
-  /**
-   * `pooled_walk_forward_dsr_style` is an explicitly labelled extension: its
-   * trial objectives come from multiple chronological training folds, not one
-   * common trial population. With N=1 the statistic is PSR.
-   */
   deflatedSharpeMethod: string | null;
   dsrRawCompletedTrials: number | null;
   dsrEffectiveTrials: number | null;
@@ -141,15 +111,12 @@ export class WalkForwardResult {
   rankStabilityAvailable: boolean;
   rankStabilityReason: string | null;
 
-  // Parameter stability
   paramStability: Record<string, number> | null;
   paramTrajectory: Row[] | null;
   paramJaccard: number | null;
 
-  // Cost sensitivity
   costSensitivity: Row[] | null;
 
-  // Meta
   fingerprint: string;
   warnings: string[];
   mode: WalkForwardMode;
@@ -189,22 +156,18 @@ export class WalkForwardResult {
     return this.folds.length;
   }
 
-  /** @deprecated 0.12.x alias; this value is not canonical CSCV PBO. */
   get pbo(): number | null {
     return this.walkForwardTopKRankFailureRate;
   }
 
-  /** @deprecated Use `rankStabilityAvailable`. */
   get pboAvailable(): boolean {
     return this.rankStabilityAvailable;
   }
 
-  /** @deprecated Use `rankStabilityReason`. */
   get pboReason(): string | null {
     return this.rankStabilityReason;
   }
 
-  /** One row per fold: fold_id, train/oos bounds, IS and OOS Sharpe. */
   foldBoundaries(): Row[] {
     return this.folds.map((fr) => ({
       fold_id: fr.fold.foldId,
@@ -217,7 +180,6 @@ export class WalkForwardResult {
     }));
   }
 
-  /** JSON-safe dict with Python's snake_case keys (for archival / fingerprinting). */
   toDict(): Record<string, unknown> {
     const d: Record<string, unknown> = {
       n_folds: this.nFolds,
@@ -237,7 +199,6 @@ export class WalkForwardResult {
       walk_forward_top_k_rank_failure_rate: this.walkForwardTopKRankFailureRate,
       rank_stability_available: this.rankStabilityAvailable,
       rank_stability_reason: this.rankStabilityReason,
-      // Deprecated compatibility keys for 0.12.x.
       pbo: this.pbo,
       pbo_available: this.pboAvailable,
       pbo_reason: this.pboReason,
@@ -267,11 +228,9 @@ export class WalkForwardResult {
     return d;
   }
 
-  /** Console summary. */
   summary(): string {
     const lines: string[] = [];
     const cfg = this.configDict;
-    // Accept camelCase (walkForwardConfigToDict) or Python snake_case keys.
     const scheme = String(cfg.scheme ?? '?');
     const trainM = String(cfg.trainMonths ?? cfg.train_months ?? '?');
     const testM = String(cfg.testMonths ?? cfg.test_months ?? '?');

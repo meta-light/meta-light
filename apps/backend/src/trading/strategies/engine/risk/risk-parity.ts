@@ -1,29 +1,14 @@
-// Ported from backtester/risk/risk_parity.py (QuantJourney Backtester, Apache 2.0).
-//
-// Equal Risk Contribution (ERC): each active instrument contributes the same
-// share of portfolio variance. Uses the strategy's weights only to pick the
-// active set and the sign of each position; magnitudes are re-derived from
-// the trailing covariance. Original gross exposure is preserved.
-
 import { type Frame, isNum } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, cloneFrame, rescoreMask, sign } from './util';
 
 export interface RiskParityOptions {
-  /** Rolling window (bars) for covariance estimation. Must be >= 2. */
   lookback?: number;
   maxIter?: number;
-  /** Convergence tolerance on weight change. */
   tol?: number;
-  /** When to recompute: "BMS" (default, monthly), "D", "W-MON", "MS", "QS". */
   rebalanceFreq?: string;
 }
 
-/**
- * pandas DataFrame.cov() with ddof=1. With no NaN it follows np.cov (two-pass
- * means); otherwise it follows pandas' nancorr (Welford over pairwise-complete
- * observations, NaN when a pair has fewer than two).
- */
 export function pairwiseCov(cols: readonly (readonly number[])[]): number[][] {
   const k = cols.length;
   const rows = k ? cols[0]!.length : 0;
@@ -112,7 +97,6 @@ export class RiskParityModel extends RiskModel {
         continue;
       }
 
-      // Python compares sign tuples; NaN never equals NaN, so any NaN forces a recompute.
       const sameSignature =
         prevSignature !== null &&
         prevSignature.length === signature.length &&
@@ -124,7 +108,6 @@ export class RiskParityModel extends RiskModel {
           .map((_, j) => j)
           .filter((j) => active[j]);
         const signs = activeIdx.map((j) => sign(rowW[j]!));
-        // ERC solves for positive magnitudes: flip each series by its sign, then restore.
         const subCols = activeIdx.map((j, a) => {
           const name = weights.columns[j]!;
           const rj = returns.colIndex(name);
@@ -149,9 +132,7 @@ export class RiskParityModel extends RiskModel {
     return out;
   }
 
-  /** Iterative ERC solver. Returns positive weights summing to 1. */
   solveErc(cov: number[][], n: number): number[] {
-    // Start from inverse vol. Math.max propagates NaN like np.maximum.
     let w = cov.map((r, k) => 1 / Math.sqrt(Math.max(r[k]!, 1e-12)));
     const s0 = plainSum(w);
     w = w.map((v) => v / s0);

@@ -43,7 +43,7 @@ export class TrailingStopRSI extends OrdersStrategy {
       if (pos === 0 && this.hasTrail[inst]) this.hasTrail[inst] = false;
 
       if (pos === 0 && value < 38 && !this.hasPending(inst)) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

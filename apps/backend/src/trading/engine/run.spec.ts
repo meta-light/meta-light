@@ -18,7 +18,7 @@ function syntheticBars(seed: number, days = DAYS): DataBar[] {
   let close = 50 + seed * 10;
   for (let i = 0; i < days; i++) {
     const open = close;
-    const drift = Math.sin(i / 60) * 0.004; // alternating trends
+    const drift = Math.sin(i / 60) * 0.004;
     close = open * (1 + drift + (rand() - 0.5) * 0.06);
     bars.push({
       timestamp: new Date(day0 + i * 86_400_000).toISOString().slice(0, 10),
@@ -42,7 +42,6 @@ const GENERIC = [
   'NVDA',
 ];
 
-/** Template universe where tickers or contract specs matter, else generic names. */
 function assetsFor(entry: StrategyEntry): string[] {
   if (entry.fixedUniverse || entry.assetClass) return entry.config.instruments;
   return GENERIC.slice(0, entry.minAssets);
@@ -111,7 +110,6 @@ describe('runStrategy on synthetic bars', () => {
       end: '2030-01-01',
     });
     expect(result.positions.columns).toEqual(['DOGE-USD']);
-    // Weights templates run in weights_fast mode, which records no fills.
     const traded = result.positions.values.some((row) =>
       row.some((v) => v !== 0),
     );

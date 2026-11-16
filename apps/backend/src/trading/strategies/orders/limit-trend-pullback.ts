@@ -40,7 +40,7 @@ export class LimitTrendPullback extends OrdersStrategy {
       const pending = this.hasPending(inst);
 
       if (pos === 0 && !pending && bar.close > trend) {
-        const shares = Math.trunc((nav * 0.12) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.12, bar.close);
         if (shares > 0) {
           this.submit({
             instrument: inst,

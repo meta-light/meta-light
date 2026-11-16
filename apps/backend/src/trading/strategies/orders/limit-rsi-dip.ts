@@ -40,7 +40,7 @@ export class LimitRSIDipBuyer extends OrdersStrategy {
       const pending = this.hasPending(inst);
 
       if (pos === 0 && !pending && value < 40) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0) {
           this.submit({
             instrument: inst,

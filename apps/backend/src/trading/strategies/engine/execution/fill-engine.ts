@@ -1,10 +1,3 @@
-// Same-bar convention: daily bars do not reveal the intrabar path, so stops
-// are evaluated before limits, and limits before markets. Opening fills see
-// only the previous bar's HLCV for slippage and the lagged mean volume for
-// participation capacity.
-//
-// Ported from backtester/execution/fill_engine.py (QuantJourney Backtester, Apache 2.0)
-
 import { randomUUID } from 'node:crypto';
 import type {
   FillEngine as CoreFillEngine,
@@ -30,16 +23,12 @@ export interface FillEngineOptions {
   slippage?: Slippage;
   commission?: CommissionModel;
   fillAt?: FillAt;
-  /** Max fraction of bar volume one instrument can fill per bar. `undefined` means uncapped. */
   maxVolumeParticipation?: number;
   volumeLookback?: number;
   expectedOpenVolumeFraction?: number;
   notionalFn?: (instrument: string, price: number, quantity: number) => number;
-  /** Return a reason string to reject an order at submit time. */
   preSubmitCheck?: (order: ExecOrder) => string | null | undefined;
-  /** Replaces the default `price > 0` check (e.g. to allow negative futures prices). */
   priceValidator?: (instrument: string, value: number) => boolean;
-  /** Return a reason string to reject a fill. Receives price, quantity and incremental commission. */
   preFillCheck?: (
     order: ExecOrder,
     price: number,
@@ -59,7 +48,6 @@ const ORDER_PRIORITY: Partial<Record<OrderType, number>> = {
   stop_limit: 1,
   stop_trail: 2,
   stop_trail_limit: 3,
-  // OCO may carry a protective stop leg, so it sits with the stop family.
   oco: 4,
   limit: 5,
   market: 6,
@@ -68,7 +56,6 @@ const ORDER_PRIORITY: Partial<Record<OrderType, number>> = {
 
 const TIFS: readonly TimeInForce[] = ['GTC', 'DAY', 'GTD'];
 
-/** Compare bar timestamps: as dates when both parse, otherwise as strings (Python str ordering). */
 function compareTimestamps(left: string, right: string): number {
   const l = Date.parse(left);
   const r = Date.parse(right);
@@ -122,7 +109,6 @@ export class FillEngine implements CoreFillEngine {
     this.preFillCheck = opts.preFillCheck;
   }
 
-  /** Clear per-run state (orders, histories, OCO registry, commission state). Config is kept. */
   reset(): void {
     this.orders = new Map();
     this.ocoPairs = new Map();
@@ -174,7 +160,6 @@ export class FillEngine implements CoreFillEngine {
     return order.orderId;
   }
 
-  /** Decompose a bracket into an entry plus an OCO pair (take-profit, stop-loss) parked until entry fills. */
   private submitBracket(order: ExecOrder): string {
     const bracket = order.bracket;
     if (!bracket) throw new Error('Bracket order requires a BracketSpec');
@@ -235,9 +220,6 @@ export class FillEngine implements CoreFillEngine {
     return entry.orderId;
   }
 
-  // Cancel
-
-  /** Cancel an active order by id. Returns true if found and cancelled. */
   cancel(orderId: string): boolean {
     for (const list of this.orders.values()) {
       for (const order of list) {
@@ -250,7 +232,6 @@ export class FillEngine implements CoreFillEngine {
     return false;
   }
 
-  /** Cancel all active orders, optionally for one instrument. Returns the count cancelled. */
   cancelAll(filter?: string | { instrument?: string }): number {
     const instrument = typeof filter === 'string' ? filter : filter?.instrument;
     const targets = instrument ? [instrument] : [...this.orders.keys()];
@@ -266,9 +247,6 @@ export class FillEngine implements CoreFillEngine {
     return count;
   }
 
-  // Process bar
-
-  /** Process all pending orders for one instrument against one bar. Returns the fills generated. */
   processBar(instrument: string, bar: BarData): Fill[] {
     const fills: Fill[] = [];
     const previousBar = this.lastBarByInstrument.get(instrument);
@@ -281,7 +259,6 @@ export class FillEngine implements CoreFillEngine {
     let capacity = this.barFillCapacity(instrument, bar);
     const slippageBar = this.slippageReferenceBar(bar, previousBar);
 
-    // Stable sort of a snapshot: children appended below are not processed this bar.
     const ordered = [...orders].sort(
       (a, b) =>
         (ORDER_PRIORITY[a.orderType] ?? 99) -
@@ -300,8 +277,6 @@ export class FillEngine implements CoreFillEngine {
       this.recordFill(fill);
       if (capacity !== null) capacity = Math.max(0, capacity - fill.quantity);
 
-      // Activate bracket children on the first entry fill (partial or full) so
-      // the position is never unprotected; resize them on later partials.
       if (order.bracketChildren) {
         for (const child of order.bracketChildren)
           if (child.isActive) child.quantity = order.filledQty;
@@ -312,7 +287,6 @@ export class FillEngine implements CoreFillEngine {
         }
       }
 
-      // Any fill on an OCO leg cancels its sibling; a child fill cancels the parent remainder.
       if (order.ocoPairId) this.cancelOcoPair(order.ocoPairId, order.orderId);
       if (order.bracketParentOrderId !== undefined)
         this.cancel(order.bracketParentOrderId);
@@ -328,8 +302,6 @@ export class FillEngine implements CoreFillEngine {
     return fills;
   }
 
-  // Fill logic
-
   private tryFill(
     order: ExecOrder,
     bar: BarData,
@@ -337,7 +309,6 @@ export class FillEngine implements CoreFillEngine {
     slippageBar: BarData,
   ): Fill | null {
     if (!this.barSupportsOrder(order, bar)) return null;
-    // Ratchet the trail anchor first so the stop is live from the first bar.
     if (
       order.orderType === 'stop_trail' ||
       order.orderType === 'stop_trail_limit'
@@ -351,7 +322,6 @@ export class FillEngine implements CoreFillEngine {
     const fillQty = this.fillQuantity(order, maxQuantity);
     if (fillQty <= 0) return null;
 
-    // Limit-like orders are clamped back to price-or-better after slippage.
     const slipped = this.slippage.compute(
       theoretical,
       fillQty,
@@ -421,7 +391,6 @@ export class FillEngine implements CoreFillEngine {
       : value > 0;
   }
 
-  /** Validate only the prices this order's fill rule can observe. */
   private barSupportsOrder(order: ExecOrder, bar: BarData): boolean {
     const valid = (v: number): boolean => this.validPrice(order.instrument, v);
     const buy = order.side === 'buy';
@@ -449,7 +418,6 @@ export class FillEngine implements CoreFillEngine {
     }
   }
 
-  /** Pre-slippage fill price, or null if the order is not triggered on this bar. */
   private getTheoreticalPrice(order: ExecOrder, bar: BarData): number | null {
     const buy = order.side === 'buy';
     switch (order.orderType) {
@@ -481,7 +449,6 @@ export class FillEngine implements CoreFillEngine {
       case 'stop_trail_limit':
         return this.getTrailingStopLimitPrice(order, bar);
       case 'oco': {
-        // Stop leg first, per the same-bar convention.
         const s = order.stopPrice;
         if (s !== undefined) {
           if (buy && bar.high >= s) return Math.max(s, bar.open);
@@ -531,7 +498,6 @@ export class FillEngine implements CoreFillEngine {
       : Math.max(fillPrice, limit);
   }
 
-  /** Charge commission on the cumulative order so per-order minimums apply once across partial fills. */
   private incrementalCommission(
     order: ExecOrder,
     price: number,
@@ -579,13 +545,11 @@ export class FillEngine implements CoreFillEngine {
     return order.side === 'sell' ? anchor - distance : anchor + distance;
   }
 
-  /** Activate on the stop, then fill only at or better than the limit. */
   private getStopLimitPrice(order: ExecOrder, bar: BarData): number | null {
     const s = order.stopPrice;
     if (s === undefined || order.limitPrice === undefined) return null;
     let reference = bar.open;
     if (!order.limitActivated) {
-      // On the activation bar the fill cannot reference prices from before the trigger.
       if (order.side === 'buy' && bar.high >= s)
         reference = Math.max(s, bar.open);
       else if (order.side === 'sell' && bar.low <= s)
@@ -638,7 +602,6 @@ export class FillEngine implements CoreFillEngine {
     return null;
   }
 
-  /** Sell trails ratchet up with the high; buy trails ratchet down with the low. */
   private updateTrailAnchor(order: ExecOrder, bar: BarData): void {
     const current = order.trailAnchor;
     if (order.side === 'sell') {
@@ -654,7 +617,6 @@ export class FillEngine implements CoreFillEngine {
       if (id !== exceptId) this.cancel(id);
   }
 
-  /** Resolve child prices that depend on the actual entry fill (pct-based TP/SL, stop-limit offset). */
   private prepareBracketChildren(entry: ExecOrder, entryFill: Fill): void {
     const bracket = entry.bracketSpec;
     if (!bracket || !entry.bracketChildren) return;
@@ -697,7 +659,6 @@ export class FillEngine implements CoreFillEngine {
       : Math.min(remaining, Math.max(maxQuantity, 0));
   }
 
-  /** Per-bar fill capacity under the participation cap; null when uncapped. Fails closed at 0. */
   private barFillCapacity(instrument: string, bar: BarData): number | null {
     const participation = this.maxVolumeParticipation;
     if (participation === undefined || participation === null) return null;
@@ -716,7 +677,6 @@ export class FillEngine implements CoreFillEngine {
     return Math.max(volume, 0) * participation;
   }
 
-  /** Expose only information available at the configured fill time. */
   private slippageReferenceBar(
     bar: BarData,
     previous: BarData | undefined,
@@ -772,7 +732,6 @@ export class FillEngine implements CoreFillEngine {
     filledThisBar: boolean,
   ): boolean {
     if (!order.isActive) return false;
-    // Bars with a fill do not count toward expiresAfterBars.
     if (!filledThisBar) order.barsLive += 1;
     const expire =
       this.normalizeTif(order) === 'DAY' ||
@@ -860,9 +819,6 @@ export class FillEngine implements CoreFillEngine {
     }
   }
 
-  // Queries
-
-  /** All active pending orders across instruments. */
   get pendingOrders(): ExecOrder[] {
     const out: ExecOrder[] = [];
     for (const list of this.orders.values())
@@ -870,7 +826,6 @@ export class FillEngine implements CoreFillEngine {
     return out;
   }
 
-  /** Every order ever submitted, including rejected and bracket children. */
   get orderHistory(): ExecOrder[] {
     return [...this.history];
   }

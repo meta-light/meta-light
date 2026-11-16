@@ -1,5 +1,3 @@
-// The engine manages the trailing anchor; the strategy never updates the stop.
-
 import { type Bar, OrdersStrategy, type StrategyConfig } from '../core/index';
 
 export const config: StrategyConfig = {
@@ -50,7 +48,7 @@ export class TrailingStopTrend extends OrdersStrategy {
       if (pos === 0 && this.hasTrail[inst]) this.hasTrail[inst] = false;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

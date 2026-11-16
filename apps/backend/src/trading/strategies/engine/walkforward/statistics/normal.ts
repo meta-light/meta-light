@@ -1,16 +1,3 @@
-// Helper for the port of backtester/walkforward/statistics (QuantJourney Backtester, Apache 2.0)
-//
-// Replaces scipy.stats.norm.cdf / norm.ppf.
-//
-// Accuracy (measured against scipy 1.x, z in [-37, 8], p in [1e-300, 1 - 1e-15]):
-//   normCdf: erfc by power series (|x| < 2.5) or Lentz continued fraction
-//         (|x| >= 2.5). Max relative error 2.3e-13 (deep lower tail), so far
-//         below 1e-15 absolute everywhere and full-range relative precision.
-//   normPpf: Acklam's rational approximation (relative error 1.15e-9) followed
-//         by one Halley step against normCdf. Max relative error 1.9e-14.
-//         The refinement always runs in the lower tail (via symmetry) so p
-//         close to 1 keeps its precision.
-
 const SQRT_PI = Math.sqrt(Math.PI);
 const SQRT2 = Math.SQRT2;
 const SQRT_2PI = Math.sqrt(2 * Math.PI);
@@ -19,7 +6,6 @@ export function erfc(x: number): number {
   if (Number.isNaN(x)) return NaN;
   if (x < 0) return 2 - erfc(-x);
   if (x < 2.5) {
-    // erf(x) = 2/sqrt(pi) * exp(-x^2) * sum_n 2^n x^(2n+1) / (2n+1)!!  (all terms positive)
     const x2 = x * x;
     let term = x;
     let total = x;
@@ -31,7 +17,6 @@ export function erfc(x: number): number {
     return 1 - (2 / SQRT_PI) * Math.exp(-x2) * total;
   }
   if (x > 27) return 0;
-  // erfc(x) = exp(-x^2)/sqrt(pi) * 1/(x + (1/2)/(x + 1/(x + (3/2)/(x + ...)))), modified Lentz.
   const tiny = 1e-300;
   let f = x;
   let c = x;
@@ -53,7 +38,6 @@ export function normCdf(z: number): number {
   return 0.5 * erfc(-z / SQRT2);
 }
 
-// Acklam coefficients.
 const A = [
   -3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2,
   1.38357751867269e2, -3.066479806614716e1, 2.506628277459239,
@@ -91,14 +75,12 @@ function acklam(p: number): number {
   );
 }
 
-/** Standard normal quantile (inverse CDF). Returns -Inf/Inf at 0/1 and NaN outside [0, 1]. */
 export function normPpf(p: number): number {
   if (Number.isNaN(p) || p < 0 || p > 1) return NaN;
   if (p === 0) return -Infinity;
   if (p === 1) return Infinity;
-  if (p > 0.5) return -normPpf(1 - p); // 1 - p is exact for p > 0.5
+  if (p > 0.5) return -normPpf(1 - p);
   const x = acklam(p);
-  // One Halley step: e = cdf(x) - p, u = e / pdf(x).
   const e = normCdf(x) - p;
   const u = e * SQRT_2PI * Math.exp((x * x) / 2);
   return x - u / (1 + (x * u) / 2);

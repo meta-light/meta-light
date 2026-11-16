@@ -1,5 +1,3 @@
-// Volatility is estimated on a strictly prior window (no look-ahead).
-
 import {
   crossAbove,
   equalWeightActive,

@@ -1,22 +1,12 @@
-// Ported from backtester/risk/vol_target.py (QuantJourney Backtester, Apache 2.0).
-//
-// Scales ALL weights by one scalar so the portfolio's realised volatility
-// matches a target.
-
 import type { Frame } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, annFactorFor, cloneFrame, nanStd, rescoreMask } from './util';
 
 export interface VolTargetOptions {
-  /** Annualised target vol, e.g. 0.15. */
   targetVol?: number;
-  /** Rolling window (bars) for the realised vol estimate. */
   lookback?: number;
-  /** Hard cap on the scale factor. */
   maxLeverage?: number;
-  /** When to recompute the scale: "BMS" (default, monthly), "D", "W-MON", "MS", "QS". */
   rebalanceFreq?: string;
-  /** Annualisation factor; defaults to sqrt(periodsPerYear). */
   annFactor?: number | null;
 }
 
@@ -59,7 +49,6 @@ export class VolTargetModel extends RiskModel {
         const portRets: number[] = [];
         for (let k = Math.max(0, i - this.lookback); k < i; k++) {
           const r = returns.values[k]!;
-          // pandas row sum skips NaN; an all-NaN row sums to 0.
           let s = 0;
           for (let j = 0; j < normW.length; j++) {
             const v = (retCols[j]! >= 0 ? r[retCols[j]!]! : NaN) * normW[j]!;

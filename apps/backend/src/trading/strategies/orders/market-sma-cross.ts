@@ -45,7 +45,7 @@ export class MarketSMACrossover extends OrdersStrategy {
       const prev = this.prevSignal[inst] ?? 0;
 
       if (signal === 1 && prev === 0 && pos === 0 && !this.hasPending(inst)) {
-        const shares = Math.trunc((nav * 0.18) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.18, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

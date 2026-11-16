@@ -1,5 +1,3 @@
-// Ported from backtester/walkforward/folds/__init__.py (QuantJourney Backtester, Apache 2.0)
-
 import type { ResolvedWalkForwardConfig } from '../config';
 import { AnchoredFoldScheme } from './anchored';
 import type { FoldScheme } from './base';

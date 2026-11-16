@@ -1,7 +1,3 @@
-// This tests FX data and portfolio logic. Weights mode does not model standard
-// lots, FX margin, rollover/swap points, bid/ask spread, or conversion of
-// non-USD PnL. Use the order example for contract-aware lot sizing.
-
 import {
   type Frame,
   isNum,
@@ -23,10 +19,6 @@ export const config: StrategyConfig = {
   indicators: [],
 };
 
-/**
- * Scale each row so absolute weights sum to 1 (`raw.div(raw.abs().sum(axis=1)
- * .replace(0, nan), axis=0).fillna(0)`). NaN cells end up as 0.
- */
 export function unitGross(raw: Frame): Frame {
   const gross = raw
     .map(Math.abs)

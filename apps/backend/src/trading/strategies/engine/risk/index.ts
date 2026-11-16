@@ -1,5 +1,3 @@
-// Ported from backtester/risk/__init__.py (QuantJourney Backtester, Apache 2.0).
-
 import type { RiskModel as RiskModelSpec, StrategyConfig } from '../../core/index';
 import { type RiskModel, RiskModelChain } from './base';
 import { InverseVolModel } from './inverse-vol';
@@ -15,10 +13,6 @@ export * from './risk-parity';
 export { rescoreMask } from './util';
 export * from './vol-target';
 
-/**
- * core's RiskModel config union widened with the options the Python classes
- * accept but core does not declare (all optional), plus inverse_vol.
- */
 export type ExtendedRiskModelSpec =
   | {
       type: 'vol_target';
@@ -74,11 +68,6 @@ export function buildRiskModel(
   }
 }
 
-/**
- * The overlay the engine applies for a config: the explicit riskModel if set,
- * else (weights mode with maxPositionSize) a per-instrument cap with no
- * leverage cap, else null.
- */
 export function defaultRiskModel(config: StrategyConfig): RiskModel | null {
   if (config.riskModel) return buildRiskModel(config.riskModel);
   if (
