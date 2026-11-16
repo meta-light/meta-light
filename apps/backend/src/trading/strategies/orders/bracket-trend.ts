@@ -48,7 +48,7 @@ export class BracketTrend extends OrdersStrategy {
       if (pos === 0 && this.hasBracket[inst]) this.hasBracket[inst] = false;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0) {
           this.submit({
             instrument: inst,

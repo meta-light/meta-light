@@ -67,7 +67,7 @@ export class OCODipOrBreakout extends OrdersStrategy {
       if (pos === 0 && !this.ocoLive[inst]) {
         if (count % 5 !== 0) continue;
 
-        const shares = Math.trunc((nav * 0.1) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.1, bar.close);
         if (shares <= 0) continue;
 
         const ocoPairId = `${inst}_${compactDate(date)}_dip_or_breakout`;

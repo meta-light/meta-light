@@ -21,7 +21,7 @@ export const config: StrategyConfig = {
     frequency: 'BME',
     maxDrawdownTrigger: 0.15,
     maxDrawdownAction: 'flatten',
-    circuitBreakerCooldownDays: 10, // wait 10 trading days before re-engaging
+    circuitBreakerCooldownDays: 10,
   },
   indicators: [
     { function: 'SMA', priceCols: ['close'], params: { periods: [50, 200] } },

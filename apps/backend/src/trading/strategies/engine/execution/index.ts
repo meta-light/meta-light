@@ -1,5 +1,3 @@
-// Ported from backtester/execution/__init__.py (QuantJourney Backtester, Apache 2.0)
-
 export * from './order-types';
 export * from './commission';
 export * from './slippage';

@@ -21,7 +21,6 @@ export const config: StrategyConfig = {
   commission: { type: 'per_share', costPerShare: 0.005, minPerOrder: 1.0 },
 };
 
-/** Max of `xs[start:end]` skipping NaN, or NaN if none are valid. */
 function windowMax(xs: number[], start: number, end: number): number {
   const valid = xs.slice(start, end).filter(isNum);
   return valid.length ? Math.max(...valid) : NaN;
@@ -70,7 +69,7 @@ export class StopBreakoutEntry extends OrdersStrategy {
         const priorHigh = windowMax(close.col(inst), idx - 20, idx);
         if (Number.isNaN(priorHigh)) continue;
         const stopPrice = round2(priorHigh * 1.002);
-        const shares = Math.trunc((nav * 0.1) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.1, bar.close);
         if (shares > 0) {
           this.submit({
             instrument: inst,

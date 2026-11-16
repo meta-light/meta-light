@@ -1,8 +1,3 @@
-// Strength is 0.6 x min(total / 5, 1) and at most 3 patterns can fire on one
-// bar (strength <= 0.36), so the old config's 0.5 threshold never triggers
-// and this strategy never trades. Kept as-is for parity; lower THRESHOLD to
-// make it usable.
-
 import {
   equalWeightActive,
   type Frame,

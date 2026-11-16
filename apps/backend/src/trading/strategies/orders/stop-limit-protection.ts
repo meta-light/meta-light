@@ -1,6 +1,3 @@
-// A stop-limit exit avoids selling below the limit price, but it can remain
-// unfilled after a gap. That fill risk is the point of this example.
-
 import { type Bar, OrdersStrategy, round2, type StrategyConfig } from '../core/index';
 
 export const config: StrategyConfig = {
@@ -51,7 +48,7 @@ export class StopLimitProtection extends OrdersStrategy {
       if (pos === 0 && this.hasStopLimit[inst]) this.hasStopLimit[inst] = false;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

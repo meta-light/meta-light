@@ -1,8 +1,3 @@
-// At 30m the session has ~13 bars, so a 12-bar high is roughly a prior-session
-// breakout. A gap through the stop fills at the worse open, not the stop price.
-// yfinance serves at most ~60 calendar days of 30-minute bars, so use
-// `recentPeriod(55)` from core for a rolling window instead of fixed dates.
-
 import {
   type Bar,
   isNum,
@@ -74,7 +69,6 @@ export class IntradayStopBreakout30m extends OrdersStrategy {
         continue;
       }
 
-      // pandas .max() skips NaN and gives NaN for an all-NaN window.
       const window = high
         .col(inst)
         .slice(posIdx - LOOKBACK, posIdx)
@@ -82,7 +76,7 @@ export class IntradayStopBreakout30m extends OrdersStrategy {
       const priorHigh = window.length ? Math.max(...window) : NaN;
       if (Number.isNaN(priorHigh) || priorHigh <= 0) continue;
 
-      const shares = Math.trunc((nav * 0.2) / close);
+      const shares = this.unitsFor(inst, nav * 0.2, close);
       if (shares > 0) {
         this.submit({
           instrument: inst,

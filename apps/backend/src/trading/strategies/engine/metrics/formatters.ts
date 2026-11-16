@@ -1,11 +1,5 @@
-// Ported from backtester/metrics/formatters.py, metrics/utils.py and
-// metrics/configs/portfolio_perf.py (QuantJourney Backtester, Apache 2.0).
-//
-// Console colouring and tables are not ported.
-
 type Formatter = (v: unknown) => string;
 
-/** Python's `f"{v:.Nf}"`, including "inf", "-inf" and "nan". */
 function fixed(v: unknown, digits: number, grouped = false): string {
   if (typeof v !== 'number') throw new TypeError('not a number');
   if (Number.isNaN(v)) return 'nan';
@@ -32,13 +26,13 @@ const currency =
       : `$${fixed(v, digits, true)}`;
 
 export const METRIC_FORMATTERS: Record<string, Formatter> = {
-  percentage: (v) => `${fixed(num(v) * 100, 2)}%`, // decimal input: 0.35 -> "35.00%"
-  percentage_raw: (v) => `${fixed(v, 2)}%`, // already in percent: 18.5 -> "18.50%"
+  percentage: (v) => `${fixed(num(v) * 100, 2)}%`,
+  percentage_raw: (v) => `${fixed(v, 2)}%`,
   ratio: (v) => fixed(v, 2),
   ratio4: (v) => fixed(v, 4),
   ratio6: (v) => fixed(v, 6),
-  currency: currency(2), // -1234 -> "-$1,234.00"
-  currency0: currency(0), // -1234 -> "-$1,234"
+  currency: currency(2),
+  currency0: currency(0),
   days: (v) => `${fixed(v, 0)} days`,
   duration: (v) => String(v),
   date: (v) => String(v),
@@ -49,7 +43,6 @@ export const METRIC_FORMATTERS: Record<string, Formatter> = {
   nan: (v) => (typeof v === 'number' && Number.isNaN(v) ? 'nan' : fixed(v, 2)),
 };
 
-/** Format one value. Null, NaN and effectively-zero numbers give "". */
 export function formatMetric(value: unknown, formatterType: string): string {
   if (
     value === null ||
@@ -73,7 +66,6 @@ export function formatMetric(value: unknown, formatterType: string): string {
 
 export type MetricPath = readonly [path: string, formatter: string];
 
-/** Report layout: section -> label -> [dotted path into the results, formatter]. */
 export const PORTFOLIO_PERF_METRICS: Record<
   string,
   Record<string, MetricPath>
@@ -130,7 +122,6 @@ export const PORTFOLIO_PERF_METRICS: Record<
 const isRecord = (v: unknown): v is Record<string, unknown> =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
-/** Whole years and leftover months between two dates (`relativedelta`). */
 function yearsMonths(start: string, end: string): string {
   const a = new Date(start);
   const b = new Date(end);
@@ -143,10 +134,6 @@ function yearsMonths(start: string, end: string): string {
   return `${Math.trunc(months / 12)}Y ${months % 12}M`;
 }
 
-/**
- * Look up a dotted path. Digit keys index arrays, "latest" takes the last
- * array element, and a missing key gives `fallback`.
- */
 export function getNestedValue(
   data: Record<string, unknown>,
   path: string,
@@ -181,7 +168,6 @@ export function getNestedValue(
   }
 }
 
-/** Formatted report: section -> label -> display string. */
 export function generateReportSections(
   results: Record<string, unknown>,
 ): Record<string, Record<string, string>> {

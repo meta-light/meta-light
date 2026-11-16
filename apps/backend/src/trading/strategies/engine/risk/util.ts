@@ -1,5 +1,3 @@
-// Ported from backtester/risk/base.py (QuantJourney Backtester, Apache 2.0).
-
 import { Frame, isNum } from '../../core/index';
 
 export function cloneFrame(f: Frame): Frame {
@@ -10,14 +8,12 @@ export function cloneFrame(f: Frame): Frame {
   );
 }
 
-/** pandas Series.sum() of absolute values: NaN skipped, empty = 0. */
 export function absSum(xs: readonly number[]): number {
   let s = 0;
   for (const v of xs) if (isNum(v)) s += Math.abs(v);
   return s;
 }
 
-/** pandas Series.std() (ddof=1, NaN skipped). */
 export function nanStd(xs: readonly number[]): number {
   const v = xs.filter(isNum);
   if (v.length < 2) return NaN;
@@ -25,11 +21,9 @@ export function nanStd(xs: readonly number[]): number {
   return Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / (v.length - 1));
 }
 
-/** np.sign, with NaN passing through. */
 export const sign = (v: number): number =>
   Number.isNaN(v) ? NaN : v > 0 ? 1 : v < 0 ? -1 : 0;
 
-/** Annualisation factor: explicit value, else sqrt(periodsPerYear), default 252. */
 export function annFactorFor(
   annFactor: number | null | undefined,
   periodsPerYear: number | undefined,
@@ -44,7 +38,6 @@ function parseDate(d: string): Date {
   return new Date(Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!));
 }
 
-/** pandas `index.to_period(code)` key for M, Q and W (W-SUN: Monday to Sunday weeks). */
 function periodKey(date: string, code: 'M' | 'Q' | 'W'): string {
   const d = parseDate(date);
   const y = d.getUTCFullYear();
@@ -64,10 +57,6 @@ const FREQ_TO_PERIOD: Record<string, 'M' | 'Q' | 'W'> = {
   QS: 'Q',
 };
 
-/**
- * Rows where a model recomputes its scale or weights: every row for "D",
- * otherwise the first row of each calendar period (unknown codes = monthly).
- */
 export function rescoreMask(
   index: readonly string[],
   rebalanceFreq: string,

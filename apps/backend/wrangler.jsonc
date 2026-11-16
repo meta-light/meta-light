@@ -25,6 +25,16 @@
       }
     ]
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "carpcap",
+      "database_id": "e841a129-90ea-4c93-af10-986951c62ae9"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/5 * * * *", "7 * * * *", "30 12 * * *"]
+  },
   "exports": {
     "BackendContainer": {
       "type": "durable-object",
@@ -32,6 +42,13 @@
     }
   },
   "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "carpcap",
+        "database_id": "e841a129-90ea-4c93-af10-986951c62ae9"
+      }
+    ],
     "containers": [
       {
         "class_name": "BackendContainer",

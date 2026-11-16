@@ -1,10 +1,3 @@
-// Ported from backtester/portfolio/portf_calc.py and the metric assembly in
-// backtester/engines/performance.py (QuantJourney Backtester, Apache 2.0).
-//
-// Result keys keep the Python snake_case names so the report config in
-// formatters.ts can address them by the same dotted paths. Plots, HTML/JSON/CSV
-// output are not ported.
-
 import { type Frame, isNum, rolling } from '../../core/index';
 import {
   cummax,
@@ -27,9 +20,7 @@ import {
 } from './series';
 
 export interface CalcConfig {
-  /** Periods per year used for annualization. */
   daysPerYear: number;
-  /** Annual risk-free rate as a decimal, e.g. 0.04. Null means 0. */
   riskFreeRateAnnual?: number | null;
 }
 
@@ -39,12 +30,9 @@ export const DEFAULT_CALC_CONFIG: CalcConfig = {
 };
 
 export interface PortfolioSeries {
-  /** Daily portfolio returns (may start with a display-only 0). */
   returns: Series;
-  /** Observed returns for metrics, excluding that first 0. Defaults to `returns`. */
   returnsForMetrics?: Series;
   weights?: Frame | null;
-  /** Overrides `daysPerYear` when no config is passed (e.g. intraday books). */
   periodsPerYear?: number;
 }
 
@@ -115,11 +103,9 @@ const insufficient = (message = 'Insufficient data'): InsufficientData => ({
   data: null,
 });
 
-/** `compute_total_returns`: compounded return, NaN skipped. */
 export const totalReturn = (returns: readonly number[]): number =>
   nanProd(returns.map((r) => 1 + r)) - 1;
 
-/** `compute_annualized_returns`: annualized by row count over `daysPerYear`. */
 export function annualizedReturnByCount(
   returns: readonly number[],
   daysPerYear = 252,
@@ -129,14 +115,12 @@ export function annualizedReturnByCount(
   return (1 + totalReturn(returns)) ** (1 / years) - 1;
 }
 
-/** `compute_drawdowns`: (nav - running peak) / running peak. */
 export function drawdowns(returns: readonly number[]): number[] {
   const nav = cumprod(returns.map((r) => 1 + r));
   const peak = cummax(nav);
   return nav.map((v, i) => (v - peak[i]!) / peak[i]!);
 }
 
-/** `sharpe_ratio`: mean / std of excess returns, optionally annualized. */
 export function sharpeRatio(
   returns: readonly number[],
   riskFreeRate = 0,
@@ -171,7 +155,6 @@ export class PortfolioCalculations {
     return this.data.returns;
   }
 
-  /** Observed returns used for metrics, with inf/NaN dropped. */
   get metricReturns(): Series {
     return dropNaN(this.data.returnsForMetrics ?? this.data.returns);
   }
@@ -289,7 +272,6 @@ export class PortfolioCalculations {
     return annualize ? ratio * Math.sqrt(this.tradingDays) : ratio;
   }
 
-  /** Gross weight churn: sum(|diff(weights)|) per date, 0 on the first row. */
   computeGrossWeightChange(): Series {
     const w = this.weights;
     if (!w || !w.length) return { index: [], values: [] };
@@ -305,13 +287,11 @@ export class PortfolioCalculations {
     return { index: [...w.index], values };
   }
 
-  /** Half-turnover, so buys and sells are not double-counted. */
   computeTurnover(): Series {
     const g = this.computeGrossWeightChange();
     return { index: g.index, values: g.values.map((v) => v / 2) };
   }
 
-  /** Rolling Sortino using only the negative returns in each window. */
   computeRollingSortino(
     window = 252,
     riskFreeRate = 0.0,
@@ -329,7 +309,6 @@ export class PortfolioCalculations {
     return { index: r.index, values };
   }
 
-  /** Calendar-time CAGR: years = elapsed days / 365.25. */
   computeAnnualizedReturn(returns?: Series): number {
     const r = returns ?? this.returns;
     if (!r.values.length) return NaN;
@@ -428,10 +407,6 @@ export class PortfolioCalculations {
     };
   }
 
-  /**
-   * The public metric set the Python report computes, keyed by the Python
-   * method names. A metric that throws is recorded as null.
-   */
   computeMetricResults(meta: MetricMeta = {}): MetricResults {
     const safe = <T>(fn: () => T): T | null => {
       try {

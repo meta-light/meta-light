@@ -1,8 +1,3 @@
-// Yahoo symbols ending in "=F" are provider-managed continuous series. This
-// does not select dated contracts, control the roll rule, book roll slippage,
-// apply exchange margin, or calculate multiplier-based PnL. Use it for signal
-// research, not for an executable futures performance claim.
-
 import {
   type Frame,
   isNum,

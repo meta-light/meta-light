@@ -1,8 +1,3 @@
-// %B < -0.55 means the close is 4.2 sd below the 20-bar mean, but a point
-// inside its own 20-bar window can be at most sqrt(19) = 4.36 sd away. It
-// only fires after a near-flat window followed by a gap, so in practice
-// this never trades. Kept as-is for parity; lower THRESHOLD to make it usable.
-
 import {
   equalWeightActive,
   type Frame,

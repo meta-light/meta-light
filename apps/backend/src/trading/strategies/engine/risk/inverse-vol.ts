@@ -1,21 +1,11 @@
-// Ported from backtester/risk/inverse_vol.py (QuantJourney Backtester, Apache 2.0).
-//
-// Reweights instruments in proportion to 1 / realised vol, then rescales to
-// keep the original gross exposure. With blendAlpha the raw weight acts as
-// conviction (w_i / vol_i); without it only the sign of the raw weight is kept.
-
 import { type Frame, isNum, rolling, shift } from '../../core/index';
 import { RiskModel, type RiskMetadata } from './base';
 import { absSum, annFactorFor, cloneFrame, nanStd, sign } from './util';
 
 export interface InverseVolOptions {
-  /** Rolling window (bars) for per-asset vol. */
   lookback?: number;
-  /** Annualisation factor; defaults to sqrt(periodsPerYear). */
   annFactor?: number | null;
-  /** Floor on the annualised vol estimate. */
   minVol?: number;
-  /** Multiply raw weights by inverse vol (true) or use only their sign (false). */
   blendAlpha?: boolean;
 }
 
@@ -40,7 +30,6 @@ export class InverseVolModel extends RiskModel {
     const out = cloneFrame(weights);
     const ann = annFactorFor(this.annFactor, metadata?.periodsPerYear);
 
-    // Strictly-prior rolling vol (min 2 valid obs), aligned by row position.
     const vols = weights.columns.map((c) => {
       const j = returns.colIndex(c);
       if (j < 0) return weights.index.map(() => NaN);

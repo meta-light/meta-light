@@ -1,5 +1,3 @@
-// The stop is attached only after the fill is visible in current positions.
-
 import { type Bar, OrdersStrategy, round2, type StrategyConfig } from '../core/index';
 
 export const config: StrategyConfig = {
@@ -50,7 +48,7 @@ export class ProtectiveStopLoss extends OrdersStrategy {
       if (pos === 0 && this.hasStop[inst]) this.hasStop[inst] = false;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.15) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.15, bar.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

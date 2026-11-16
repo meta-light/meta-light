@@ -6,6 +6,7 @@ import {
 } from '../env';
 import { ensureSchema } from './ensure';
 import * as schema from './schema';
+import type { Sql } from './sql';
 
 export type Database = SqliteRemoteDatabase<typeof schema>;
 
@@ -117,6 +118,18 @@ async function remoteQuery(
   const rows = await d1Raw(sql, params);
   if (method === 'get') return { rows: (rows[0] ?? null) as any };
   return { rows: rows as any[] };
+}
+
+export function restSql(): Sql {
+  return {
+    async run(query, params = []) {
+      await postD1('query', query, params);
+    },
+    async all<T>(query: string, params: unknown[] = []): Promise<T[]> {
+      const statement = await postD1('query', query, params);
+      return Array.isArray(statement.results) ? (statement.results as T[]) : [];
+    },
+  };
 }
 
 export async function connectDatabase(): Promise<void> {

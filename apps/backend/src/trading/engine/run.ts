@@ -1,4 +1,9 @@
-import { pctChange, type StrategyConfig } from '../strategies/core/index';
+import {
+  pctChange,
+  type CommissionScheme,
+  type SlippageModel,
+  type StrategyConfig,
+} from '../strategies/core/index';
 import {
   Backtester,
   type BacktesterOptions,
@@ -6,6 +11,7 @@ import {
   BarData,
   type DataBar,
 } from '../strategies/engine/index';
+import { getContractSpec } from '../strategies/engine/execution/contract-spec';
 import { toMs } from '../strategies/engine/metrics/series';
 import { getStrategy, type StrategyEntry } from './registry';
 
@@ -16,22 +22,18 @@ export interface BarRequest {
   interval: string;
 }
 
-/** `end` is exclusive. */
 export type FetchBars = (request: BarRequest) => Promise<DataBar[]>;
 
 export interface RunOptions {
   strategy: string;
-  /** The first asset is the benchmark. */
   assets?: string[];
-  /** Inclusive start date; defaults to the template's. */
   start?: string;
-  /** Exclusive end date; defaults to the template's. */
   end?: string;
   interval?: string;
   capital?: number;
-  /** Takes precedence over `fetchBars`. */
   bars?: Record<string, readonly DataBar[]>;
   fetchBars?: FetchBars;
+  costs?: { commission?: CommissionScheme; slippage?: SlippageModel };
   backtester?: BacktesterOptions;
 }
 
@@ -48,16 +50,20 @@ export async function runStrategy(options: RunOptions): Promise<RunResult> {
   const { start, end } = config.backtestPeriod;
   const interval = config.granularity ?? '1d';
 
-  const bars = await loadBars(assets, { start, end, interval }, options);
-  const data = new BarData(bars, config.indicators);
+  const loaded = await loadBars(assets, { start, end, interval }, options);
+  const data = new BarData(loaded.bars, config.indicators);
 
   const benchmark = data.getFeature('adj_close').col(assets[0]!);
   const backtester = new Backtester(entry.create(config), data, {
     benchmarkReturns: { index: data.dates, values: pctChange(benchmark) },
+    periodsPerYear: periodsPerYear(interval, assets),
     ...options.backtester,
   });
   const result = backtester.run();
-  result.warnings.unshift(...assetClassWarnings(entry, assets));
+  result.warnings.unshift(
+    ...assetClassWarnings(entry, assets),
+    ...loaded.warnings,
+  );
   return { strategy: entry.id, config, result };
 }
 
@@ -100,6 +106,8 @@ function withOverrides(
     initialCapital: options.capital ?? base.initialCapital,
     benchmarkSymbol: assets[0]!,
     benchmarkName: `${assets[0]} buy and hold`,
+    ...(options.costs?.commission && { commission: options.costs.commission }),
+    ...(options.costs?.slippage && { slippage: options.costs.slippage }),
   };
 }
 
@@ -107,7 +115,7 @@ async function loadBars(
   assets: string[],
   period: Omit<BarRequest, 'asset'>,
   options: RunOptions,
-): Promise<Record<string, DataBar[]>> {
+): Promise<{ bars: Record<string, DataBar[]>; warnings: string[] }> {
   const { bars, fetchBars } = options;
   if (!bars && !fetchBars)
     throw new Error(`${options.strategy}: pass either bars or fetchBars`);
@@ -123,19 +131,51 @@ async function loadBars(
   );
   const from = toMs(period.start);
   const to = toMs(period.end);
-  return Object.fromEntries(
-    assets.map((asset, i) => {
-      const inPeriod = lists[i]!.filter((b) => {
-        const t = toMs(b.timestamp);
-        return t >= from && t < to;
-      });
-      if (!inPeriod.length)
-        throw new Error(
-          `No bars for ${asset} between ${period.start} and ${period.end}`,
-        );
-      return [asset, inPeriod];
-    }),
-  );
+  const inPeriod = assets.map((asset, i) => {
+    const list = lists[i]!.filter((b) => {
+      const t = toMs(b.timestamp);
+      return t >= from && t < to;
+    });
+    if (!list.length)
+      throw new Error(
+        `No bars for ${asset} between ${period.start} and ${period.end}`,
+      );
+    return list;
+  });
+
+  const firsts = inPeriod.map((list) => toMs(list[0]!.timestamp));
+  const common = Math.max(...firsts);
+  const warnings: string[] = [];
+  if (firsts.some((t) => t < common)) {
+    const late = assets.filter((_, i) => firsts[i] === common);
+    warnings.push(
+      `Trimmed start to ${inPeriod[firsts.indexOf(common)]![0]!.timestamp}, when ${late.join(', ')} first has data`,
+    );
+  }
+  return {
+    bars: Object.fromEntries(
+      assets.map((asset, i) => [
+        asset,
+        inPeriod[i]!.filter((b) => toMs(b.timestamp) >= common),
+      ]),
+    ),
+    warnings,
+  };
+}
+
+const MINUTES = { m: 1, h: 60, d: 1440 } as const;
+
+export function periodsPerYear(interval: string, assets: string[]): number {
+  const m = /^(\d+)(m|h|d|wk?|mo)$/.exec(interval.trim().toLowerCase());
+  if (!m) return 252;
+  const n = Number(m[1]);
+  const unit = m[2]!;
+  if (unit === 'mo') return Math.max(1, Math.round(12 / n));
+  if (unit === 'w' || unit === 'wk') return Math.max(1, Math.round(52 / n));
+  const minutes = n * MINUTES[unit as keyof typeof MINUTES];
+  const crypto = assets.every((a) => getContractSpec(a).assetClass === 'crypto');
+  const [days, minutesPerDay] = crypto ? [365, 1440] : [252, 390];
+  return Math.max(1, Math.round(days * Math.max(1, minutesPerDay / minutes)));
 }
 
 const SYMBOL_SUFFIX = { fx: '=X', futures: '=F' } as const;

@@ -1,27 +1,15 @@
-// Ported from backtester/execution/contract_spec.py (QuantJourney Backtester, Apache 2.0)
-//
-// Local subset of the execution ContractSpec, kept here so portfolio
-// accounting has no dependency on the execution module. Any object carrying
-// `multiplier` (such as the core ContractSpec) is accepted and filled with
-// the Python defaults.
-
 export type AssetClass = 'equity' | 'future' | 'fx' | 'crypto' | 'option';
 
 export interface PortfolioContractSpec {
   symbol: string;
   assetClass: AssetClass;
-  /** 1 for equity/crypto, contract multiplier for futures. */
   multiplier: number;
-  /** 100,000 for FX standard lots, 1 otherwise. */
   lotSize: number;
-  /** Margin per contract or lot; 0 means full notional. */
   margin: number;
-  /** Inverse (coin-margined) contract: notional = |q| * multiplier / price. */
   inverse: boolean;
   quoteCurrency: string;
 }
 
-/** What a resolver may return. Missing fields take the Python defaults. */
 export interface ContractSpecInput {
   multiplier: number;
   symbol?: string;
@@ -44,7 +32,6 @@ function currencyCode(value: string, field: string): string {
   return code;
 }
 
-/** Fill defaults and validate economic inputs (ContractSpec.__post_init__ subset). */
 export function resolveContractSpec(
   instrument: string,
   input: ContractSpecInput,
@@ -70,7 +57,6 @@ export function resolveContractSpec(
   return spec;
 }
 
-/** FX contracts must settle in the portfolio currency (no FX conversion). */
 export function validateSettlementCurrency(
   spec: PortfolioContractSpec,
   settlementCurrency: string,
@@ -85,7 +71,6 @@ export function validateSettlementCurrency(
   }
 }
 
-/** Absolute notional exposure of a position. */
 export function notional(
   spec: PortfolioContractSpec,
   quantity: number,
@@ -96,7 +81,6 @@ export function notional(
   return Math.abs(quantity) * Math.abs(price) * spec.multiplier * spec.lotSize;
 }
 
-/** Collateral required: margin per unit when set, otherwise full notional. */
 export function marginRequired(
   spec: PortfolioContractSpec,
   quantity: number,

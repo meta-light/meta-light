@@ -73,14 +73,12 @@ export function kellyCriterionNewton(
   }
 
   const normalized = normalizeProbabilities(probabilities);
-  // Zero-probability outcomes contribute nothing to growth and must not limit the domain.
   const live = odds
     .map((odd, i) => ({ b: odd, p: normalized[i] }))
     .filter((o) => o.p > 0);
   const b = live.map((o) => o.b);
   const p = live.map((o) => o.p);
 
-  // g(f) = sum p * ln(1 + b f) is concave, so g'(f) is decreasing. If g'(0) <= 0, don't bet.
   if (sum(b.map((odd, i) => odd * p[i])) <= 0) {
     return { optimalFraction: 0, expectedValue: 1 };
   }
@@ -92,8 +90,6 @@ export function kellyCriterionNewton(
     );
   }
 
-  // The optimum lies in (0, 1 / maxLoss): g' > 0 at 0 and g' -> -infinity at the domain edge.
-  // Newton steps that leave the bracket fall back to bisection, so f always stays in-domain.
   let lo = 0;
   let hi = 1 / maxLoss;
   let f = initialValue > lo && initialValue < hi ? initialValue : (lo + hi) / 2;

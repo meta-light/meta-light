@@ -1,7 +1,3 @@
-// Ported from backtester/walkforward/optimization/__init__.py (QuantJourney Backtester, Apache 2.0)
-//
-// The Optuna optimizer and the summary helpers are Python-only and not ported.
-
 export type {
   Objective,
   OptimizationProgress,
@@ -24,7 +20,6 @@ export {
 import type { Optimizer } from './base';
 import { GridSearchOptimizer } from './grid';
 
-/** Create an optimizer by method name. Only "grid" exists in TS (Optuna is Python-only). */
 export function optimizerFactory(
   method: string,
   paramGrid: Record<string, readonly unknown[]> = {},

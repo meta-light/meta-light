@@ -41,7 +41,6 @@ export class VolTargetMomentum extends WeightsStrategy {
     const cols = close.columns;
     return Frame.full(close.index, cols, 0).mapRows((row, i) => {
       if (i < LOOKBACK) return row;
-      // Only positive momentum qualifies; NaN and <= 0 are dropped.
       const momentum = close.values[i]!.map((v, j) => {
         const m = v / close.values[i - LOOKBACK]![j]! - 1;
         return m > 0 ? m : NaN;

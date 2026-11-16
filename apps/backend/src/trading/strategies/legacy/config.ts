@@ -1,6 +1,3 @@
-// The old service traded crypto tokens; the default universe keeps that, and
-// the engine runner swaps in whatever assets the caller asks for.
-
 import type { StrategyConfig } from '../core/index';
 
 export function legacyConfig(strategyName: string): StrategyConfig {

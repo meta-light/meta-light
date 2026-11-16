@@ -1,10 +1,3 @@
-// Fastest cadence in the intraday grid (1m -> 5m -> 30m -> 1h). At 1m,
-// turnover is high and costs dominate, so this is mostly a stress test of the
-// engine's intraday timestamp handling and signal-change rebalancing.
-//
-// The backtest window is pinned like the original. Swap in `recentPeriod(5)`
-// from ../core for a rolling window (yfinance serves ~7 days of 1m bars).
-
 import {
   crossAbove,
   equalWeightActive,

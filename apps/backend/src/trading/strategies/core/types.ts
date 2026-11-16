@@ -8,15 +8,12 @@ export interface Bar {
 }
 
 export interface ContractSpec {
-  /** Price multiplier (futures point value, FX units per price point). */
   multiplier: number;
-  /** Initial margin per contract, for futures. */
   margin?: number;
-  /** Units per standard lot, for FX. */
   lotSize?: number;
+  roundQuantity?(quantity: number): number;
 }
 
-/** Indicator columns the engine precomputes, e.g. SMA(50) -> "SMA_50_close". */
 export interface IndicatorSpec {
   function: 'SMA' | 'EMA' | 'RSI';
   priceCols: string[];
@@ -34,11 +31,6 @@ export type CommissionScheme =
       maxPct?: number;
     };
 
-/**
- * When the weights engine rebalances. Frequencies use pandas offset codes:
- * "D" daily, "W" weekly (on `weekday`, 0 = Mon), "BME" business month-end,
- * "BQE" business quarter-end, `null` = only on triggers.
- */
 export interface RebalancePolicy {
   frequency: 'D' | 'W' | 'BME' | 'BQE' | null;
   weekday?: number;
@@ -75,7 +67,6 @@ export interface StrategyConfig {
   initialCapital: number;
   instruments: string[];
   backtestPeriod: { start: string; end: string };
-  /** Bar size for intraday templates, e.g. "1m", "15m", "1h". Daily if unset. */
   granularity?: string;
   benchmarkSymbol: string;
   benchmarkName: string;
@@ -124,9 +115,7 @@ export interface Order {
   limitPrice?: number;
   stopPrice?: number;
   limitOffset?: number;
-  /** Absolute trailing distance. */
   trailAmount?: number;
-  /** Fractional trailing distance (0.02 = 2%). */
   trailPercent?: number;
   bracket?: BracketSpec;
   ocoPairId?: string;
@@ -151,16 +140,10 @@ export interface WalkForwardConfig {
   trainMonths: number;
   testMonths: number;
   stepMonths: number;
-  /** Training days dropped next to each test window. */
   purgeDays: number;
-  /** Extra purge before OOS as a fraction of the in-sample length. */
   extraPreOosPurgePct?: number;
 }
 
-/**
- * "slice_diagnostics" scores in-sample slices of one full run (indicative
- * only). "per_fold_refit" rebuilds the strategy per fold for true OOS results.
- */
 export type WalkForwardMode = 'slice_diagnostics' | 'per_fold_refit';
 
 export interface FoldWindow {

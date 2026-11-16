@@ -1,6 +1,3 @@
-// RSI(14) below 13.5 only happens in sharp capitulations, so this trades
-// rarely. Kept as-is for parity; lower THRESHOLD to trade the usual 30/70.
-
 import {
   equalWeightActive,
   type Frame,

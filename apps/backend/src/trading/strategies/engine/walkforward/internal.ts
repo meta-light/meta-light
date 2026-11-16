@@ -1,9 +1,3 @@
-// Shared helpers for the port of backtester/walkforward (QuantJourney Backtester, Apache 2.0).
-// No single Python counterpart: replaces dateutil.relativedelta month math,
-// pandas DatetimeIndex slicing, Python/numpy seeded RNGs and warnings.warn.
-
-// ISO dates (YYYY-MM-DD) are compared lexically.
-
 function parseIso(date: string): [number, number, number] {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);
   if (!m)
@@ -17,7 +11,6 @@ function formatIso(y: number, m: number, d: number): string {
   return `${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
 
-/** Calendar month shift with end-of-month clamping, like `relativedelta(months=n)`. */
 export function addMonths(date: string, months: number): string {
   const [y, m, d] = parseIso(date);
   const total = y * 12 + (m - 1) + months;
@@ -27,14 +20,12 @@ export function addMonths(date: string, months: number): string {
   return formatIso(ny, nm, Math.min(d, lastDay));
 }
 
-/** Calendar day shift, like `+ pd.Timedelta(days=n)`. */
 export function addDays(date: string, days: number): string {
   const [y, m, d] = parseIso(date);
   const t = new Date(Date.UTC(y, m - 1, d + days));
   return formatIso(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
 }
 
-/** First index in sorted `dates` with `dates[i] >= value` (or `> value` when `strict`). */
 function lowerBound(
   dates: readonly string[],
   value: string,
@@ -51,7 +42,6 @@ function lowerBound(
   return lo;
 }
 
-/** Sorted trading dates inside the inclusive range `[from, to]`. */
 export function datesBetween(
   dates: readonly string[],
   from: string,
@@ -60,7 +50,6 @@ export function datesBetween(
   return dates.slice(lowerBound(dates, from), lowerBound(dates, to, true));
 }
 
-/** Last trading date strictly before `date`, or undefined. */
 export function lastDateBefore(
   dates: readonly string[],
   date: string,
@@ -69,13 +58,6 @@ export function lastDateBefore(
   return i > 0 ? dates[i - 1] : undefined;
 }
 
-// --- Seeded RNG -------------------------------------------------------------
-
-/**
- * Mulberry32 uniform generator on [0, 1). Deterministic per seed, but NOT the
- * same stream as Python's `random.Random` or numpy's `default_rng`, so sampled
- * outputs differ from the Python originals for the same seed.
- */
 export function seededRandom(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
@@ -87,7 +69,6 @@ export function seededRandom(seed: number): () => number {
   };
 }
 
-/** `k` distinct items drawn without replacement (partial Fisher-Yates). */
 export function sampleWithoutReplacement<T>(
   items: readonly T[],
   k: number,
@@ -102,11 +83,8 @@ export function sampleWithoutReplacement<T>(
   return pool.slice(0, k);
 }
 
-// --- Warnings ---------------------------------------------------------------
-
 const warned = new Set<string>();
 
-/** Print a deprecation-style warning once per message, like Python's default filter. */
 export function warnOnce(message: string): void {
   if (warned.has(message)) return;
   warned.add(message);

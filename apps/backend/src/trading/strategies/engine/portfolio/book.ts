@@ -1,14 +1,3 @@
-// Ported from backtester/portfolio/book.py (QuantJourney Backtester, Apache 2.0)
-//
-// StrategyBook is a capital allocator over strategy NAV sleeves, not a
-// security-level merger, so it never nets offsetting underlying positions
-// across strategies.
-//
-// Allocation timestamps are point-in-time. Dynamic allocations are
-// forward-filled onto sleeve timestamps and never backfilled. The rebalance
-// engine applies a target at the close of its timestamp, so it can affect
-// returns only from the following period.
-
 import { Frame } from '../../core/index';
 import { dateMs, isClose, type SeriesLike } from './frame-utils';
 import {
@@ -28,9 +17,7 @@ export type SleeveSeriesKind = 'nav' | 'returns';
 export type SleeveSource = SeriesLike | { netAssetValue: SeriesLike };
 
 export interface StrategyBookOptions {
-  /** Defaults to a daily policy. Close-of-period timing is preserved. */
   rebalancePolicy?: PortfolioRebalancePolicy;
-  /** Cost on implied sleeve-unit trades. Defaults to zero cost. */
   weightCostModel?: WeightCostModel;
   initialCapital?: number;
   seriesKind?: SleeveSeriesKind | Readonly<Record<string, SleeveSeriesKind>>;
@@ -52,22 +39,16 @@ export interface StrategyBookStats extends Partial<RebalanceStats> {
   underlying_security_netting: false;
 }
 
-/**
- * Auditable output of one StrategyBook run. `returns` includes cost drag,
- * including any initial allocation cost on its first row.
- */
 export interface StrategyBookResult {
   nav: number[];
   returns: number[];
   targetAllocations: Frame;
-  /** End-of-period sleeve allocations. */
   actualAllocations: Frame;
   sleeveUnits: Frame;
   sleeveValues: Frame;
   cash: number[];
   rebalanceFlags: boolean[];
   turnover: number[];
-  /** Book transaction cost per period (alias: transactionCosts). */
   costs: number[];
   sleeveNav: Frame;
   grossReturns: number[];
@@ -92,9 +73,6 @@ export class StrategyBook {
     SleeveSeriesKind | Record<string, SleeveSeriesKind>;
   private readonly periodsPerYear: number;
 
-  /**
-   * @param allocations static weights, or a point-in-time Frame (columns may be sparse, each forward-filled)
-   */
   constructor(
     sleeves: Readonly<Record<string, SleeveSource>>,
     allocations: Readonly<Record<string, number>> | Frame,
@@ -235,7 +213,6 @@ export class StrategyBook {
       : this.seriesKind[name]!;
   }
 
-  /** Validate an index and return its UTC milliseconds. */
   private static utcIndex(index: readonly string[], label: string): number[] {
     const ms = index.map(dateMs);
     for (let i = 1; i < ms.length; i++) {
@@ -290,7 +267,6 @@ export class StrategyBook {
     return { ms, labels: raw.index, nav };
   }
 
-  /** Union of sleeve timestamps over the common lifetime, forward-filled. */
   private prepareSleeveNav(): Frame {
     const series = this.names.map((name) =>
       this.coerceSleeve(name, this.sleeves[name]!),
@@ -311,7 +287,6 @@ export class StrategyBook {
     if (times.length === 0)
       throw new Error('sleeves have no common valuation timestamps');
 
-    // reindex(index).ffill(): carry the last observation at or before each time.
     const columns = series.map((s) => {
       let k = -1;
       return times.map((t) => {
@@ -349,8 +324,6 @@ export class StrategyBook {
       ) {
         throw new Error('allocations contain infinite values');
       }
-      // Missing sleeves are 0; each column is forward-filled independently up
-      // to each book timestamp and never backfilled.
       const columns = this.names.map((name) => {
         const j = raw.columns.indexOf(name);
         let k = -1;

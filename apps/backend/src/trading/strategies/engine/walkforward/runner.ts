@@ -1,13 +1,3 @@
-// Ported from backtester/walkforward/engine.py and backtester/walkforward/runner.py
-// (QuantJourney Backtester, Apache 2.0)
-//
-// Walk-forward orchestration. Two modes:
-//   slice_diagnostics: slice IS/OOS metrics out of one full-period run.
-//   per_fold_refit:    for each fold, optionally grid-search params on IS
-//                      (objective = IS Sharpe of a factory run), then run the
-//                      factory over [trainStart, oosEnd] and slice that.
-// persistence.py is not ported.
-
 import { createHash } from 'node:crypto';
 import type { Blotter } from '../metrics/index';
 import {
@@ -46,12 +36,10 @@ export interface WalkForwardRun {
 }
 
 export interface FactoryArgs {
-  /** Backtest period to run (inclusive, YYYY-MM-DD). */
   start: string;
   end: string;
   params: Params;
   baseConfig: Record<string, unknown>;
-  /** Set for fold runs; null for optimizer objective runs. */
   fold: Fold | null;
   trainStart: string;
   trainEnd: string;
@@ -101,7 +89,6 @@ function stdOf(xs: readonly number[]): number {
   return Math.sqrt(xs.reduce((s, v) => s + (v - m) ** 2, 0) / (xs.length - 1));
 }
 
-/** pandas Series.skew() (bias-corrected G1). */
 function skewOf(xs: readonly number[]): number {
   const n = xs.length;
   if (n < 3) return NaN;
@@ -112,7 +99,6 @@ function skewOf(xs: readonly number[]): number {
   return (Math.sqrt(n * (n - 1)) / (n - 2)) * (m3 / m2 ** 1.5);
 }
 
-/** pandas Series.kurt() (bias-corrected excess kurtosis). */
 function kurtOf(xs: readonly number[]): number {
   const n = xs.length;
   if (n < 4) return NaN;
@@ -124,7 +110,6 @@ function kurtOf(xs: readonly number[]): number {
   return ((n - 1) / ((n - 2) * (n - 3))) * ((n + 1) * g2 + 6);
 }
 
-/** Python json.dumps(obj, sort_keys=True) with default separators; NaN and Infinity as Python writes them. */
 function pyJson(value: unknown): string {
   if (value === null || value === undefined) return 'null';
   if (typeof value === 'number') {
@@ -144,7 +129,6 @@ function pyJson(value: unknown): string {
 const sha16 = (payload: unknown): string =>
   createHash('sha256').update(pyJson(payload)).digest('hex').slice(0, 16);
 
-/** Return-series window [start, end] from a NAV: pct_change, slice, drop NaN. */
 function windowReturns(
   run: WalkForwardRun,
   start: string,
@@ -172,7 +156,6 @@ export interface FoldRunnerOptions {
   rankStabilityTrials?: number;
 }
 
-/** Runs one fold and builds its FoldResult (runner.py FoldRunner). */
 export class FoldRunner {
   private run: WalkForwardRun | null;
   private readonly factory: BacktesterFactory | null;
@@ -269,7 +252,6 @@ export class FoldRunner {
       const f = this.fold;
       const start = day(f.trainStart);
       const end = day(f.effectiveIsEnd);
-      // grid._evaluate_backtest: run IS and score sharpe of the NAV.
       const result = await this.optimizer.optimize(async (params) => {
         const run = await this.factory!(
           this.factoryArgs(params, start, end, null),
@@ -362,7 +344,6 @@ export class FoldRunner {
       nTrades = trades.length;
       turnoverAnn = 0;
       if (nTrades > 0) {
-        // No PnL column in the TS blotter, so win rate and profit factor stay NaN.
         const notional = trades.reduce((s, t) => s + Math.abs(t.tradeValue), 0);
         const navWindow = run.nav.filter((_, i) =>
           inWindow(run.dates[i]!, start, end),
@@ -494,9 +475,7 @@ export class FoldRunner {
 }
 
 export interface WalkForwardEngineOptions {
-  /** Full-period run: required for slice mode, and supplies the trading calendar in refit mode. */
   run?: WalkForwardRun | null;
-  /** Trading calendar when no run is given (refit mode). */
   tradingDates?: readonly string[];
   factory?: BacktesterFactory | null;
   optimizer?: GridSearchOptimizer | null;
@@ -505,7 +484,6 @@ export interface WalkForwardEngineOptions {
   periodsPerYear?: number;
 }
 
-/** Walk-forward orchestrator (engine.py WalkForwardEngine). */
 export class WalkForwardEngine {
   readonly config: ResolvedWalkForwardConfig;
 

@@ -1,24 +1,12 @@
-// Ported from backtester/walkforward/folds/base.py (QuantJourney Backtester, Apache 2.0)
-//
-// Also holds the fold loop shared by rolling.py, expanding.py and anchored.py,
-// which in Python are three near-identical copies differing only in where the
-// IS window starts and how the minimum-IS check treats an empty window.
-
 import type { FoldWindow } from '../../../core/index';
 import type { ResolvedWalkForwardConfig } from '../config';
 import { addDays, addMonths, datesBetween } from '../internal';
 import { computePreOosPurge } from './purge';
 
-/**
- * One walk-forward fold. Dates are inclusive ISO trading dates. The effective
- * IS window is `[trainStart, effectiveIsEnd]` after the pre-OOS purge.
- */
 export interface Fold extends FoldWindow {
   scheme: string;
   effectiveIsEnd: string;
-  /** First excluded date, null when no dates are purged. */
   purgeStart: string | null;
-  /** Last excluded date (oosStart minus one trading day), null when no dates are purged. */
   purgeEnd: string | null;
 }
 
@@ -30,7 +18,6 @@ export interface FoldScheme {
   ): Fold[];
 }
 
-/** @internal Fold loop for the rolling, expanding and anchored schemes. */
 export function generateWindowFolds(
   cfg: ResolvedWalkForwardConfig,
   scheme: 'rolling' | 'expanding' | 'anchored',
@@ -41,7 +28,6 @@ export function generateWindowFolds(
   const folds: Fold[] = [];
   const rolling = scheme === 'rolling';
   let foldId = 0;
-  // Advance the cursor cumulatively (clamping each step), as relativedelta does.
   for (
     let oosCursor = addMonths(start, cfg.trainMonths);
     oosCursor <= end;

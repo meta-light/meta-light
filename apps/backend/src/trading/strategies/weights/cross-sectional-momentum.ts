@@ -1,5 +1,3 @@
-// Short borrow/financing is not modeled (research approximation).
-
 import {
   Frame,
   isNum,

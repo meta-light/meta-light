@@ -1,20 +1,9 @@
-// Ported from backtester/risk/pre_trade.py (QuantJourney Backtester, Apache 2.0).
-//
-// The default configuration is pass-through; margin, leverage and short limits
-// only bind when explicitly configured because they depend on account and venue.
-
 import type { ContractSpec, Order } from '../../core/index';
 
-/**
- * Minimal portfolio state the checks need (a local stand-in for the ledger's
- * PortfolioSnapshot).
- */
 export interface PortfolioSnapshot {
   cash: number;
   nav: number;
-  /** Instrument to signed quantity. */
   positions: Record<string, number>;
-  /** Instrument to latest mark; null or undefined means no usable price. */
   prices: Record<string, number | null | undefined>;
   marginUsed?: number;
   buyingPower?: number;
@@ -29,7 +18,6 @@ export interface RiskContractSpec {
 
 export type ContractSpecResolver = (instrument: string) => RiskContractSpec;
 
-/** Adapt core's ContractSpec, matching backtester ContractSpec.notional / margin_required. */
 export function riskSpecFromCore(
   spec: ContractSpec,
   extra: {
@@ -55,11 +43,8 @@ export function riskSpecFromCore(
   };
 }
 
-/** core Order plus the partial-fill state the Python Order carries. */
 export type PreTradeOrder = Order & {
-  /** Unfilled quantity; defaults to `quantity`. */
   remainingQty?: number;
-  /** Only active pending orders are reserved; defaults to true. */
   isActive?: boolean;
 };
 
@@ -85,7 +70,6 @@ export interface PreTradeRiskOptions {
   tolerance?: number;
 }
 
-/** Python's "{:.6g}" format. */
 function fmtG(v: number): string {
   if (!Number.isFinite(v))
     return Number.isNaN(v) ? 'nan' : v > 0 ? 'inf' : '-inf';
@@ -125,7 +109,6 @@ export class PreTradeRisk {
     this.tolerance = opts.tolerance ?? 1e-9;
   }
 
-  /** True when no portfolio limit can reject a finite order. */
   get isPassthrough(): boolean {
     return (
       this.maxMarginUtilization === null &&
@@ -134,7 +117,6 @@ export class PreTradeRisk {
     );
   }
 
-  /** Evaluate one order against projected positions and collateral. */
   evaluate(
     order: PreTradeOrder,
     portfolio: PortfolioSnapshot,
@@ -190,8 +172,6 @@ export class PreTradeRisk {
       projectedGrossLeverage: projectedGross,
     });
 
-    // Risk-reducing orders stay executable even when the book is already over
-    // an opening limit; closes and deleveraging must always go through.
     const riskReducing = projectedMargin <= currentMargin + this.tolerance;
     if (!riskReducing && this.maxMarginUtilization !== null) {
       const allowed = Math.max(portfolio.nav, 0) * this.maxMarginUtilization;
@@ -215,12 +195,6 @@ export class PreTradeRisk {
     return decision(true, null);
   }
 
-  /**
-   * Evaluate a trade list, applying approved deltas to later checks. When
-   * `allowCrossInstrumentNetting` is false, an approved order only affects
-   * later checks for the same instrument, so a planned sale cannot finance a
-   * purchase of something else before it fills.
-   */
   evaluateBatch<O extends PreTradeOrder>(
     orders: Iterable<O>,
     portfolio: PortfolioSnapshot,
@@ -268,7 +242,6 @@ export class PreTradeRisk {
     return { approvedOrders, rejectedOrders, decisions };
   }
 
-  /** [margin, grossLeverage] for a set of positions at current marks. */
   private projectedRequirements(
     positions: Record<string, number>,
     portfolio: PortfolioSnapshot,
@@ -279,7 +252,6 @@ export class PreTradeRisk {
     for (const [instrument, quantity] of Object.entries(positions)) {
       if (Math.abs(quantity) <= this.tolerance) continue;
       const price = portfolio.prices[instrument];
-      // A position without a usable mark cannot safely increase.
       if (price === null || price === undefined || !Number.isFinite(price))
         return [Infinity, Infinity];
       const spec = resolveSpec(instrument);

@@ -1,16 +1,3 @@
-// Ported from backtester/portfolio/instr_data.py and the indicator step in
-// backtester/core.py (QuantJourney Backtester, Apache 2.0).
-//
-// The SMA, EMA and RSI kernels below match quantjourney_ti
-// (_indicator_kernels.py), so feature values match what the Python engine fed
-// the original strategies, NaN handling included.
-//
-// About NaN: those kernels are compiled with numba fastmath, which drops their
-// isnan checks. The SMA window check still works, but EMA and RSI go NaN from
-// the first missing price onward (all NaN if it falls in the seed window).
-// We reproduce that on purpose by running them on the prefix before the
-// first NaN.
-
 import {
   type Bar,
   Frame,
@@ -33,7 +20,6 @@ const PRICE_FIELDS = [
 ] as const;
 type PriceField = (typeof PRICE_FIELDS)[number];
 
-/** Run `kernel` on the prices before the first NaN and pad the rest with NaN. */
 function untilFirstNaN(
   prices: readonly number[],
   kernel: (p: readonly number[]) => number[],
@@ -41,11 +27,9 @@ function untilFirstNaN(
   const cut = prices.findIndex((v) => Number.isNaN(v));
   if (cut < 0) return kernel(prices);
   const head = cut >= 1 ? kernel(prices.slice(0, cut)) : [];
-  // A window longer than the prefix still yields NaN, as the full-length guard would.
   return [...head, ...new Array<number>(prices.length - head.length).fill(NaN)];
 }
 
-/** Simple moving average. NaN wherever the window holds a NaN. */
 export function sma(prices: readonly number[], window: number): number[] {
   const n = prices.length;
   const out = new Array<number>(n).fill(NaN);
@@ -65,7 +49,6 @@ export function sma(prices: readonly number[], window: number): number[] {
   return out;
 }
 
-/** Exponential moving average seeded with the mean of the first window. */
 export function ema(prices: readonly number[], window: number): number[] {
   return untilFirstNaN(prices, (p) => emaKernel(p, window));
 }
@@ -83,7 +66,6 @@ function emaKernel(prices: readonly number[], window: number): number[] {
   return out;
 }
 
-/** Wilder RSI. */
 export function rsi(prices: readonly number[], period: number): number[] {
   return untilFirstNaN(prices, (p) => rsiKernel(p, period));
 }
@@ -135,15 +117,6 @@ const KERNELS: Record<
   RSI: rsi,
 };
 
-/**
- * Dates are the sorted union across instruments; an instrument with no bar
- * on a date gets NaN there.
- *
- * Features: open, high, low, close, volume, adj_close (falls back to close),
- * plus one `${FN}_${period}_${col}` frame per configured indicator, e.g.
- * `SMA_50_close`. An indicator on "close" is computed on adj_close, like the
- * Python engine.
- */
 export class BarData implements InstrumentData {
   readonly instruments: string[];
   readonly dates: string[];
@@ -207,7 +180,6 @@ export class BarData implements InstrumentData {
     }
   }
 
-  /** Fetch every instrument's bars (in parallel), then build. */
   static async fromFetch(
     instruments: readonly string[],
     fetch: BarFetcher,
@@ -220,7 +192,6 @@ export class BarData implements InstrumentData {
     );
   }
 
-  /** Every feature name this instance serves. */
   get featureNames(): string[] {
     return [...this.features.keys()];
   }
@@ -234,7 +205,6 @@ export class BarData implements InstrumentData {
     return frame;
   }
 
-  /** The bars for one date, keyed by instrument, skipping instruments with no close. */
   barsAt(date: string): Record<string, Bar> {
     const i = this.dates.indexOf(date);
     const out: Record<string, Bar> = {};

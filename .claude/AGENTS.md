@@ -41,3 +41,4 @@ with the pattern
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary Avoid introducing bugs.
+- **Comments**: Assume the reader can read the code. Only leave a comment when it says something the code can't: a non-obvious constraint, a gotcha, or why something that looks wrong is right. No narration, section banners, restated names or JSDoc that repeats the signature.

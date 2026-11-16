@@ -1,8 +1,3 @@
-// Public API of the backtest engine (ported from QuantJourney Backtester, Apache 2.0).
-//
-// Subpackages are exported as namespaces because several share type names
-// (e.g. PortfolioSnapshot, ContractSpecResolver in risk and portfolio).
-
 export {
   Backtester,
   type BacktesterOptions,

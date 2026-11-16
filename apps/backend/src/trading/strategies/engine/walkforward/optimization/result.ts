@@ -1,8 +1,3 @@
-// Ported from backtester/walkforward/optimization/result.py (QuantJourney Backtester, Apache 2.0)
-//
-// Optimizer-agnostic result containers. `summary()` / `summary_dict()` live in
-// Python's summary.py, which is not ported.
-
 export type Params = Record<string, unknown>;
 export type TrialState = 'COMPLETE' | 'PRUNED' | 'FAIL';
 
@@ -22,13 +17,11 @@ export interface OptimizationResultInit {
   bestObjective: number;
   nEvaluated: number;
   elapsedSeconds: number;
-  /** One row per trial: params plus `objective`. */
   allResults?: Array<Record<string, unknown>> | null;
   trials?: TrialRecord[];
   paramImportance?: Record<string, number>;
   convergenceCurve?: number[];
   paretoFront?: Array<Record<string, unknown>>;
-  /** `direction: "minimize"` flips `bestTrial` and `topK`. */
   studyMetadata?: Record<string, unknown>;
   nCompleted?: number;
   nPruned?: number;
@@ -52,7 +45,6 @@ export class OptimizationResult {
   nCompleted: number;
   nPruned: number;
   nFailed: number;
-  /** Every evaluated trial failed, so `bestParams` is empty. */
   allTrialsFailed: boolean;
   earlyStopped: boolean;
   earlyStopReason: string;
@@ -84,7 +76,6 @@ export class OptimizationResult {
     return this.trials.filter((t) => t.state === 'COMPLETE');
   }
 
-  /** Best COMPLETE trial in the study direction (first one wins ties), or null. */
   bestTrial(): TrialRecord | null {
     const sign = this.maximize() ? 1 : -1;
     let best: TrialRecord | null = null;
@@ -94,7 +85,6 @@ export class OptimizationResult {
     return best;
   }
 
-  /** Top `k` COMPLETE trials, best first (stable on ties). */
   topK(k = 10): TrialRecord[] {
     const sign = this.maximize() ? -1 : 1;
     return this.completed()

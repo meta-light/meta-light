@@ -1,5 +1,3 @@
-// Short borrow and financing are not modeled (research approximation).
-
 import {
   Frame,
   mean,
@@ -46,7 +44,7 @@ export class PairsRatioZScore extends WeightsStrategy {
 
     const ia = close.colIndex(a);
     const ib = close.colIndex(b);
-    let state = 0; // +1 = long A / short B, -1 = short A / long B
+    let state = 0;
     return Frame.full(close.index, close.columns, 0).mapRows((row, i) => {
       const zi = z[i]!;
       if (Number.isNaN(zi)) state = 0;

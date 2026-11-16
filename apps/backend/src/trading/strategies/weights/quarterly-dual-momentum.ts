@@ -34,7 +34,6 @@ export class QuarterlyDualMomentum extends WeightsStrategy {
     const close = this.data.getFeature('adj_close');
     return Frame.full(close.index, close.columns, 0).mapRows((row, i) => {
       if (i < LOOKBACK) return row;
-      // Absolute filter first (momentum > 0), then pick the strongest.
       const momentum = close.values[i]!.map(
         (v, j) => v / close.values[i - LOOKBACK]![j]! - 1,
       );

@@ -1,9 +1,3 @@
-// Yahoo `=F` data are provider-managed continuous series. Contract
-// multipliers are honored for sizing and PnL, but dated contract selection,
-// controlled rolls, tick rounding, variation margin and broker buying power
-// are not modeled. Cash accounting uses full notional; the margin figure is
-// only an extra sizing cap.
-
 import {
   averageTrueRange,
   type Bar,
@@ -24,7 +18,6 @@ export const config: StrategyConfig = {
   executionMode: 'orders',
   indicators: [],
   slippage: { type: 'fixed_bps', bps: 1.0 },
-  // Quantity-based fee proxy: $2.50 per contract, with no percentage cap.
   commission: {
     type: 'per_share',
     costPerShare: 2.5,
@@ -64,7 +57,6 @@ export function sizeFuturesContracts({
   return Math.max(0, Math.min(...limits));
 }
 
-/** Highest (or lowest) non-NaN value in `xs[from, to)`, NaN if none. */
 function windowExtreme(
   xs: readonly number[],
   from: number,
@@ -95,7 +87,7 @@ export class FuturesDonchianContracts extends OrdersStrategy {
     const { BREAKOUT_WINDOW, ATR_WINDOW } = FuturesDonchianContracts;
     const close = this.data.getFeature('adj_close');
     const index = close.rowIndex(date);
-    if (index < BREAKOUT_WINDOW) return; // also covers a missing date (-1)
+    if (index < BREAKOUT_WINDOW) return;
 
     const high = this.data.getFeature('high');
     const low = this.data.getFeature('low');

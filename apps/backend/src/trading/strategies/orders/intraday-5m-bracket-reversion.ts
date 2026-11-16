@@ -1,8 +1,3 @@
-// The 5m cadence is the sweet spot for intraday mean reversion: long enough
-// for RSI to be meaningful, short enough for several round trips per session.
-// yfinance serves at most ~60 calendar days of 5-minute bars, so use
-// `recentPeriod(30)` from core for a rolling window instead of fixed dates.
-
 import { type Bar, OrdersStrategy, round2, type StrategyConfig } from '../core/index';
 
 export const config: StrategyConfig = {
@@ -50,7 +45,7 @@ export class IntradayBracketReversion5m extends OrdersStrategy {
       if (pos === 0 && this.hasBracket[inst]) this.hasBracket[inst] = false;
 
       if (value < 30 && pos === 0 && !this.hasBracket[inst]) {
-        const shares = Math.trunc((nav * 0.2) / bar.close);
+        const shares = this.unitsFor(inst, nav * 0.2, bar.close);
         if (shares > 0) {
           this.submit({
             instrument: inst,

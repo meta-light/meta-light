@@ -13,7 +13,7 @@ export const config: StrategyConfig = {
   maxPositionSize: 0.35,
   rebalancePolicy: {
     frequency: 'D',
-    driftThreshold: 0.1, // only act when a weight drifts >10% from target
+    driftThreshold: 0.1,
     driftType: 'absolute',
     partialRebalance: true,
   },
@@ -36,7 +36,6 @@ export class DailyPartialDrift extends WeightsStrategy {
   }
 
   computeSignals(): Frame {
-    // NaN momentum -> 0, which `m > 0` already gives.
     return this.momentum().map((m) => (m > 0 ? 1 : 0));
   }
 

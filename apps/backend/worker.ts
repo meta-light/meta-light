@@ -1,11 +1,30 @@
 import { DurableObject } from 'cloudflare:workers';
+import { FAST_JOBS, HOURLY_JOBS, runJobs } from './src/collect/collectors';
+import { ensureRecorder } from './src/database/recorder';
+import type { Sql } from './src/database/sql';
 
 const PORT = 3000;
 const SLEEP_AFTER_MS = 60_000;
 
 interface Env {
   BACKEND: DurableObjectNamespace<BackendContainer>;
+  DB: D1Database;
   [key: string]: unknown;
+}
+
+const FAST_CRON = '*/5 * * * *';
+const HOURLY_CRON = '7 * * * *';
+const PAPER_CRON = '30 12 * * *';
+
+function d1Sql(db: D1Database): Sql {
+  return {
+    async run(query, params = []) {
+      await db.prepare(query).bind(...params).run();
+    },
+    async all<T>(query: string, params: unknown[] = []): Promise<T[]> {
+      return (await db.prepare(query).bind(...params).all<T>()).results;
+    },
+  };
 }
 
 function containerEnv(env: Env): Record<string, string> {
@@ -63,6 +82,22 @@ export class BackendContainer extends DurableObject<Env> {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    if (new URL(request.url).pathname.startsWith('/internal/')) return new Response('Not found', { status: 404 });
     return env.BACKEND.getByName('backend').fetch(request);
+  },
+
+  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
+    if (controller.cron === PAPER_CRON) {
+      const res = await env.BACKEND.getByName('backend').fetch('http://container/internal/paper', { method: 'POST' });
+      const body = await res.text();
+      console.log(`paper ${res.status}: ${body.slice(0, 2000)}`);
+      if (!res.ok) throw new Error(`paper run failed: ${res.status}`);
+      return;
+    }
+    const sql = d1Sql(env.DB);
+    await ensureRecorder(sql);
+    const jobs = controller.cron === HOURLY_CRON ? HOURLY_JOBS : controller.cron === FAST_CRON ? FAST_JOBS : {};
+    const results = await runJobs(sql, jobs, controller.scheduledTime);
+    for (const r of results) console.log(`${r.ok ? 'ok' : 'FAIL'} ${r.job} ${r.rows} rows ${r.ms}ms ${r.error ?? ''}`);
   },
 };

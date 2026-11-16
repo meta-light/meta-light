@@ -1,7 +1,3 @@
-// Short borrow/financing is not modeled (research approximation). Short-term
-// reversal is turnover-heavy, so enable slippage/commissions before drawing
-// conclusions.
-
 import {
   Frame,
   isNum,

@@ -1,8 +1,3 @@
-// Ported from backtester/portfolio/_time.py (QuantJourney Backtester, Apache 2.0)
-//
-// Dates are ISO strings ("YYYY-MM-DD" or "YYYY-MM-DDTHH:MM:SS[Z|+hh:mm]"), so
-// the tz normalization in _time.py reduces to exact-label reindexing here.
-
 import { Frame } from '../../core/index';
 
 export interface SeriesLike {
@@ -10,7 +5,6 @@ export interface SeriesLike {
   readonly values: readonly number[];
 }
 
-/** Parse an ISO date label to UTC milliseconds. Naive datetimes are read as UTC. */
 export function dateMs(label: string): number {
   const s = label.trim();
   let ms: number;
@@ -21,10 +15,8 @@ export function dateMs(label: string): number {
   return ms;
 }
 
-/** nan_to_num(x, nan=0, posinf=0, neginf=0). */
 export const finiteOr0 = (v: number): number => (Number.isFinite(v) ? v : 0);
 
-/** Reindex rows and columns by label; missing cells become NaN. */
 export function reindexFrame(
   frame: Frame,
   index: readonly string[],
@@ -41,7 +33,6 @@ export function reindexFrame(
   return new Frame(index, columns, values);
 }
 
-/** Reindex a series by label; missing labels become NaN. */
 export function reindexSeries(
   series: SeriesLike,
   index: readonly string[],
@@ -53,7 +44,6 @@ export function reindexSeries(
   });
 }
 
-/** Forward-fill NaN down each column. */
 export function ffillFrame(frame: Frame): Frame {
   const m = frame.columns.length;
   const last = new Array<number>(m).fill(NaN);
@@ -66,7 +56,6 @@ export function ffillFrame(frame: Frame): Frame {
   return new Frame(frame.index, frame.columns, values);
 }
 
-/** Forward-fill NaN in a 1-D array. */
 export function ffill(xs: readonly number[]): number[] {
   let last = NaN;
   return xs.map((v) => {
@@ -75,7 +64,6 @@ export function ffill(xs: readonly number[]): number[] {
   });
 }
 
-/** First difference by row; row 0 is copied from the input (diff().fillna(first row)). */
 export function diffRowsKeepFirst(frame: Frame): Frame {
   const values = frame.values.map((row, i) =>
     i === 0 ? row.slice() : row.map((v, j) => v - frame.values[i - 1]![j]!),
@@ -88,7 +76,6 @@ export function cumprod(xs: readonly number[]): number[] {
   return xs.map((v) => (acc *= v));
 }
 
-/** Sample standard deviation (ddof = 1), numpy semantics. */
 export function stdDdof1(xs: readonly number[]): number {
   const n = xs.length;
   if (n < 2) return NaN;
@@ -100,7 +87,6 @@ export function stdDdof1(xs: readonly number[]): number {
   return Math.sqrt(ss / (n - 1));
 }
 
-/** numpy.isclose(a, b, rtol, atol) for scalars (NaN never close). */
 export function isClose(
   a: number,
   b: number,
@@ -112,7 +98,6 @@ export function isClose(
   return Math.abs(a - b) <= atol + rtol * Math.abs(b);
 }
 
-/** Leftmost insertion point (numpy searchsorted side="left"). */
 export function bisectLeft(xs: readonly number[], x: number): number {
   let lo = 0;
   let hi = xs.length;
@@ -124,7 +109,6 @@ export function bisectLeft(xs: readonly number[], x: number): number {
   return lo;
 }
 
-/** Rightmost insertion point (numpy searchsorted side="right"). */
 export function bisectRight(xs: readonly number[], x: number): number {
   let lo = 0;
   let hi = xs.length;

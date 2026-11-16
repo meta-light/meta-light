@@ -45,7 +45,7 @@ export class SignalChangeRotationOrders extends OrdersStrategy {
       const pos = positions[inst] ?? 0;
 
       if (signal === 1 && prev === 0 && pos === 0) {
-        const shares = Math.trunc((nav * 0.18) / bars[inst]!.close);
+        const shares = this.unitsFor(inst, nav * 0.18, bars[inst]!.close);
         if (shares > 0)
           this.submit({
             instrument: inst,

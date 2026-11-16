@@ -1,5 +1,3 @@
-// Ported from backtester/walkforward/statistics/aggregation.py (QuantJourney Backtester, Apache 2.0)
-
 import { mean, std } from '../../../core/index';
 import { seededRandom } from '../internal';
 
@@ -8,10 +6,6 @@ export interface DatedSeries {
   values: number[];
 }
 
-/**
- * Concatenate per-fold OOS returns, sort by date and build NAV = cumprod(1 + r).
- * Overlapping dates (step < test) are averaged across folds with a warning.
- */
 export function aggregateOosReturns(foldOosReturns: readonly DatedSeries[]): {
   returns: DatedSeries;
   nav: DatedSeries;
@@ -66,7 +60,7 @@ export function computeCompositeMetrics(
   const years = n / tradingDays;
   const growth = oosReturns.reduce((p, r) => p * (1 + r), 1);
   const cagr = growth ** (1 / Math.max(years, 1e-9)) - 1;
-  const sd = std(oosReturns); // NaN for a single observation, as in pandas
+  const sd = std(oosReturns);
   const ann = Math.sqrt(tradingDays);
   const excess = mean(oosReturns) - riskFreeRate / tradingDays;
   const sharpe = sd > 0 ? (excess / sd) * ann : 0;
@@ -81,7 +75,6 @@ export function computeCompositeMetrics(
   return { sharpe, cagr, maxDd, volatility: sd * ann };
 }
 
-/** numpy.percentile with the default linear interpolation. */
 function percentile(sorted: readonly number[], q: number): number {
   const pos = (q / 100) * (sorted.length - 1);
   const lo = Math.floor(pos);
@@ -89,13 +82,6 @@ function percentile(sorted: readonly number[], q: number): number {
   return sorted[lo]! + (sorted[hi]! - sorted[lo]!) * (pos - lo);
 }
 
-/**
- * 5th / 95th percentile of the annualized Sharpe under a stationary block
- * bootstrap (Politis and Romano), expected block length round(sqrt(T)).
- * null when T < 20, any value is non-finite, or volatility is zero.
- * The RNG is seeded but differs from numpy's `default_rng`, so the interval
- * matches Python statistically, not bit for bit.
- */
 export function bootstrapSharpeCi(
   returns: readonly number[],
   options: {

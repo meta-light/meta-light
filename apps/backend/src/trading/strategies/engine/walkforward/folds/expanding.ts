@@ -1,5 +1,3 @@
-// Ported from backtester/walkforward/folds/expanding.py (QuantJourney Backtester, Apache 2.0)
-
 import type { ResolvedWalkForwardConfig } from '../config';
 import { type Fold, type FoldScheme, generateWindowFolds } from './base';
 

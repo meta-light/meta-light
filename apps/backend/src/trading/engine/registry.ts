@@ -1,6 +1,3 @@
-// Walk-forward templates are not here: they drive a template rather than
-// being one.
-
 import type { Strategy, StrategyConfig } from '../strategies/core/index';
 import * as adxTrend from '../strategies/weights/adx-trend';
 import * as bollingerBands from '../strategies/weights/bollinger-bands';
@@ -68,12 +65,7 @@ export interface StrategyEntry {
   config: StrategyConfig;
   minAssets: number;
   maxAssets?: number;
-  /** Logic names specific tickers, so only the template's universe works. */
   fixedUniverse?: boolean;
-  /**
-   * Sizing reads FX lot sizes or futures multipliers from the contract spec,
-   * which only resolve for `XXXYYY=X` / `XX=F` style symbols.
-   */
   assetClass?: 'fx' | 'futures';
   create(config: StrategyConfig): Strategy;
 }

@@ -1,5 +1,3 @@
-// Ported from backtester/execution/commission.py (QuantJourney Backtester, Apache 2.0)
-
 import type { CommissionScheme as CommissionConfigCore } from '../../core/index';
 
 export interface CommissionModel {
@@ -12,7 +10,6 @@ export class ZeroCommission implements CommissionModel {
   }
 }
 
-/** Fixed cost per share with a minimum and an optional cap as a fraction of notional. */
 export class PerShareCommission implements CommissionModel {
   constructor(
     readonly costPerShare = 0.005,
@@ -29,7 +26,6 @@ export class PerShareCommission implements CommissionModel {
   }
 }
 
-/** Commission as fixed basis points of notional. */
 export class FixedBpsCommission implements CommissionModel {
   constructor(
     readonly bps = 1.0,
@@ -41,7 +37,6 @@ export class FixedBpsCommission implements CommissionModel {
   }
 }
 
-/** Volume tiers as [threshold, ratePerShare] pairs. Quantity beyond the last tier is not charged. */
 export class TieredCommission implements CommissionModel {
   constructor(
     readonly tiers: ReadonlyArray<readonly [number, number]>,
@@ -65,7 +60,6 @@ export class TieredCommission implements CommissionModel {
   }
 }
 
-/** Mirrors the Python CommissionConfig (same field defaults). */
 export interface CommissionConfig {
   scheme?: 'zero' | 'per_share' | 'fixed_bps' | 'tiered';
   bps?: number;
@@ -101,11 +95,6 @@ export function buildCommission(cfg: CommissionConfig = {}): CommissionModel {
   }
 }
 
-/**
- * Build a model from a strategy config's `commission` field. Not in the
- * Python module: strategy configs there pass model instances directly.
- * Fields the core type omits fall back to the Python class defaults.
- */
 export function commissionFromConfig(
   cfg: CommissionConfigCore | undefined,
 ): CommissionModel {

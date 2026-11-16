@@ -1,5 +1,3 @@
-// Ported from backtester/portfolio/weight_cost.py (QuantJourney Backtester, Apache 2.0)
-
 import { Frame } from '../../core/index';
 import { diffRowsKeepFirst, isClose, reindexFrame } from './frame-utils';
 
@@ -7,25 +5,15 @@ export interface WeightCostBreakdown {
   quantityDeltas: Frame;
   tradeValues: Frame;
   transactionCosts: Frame;
-  /** Per-bar total cost in currency. */
   totalCost: number[];
-  /** totalCost / nav (0 where nav is 0). */
   totalCostPct: number[];
 }
 
 export interface WeightCostInput {
   actualWeights: Frame;
-  /** Raw marks; reindexed by label onto the weights frame. */
   prices: Frame;
-  /** NAV aligned to actualWeights.index. */
   nav: readonly number[];
-  /** Rebalance flags aligned to actualWeights.index. */
   rebalanceFlags: readonly boolean[];
-  /**
-   * Contract-aware unit notionals (supplied by the weight ledger). Python only
-   * passes this to FixedBpsWeightCostModel; here every model receives it and
-   * may ignore it.
-   */
   tradeUnitValues?: Frame;
 }
 
@@ -34,10 +22,6 @@ export interface WeightCostModel {
 }
 
 export class FixedBpsWeightCostModel implements WeightCostModel {
-  /**
-   * @param totalBps cost in basis points per unit of traded notional (1 = 1 bp)
-   * @param minTradeValue implied trades below this value stay in the audit but cost 0
-   */
   constructor(
     readonly totalBps = 1.0,
     readonly minTradeValue = 0.0,
@@ -60,7 +44,6 @@ export class FixedBpsWeightCostModel implements WeightCostModel {
         ? px.map(Math.abs)
         : reindexFrame(tradeUnitValues, index, columns);
 
-    // nav.reindex().ffill().fillna(0)
     const navAligned: number[] = [];
     let lastNav = NaN;
     for (let i = 0; i < n; i++) {
@@ -70,8 +53,6 @@ export class FixedBpsWeightCostModel implements WeightCostModel {
     }
     const flags = index.map((_, i) => rebalanceFlags[i] === true);
 
-    // |unit| with 0 -> NaN, then ffill: preserve the last quantity through gaps
-    // and use an absolute mark so a negative futures price cannot credit costs.
     const lastUnit = new Array<number>(m).fill(NaN);
     const safeUnit = unit.values.map((row) =>
       row.map((v, j) => {
@@ -95,7 +76,6 @@ export class FixedBpsWeightCostModel implements WeightCostModel {
     const deltas = diffRowsKeepFirst(targetQuantities).values.map((row, i) =>
       row.map((d, j) => {
         if (!flags[i]) return 0;
-        // A missing raw mark is not a tradeable bar.
         if (Number.isNaN(px.values[i]![j]!)) return 0;
         return d;
       }),
@@ -139,7 +119,6 @@ export class FixedBpsWeightCostModel implements WeightCostModel {
 export interface SolveRecursiveWeightCostsInput {
   actualWeights: Frame;
   prices: Frame;
-  /** Gross (pre-cost) portfolio returns aligned to actualWeights.index. */
   grossReturns: readonly number[];
   initialCapital: number;
   rebalanceFlags: readonly boolean[];
@@ -156,12 +135,6 @@ export interface SolveRecursiveWeightCostsResult {
   breakdown: WeightCostBreakdown;
 }
 
-/**
- * Solve a self-financing post-cost NAV and implied-trade path. Target
- * quantities depend on post-cost NAV and costs depend on quantity deltas, so
- * the fixed point is solved over the whole path: the returned NAV, quantities,
- * trade values and costs all describe one capital trajectory.
- */
 export function solveRecursiveWeightCosts(
   input: SolveRecursiveWeightCostsInput,
 ): SolveRecursiveWeightCostsResult {
@@ -232,7 +205,6 @@ export function solveRecursiveWeightCosts(
     );
   }
 
-  // Re-price once on the converged path and use those exact dollars.
   const breakdown = breakdownFor(candidate);
   const nav = navAfterCosts(
     returns,

@@ -1,5 +1,3 @@
-// Ported from backtester/execution/order_types.py (QuantJourney Backtester, Apache 2.0)
-
 import { randomUUID } from 'node:crypto';
 import type {
   Bar,
@@ -24,7 +22,6 @@ export type {
 export type OrderStatus =
   'pending' | 'partial' | 'filled' | 'cancelled' | 'rejected' | 'expired';
 
-/** OHLCV bar. `volume` defaults to 0 when absent, as in the Python BarData. */
 export type BarData = Bar;
 
 export interface Fill {
@@ -33,7 +30,6 @@ export interface Fill {
   side: OrderSide;
   quantity: number;
   fillPrice: number;
-  /** Absolute slippage per unit. */
   slippage: number;
   commission: number;
   timestamp: string;
@@ -44,13 +40,10 @@ export interface Fill {
 
 export interface OrderInit extends Order {
   orderId?: string;
-  /** Timestamp of the bar the order was created on. Set on first bar if absent. */
   createdAt?: string;
-  /** GTD expiry timestamp (inclusive). */
   expireAt?: string;
 }
 
-/** Python BracketSpec defaults: take-profit is a limit, stop-loss a stop. */
 export function bracketTakeProfitType(spec: BracketSpec): OrderType {
   return spec.takeProfitType ?? 'limit';
 }

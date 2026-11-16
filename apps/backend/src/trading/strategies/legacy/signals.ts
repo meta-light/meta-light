@@ -1,23 +1,5 @@
-// The old functions scored only the last bar of a price history. Here each
-// function returns the score and strength for every bar t, using only bars
-// 0..t, so the value at bar t equals the old function called on
-// `history.slice(0, t + 1)` (the parity spec checks this).
-//
-// Bars where the old code would have returned "not enough history" are NaN,
-// so a strategy stays flat there.
-//
-// Deviations from the old code, all deliberate:
-// - Stochastic and ADX take real high/low. The old code was fed close only.
-//   Passing the close series as high and low reproduces the old stochastic.
-// - ADX uses standard Wilder smoothing. The old version re-averaged a
-//   14-bar SMA each step and ended with ADX == DX.
-// - RSI on a perfectly flat window is 50, not 100 (engine kernel).
-// - Liquidity-based uses the old price-volatility fallback only. OHLCV bars
-//   carry no spread or pool-liquidity history.
-
 import { ema, rsi, sma } from '../engine/data';
 
-/** Score in [-1, 1] (sign = direction) and strength in [0, 1], per bar. */
 export interface LegacyScore {
   score: number[];
   strength: number[];
@@ -42,7 +24,6 @@ export type LegacySignalName =
   | 'Mean_Reversion'
   | 'Liquidity_Based';
 
-/** `SIGNAL_CONFIG` from the old config.ts (identical for every chain). */
 export const LEGACY_SIGNALS: Record<LegacySignalName, LegacySignalSpec> = {
   SMA_Crossover: { name: 'SMA_Crossover', threshold: 0.5, weight: 1.0 },
   EMA_Crossover: { name: 'EMA_Crossover', threshold: 0.5, weight: 1.1 },
@@ -82,12 +63,6 @@ function emptyScore(n: number): LegacyScore {
   return { score: nanArray(n), strength: nanArray(n) };
 }
 
-/**
- * Run `fn` on the part of each series after its leading NaNs and pad the
- * front back with NaN. Multi-asset frames hold leading NaNs for instruments
- * that list later than others; the engine kernels would otherwise give NaN
- * for the whole column.
- */
 function afterLeadingNaN(
   series: readonly (readonly number[])[],
   fn: (...xs: number[][]) => LegacyScore,
@@ -167,7 +142,6 @@ export function rsiScore(close: readonly number[]): LegacyScore {
     const r = rsi(c, 14);
     const out = emptyScore(c.length);
     r.forEach((v, t) => {
-      // The old `if (!rsi)` also skipped RSI == 0.
       if (Number.isNaN(v) || v === 0) {
         if (v === 0) {
           out.score[t] = 0;
@@ -231,11 +205,6 @@ export function stochasticScore(
   });
 }
 
-/**
- * Old `generateMACDSignal` (12, 26, 9). The old signal line was an EMA(9)
- * over only the last 10 MACD values, i.e. seeded with the mean of the 9
- * values before bar t and stepped once with bar t. Reproduced as-is.
- */
 export function macdScore(close: readonly number[]): LegacyScore {
   return afterLeadingNaN([close], (c) => {
     const fast = ema(c, 12);
@@ -268,7 +237,6 @@ export function macdScore(close: readonly number[]): LegacyScore {
   });
 }
 
-/** Old `generateBollingerSignal` (20, 2), population standard deviation. */
 export function bollingerScore(close: readonly number[]): LegacyScore {
   return afterLeadingNaN([close], (c) => {
     const period = 20;
@@ -288,7 +256,6 @@ export function bollingerScore(close: readonly number[]): LegacyScore {
         out.score[t] = clamp(-(pb - 1), -1, 0);
         out.strength[t] = Math.min(pb - 1, 1);
       } else {
-        // A flat window gives pb = NaN; the old code produced NaN here too.
         const bp = (pb - 0.5) * 2;
         out.score[t] = clamp(bp, -0.3, 0.3);
         out.strength[t] = Math.abs(bp) * 0.5;
@@ -298,11 +265,6 @@ export function bollingerScore(close: readonly number[]): LegacyScore {
   });
 }
 
-/**
- * ADX(14) trend signal with standard Wilder smoothing and real high/low.
- * Scoring is the old `generateADXSignal`: above ADX 25, direction from DI+
- * vs DI-, magnitude from ADX/50 times the DI spread.
- */
 export function adxScore(
   close: readonly number[],
   high: readonly number[] = close,
@@ -342,7 +304,6 @@ export function adxScore(
       const diMinus = sTR > 0 ? (100 * sMinus) / sTR : 0;
       const diSum = diPlus + diMinus;
       const dx = diSum > 0 ? (100 * Math.abs(diPlus - diMinus)) / diSum : 0;
-      // DX is available from t = period; ADX averages the first `period` DX.
       const k = t - period + 1;
       if (k < period) {
         dxSum += dx;
@@ -378,7 +339,6 @@ export function patternScore(close: readonly number[]): LegacyScore {
     const out = emptyScore(c.length);
     for (let t = 0; t < c.length; t++) {
       if (t < 4) {
-        // The old function returned no patterns (score 0) under 5 prices.
         out.score[t] = 0;
         out.strength[t] = 0;
         continue;
@@ -419,12 +379,6 @@ export function patternScore(close: readonly number[]): LegacyScore {
   });
 }
 
-/**
- * Old `generateLiquidityBasedSignal`, fallback branch: the mean absolute
- * return over the last 9 moves maps to a 0..100 "liquidity" score. Calm
- * (score > 70, i.e. under 3% average move) buys, wild (under 30, over 7%)
- * sells.
- */
 export function liquidityScore(close: readonly number[]): LegacyScore {
   return afterLeadingNaN([close], (c) => {
     const out = emptyScore(c.length);
@@ -448,7 +402,6 @@ export function liquidityScore(close: readonly number[]): LegacyScore {
   });
 }
 
-/** Old "not enough history" result: the aggregators treat it as 0 / 0. */
 const orZero = (v: number): number => (Number.isNaN(v) ? 0 : v);
 
 export function combinedMomentumScore(
@@ -506,7 +459,6 @@ function marketCondition(
   return { type: 'sideways', volatility };
 }
 
-/** Old `regimeWeights` (matches on the signal name, like the original). */
 function regimeWeight(type: Regime, s: string): number {
   if (type === 'trending') {
     if (/ADX|EMA|MACD|Momentum/.test(s)) return 1.4;
@@ -537,9 +489,7 @@ function weightedMedian(xs: { value: number; weight: number }[]): number {
 }
 
 export interface ConfluenceScore extends LegacyScore {
-  /** Fraction of signals whose strength met their threshold. */
   confidence: number[];
-  /** Any component signal with |score| > 0.1. */
   aligned: boolean[];
 }
 
@@ -547,7 +497,6 @@ const VOLATILITY_PENALTY = 0.5;
 const LIQUIDITY_BONUS = 0.1;
 const ALIGNMENT_BONUS = 0.1;
 const MIN_CONFLUENCE = 2;
-/** `calculateLiquidityScore` with no pool-liquidity history. */
 const DEFAULT_LIQUIDITY = 0.5;
 
 export function confluenceScore(
@@ -586,7 +535,6 @@ export function confluenceScore(
     const rows = parts.map(([spec, s]) => {
       const score = orZero(s.score[t]!);
       const strength = orZero(s.strength[t]!);
-      // The fallback liquidity signal never set timeframeAlignment.
       const aligned = spec.name !== 'Liquidity_Based' && Math.abs(score) > 0.1;
       const weight = Math.max(
         0,
@@ -629,7 +577,6 @@ export function confluenceScore(
   return out;
 }
 
-/** NaN (no data / warm-up) is flat. */
 export function longFlat(s: LegacyScore, threshold: number): number[] {
   let holding = false;
   return s.score.map((score, t) => {
