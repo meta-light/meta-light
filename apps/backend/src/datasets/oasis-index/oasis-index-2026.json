@@ -1,0 +1,580 @@
+{
+  "name": "Oasis Index 2026",
+  "description": "Cost of 5 domestic beers (0.5 l) and 2 packs of cigarettes, in US dollars, by city.",
+  "year": 2026,
+  "basket": {
+    "beers": 5,
+    "beerSizeLitres": 0.5,
+    "cigarettePacks": 2
+  },
+  "currency": "USD",
+  "source": {
+    "publisher": "Deutsche Bank Research Institute",
+    "report": "Mapping the World's Prices 2026 (10th edition)",
+    "published": "2026-07",
+    "figure": "Figure 42",
+    "underlyingData": "Numbeo (crowdsourced)",
+    "transcribedBy": "Mapular",
+    "url": "https://mapular.com/blog/oasis-index-2026"
+  },
+  "fields": {
+    "rank": "1 = most expensive",
+    "priceUsd": "Basket price in USD, 2026",
+    "pctOfNewYork": "Price as a percentage of New York's (New York = 100)",
+    "change2016To2026Pct": "Percent change in the USD price since 2016; null for cities new to the index"
+  },
+  "cities": [
+    {
+      "rank": 1,
+      "city": "Melbourne",
+      "country": "Australia",
+      "priceUsd": 111.2,
+      "pctOfNewYork": 206,
+      "change2016To2026Pct": 89
+    },
+    {
+      "rank": 2,
+      "city": "Sydney",
+      "country": "Australia",
+      "priceUsd": 109.5,
+      "pctOfNewYork": 203,
+      "change2016To2026Pct": 82
+    },
+    {
+      "rank": 3,
+      "city": "Auckland",
+      "country": "New Zealand",
+      "priceUsd": 68.6,
+      "pctOfNewYork": 127,
+      "change2016To2026Pct": 42
+    },
+    {
+      "rank": 4,
+      "city": "Wellington",
+      "country": "New Zealand",
+      "priceUsd": 67.1,
+      "pctOfNewYork": 124,
+      "change2016To2026Pct": 28
+    },
+    {
+      "rank": 5,
+      "city": "London",
+      "country": "United Kingdom",
+      "priceUsd": 63.9,
+      "pctOfNewYork": 118,
+      "change2016To2026Pct": 61
+    },
+    {
+      "rank": 6,
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "priceUsd": 62.8,
+      "pctOfNewYork": 116,
+      "change2016To2026Pct": 69
+    },
+    {
+      "rank": 7,
+      "city": "Dublin",
+      "country": "Ireland",
+      "priceUsd": 61.6,
+      "pctOfNewYork": 114,
+      "change2016To2026Pct": 65
+    },
+    {
+      "rank": 8,
+      "city": "Edinburgh",
+      "country": "United Kingdom",
+      "priceUsd": 60.5,
+      "pctOfNewYork": 112,
+      "change2016To2026Pct": 56
+    },
+    {
+      "rank": 9,
+      "city": "New York",
+      "country": "United States",
+      "priceUsd": 54.1,
+      "pctOfNewYork": 100,
+      "change2016To2026Pct": 39
+    },
+    {
+      "rank": 10,
+      "city": "Oslo",
+      "country": "Norway",
+      "priceUsd": 53.4,
+      "pctOfNewYork": 99,
+      "change2016To2026Pct": 21
+    },
+    {
+      "rank": 11,
+      "city": "Singapore",
+      "country": "Singapore",
+      "priceUsd": 50.3,
+      "pctOfNewYork": 93,
+      "change2016To2026Pct": 20
+    },
+    {
+      "rank": 12,
+      "city": "Tel Aviv-Yafo",
+      "country": "Israel",
+      "priceUsd": 49.1,
+      "pctOfNewYork": 91,
+      "change2016To2026Pct": 71
+    },
+    {
+      "rank": 13,
+      "city": "Chicago",
+      "country": "United States",
+      "priceUsd": 47.2,
+      "pctOfNewYork": 87,
+      "change2016To2026Pct": 43
+    },
+    {
+      "rank": 14,
+      "city": "Helsinki",
+      "country": "Finland",
+      "priceUsd": 46.2,
+      "pctOfNewYork": 85,
+      "change2016To2026Pct": 69
+    },
+    {
+      "rank": 15,
+      "city": "Vancouver",
+      "country": "Canada",
+      "priceUsd": 45.1,
+      "pctOfNewYork": 83,
+      "change2016To2026Pct": 47
+    },
+    {
+      "rank": 16,
+      "city": "Paris",
+      "country": "France",
+      "priceUsd": 43.5,
+      "pctOfNewYork": 80,
+      "change2016To2026Pct": 66
+    },
+    {
+      "rank": 17,
+      "city": "San Francisco",
+      "country": "United States",
+      "priceUsd": 43.0,
+      "pctOfNewYork": 80,
+      "change2016To2026Pct": 62
+    },
+    {
+      "rank": 18,
+      "city": "Brussels",
+      "country": "Belgium",
+      "priceUsd": 41.1,
+      "pctOfNewYork": 76,
+      "change2016To2026Pct": 84
+    },
+    {
+      "rank": 19,
+      "city": "Toronto",
+      "country": "Canada",
+      "priceUsd": 41.1,
+      "pctOfNewYork": 76,
+      "change2016To2026Pct": 44
+    },
+    {
+      "rank": 20,
+      "city": "Boston",
+      "country": "United States",
+      "priceUsd": 40.2,
+      "pctOfNewYork": 74,
+      "change2016To2026Pct": 27
+    },
+    {
+      "rank": 21,
+      "city": "Geneva",
+      "country": "Switzerland",
+      "priceUsd": 38.5,
+      "pctOfNewYork": 71,
+      "change2016To2026Pct": 44
+    },
+    {
+      "rank": 22,
+      "city": "Los Angeles",
+      "country": "United States",
+      "priceUsd": 38.4,
+      "pctOfNewYork": 71,
+      "change2016To2026Pct": 60
+    },
+    {
+      "rank": 23,
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "priceUsd": 38.1,
+      "pctOfNewYork": 71,
+      "change2016To2026Pct": 78
+    },
+    {
+      "rank": 24,
+      "city": "Zurich",
+      "country": "Switzerland",
+      "priceUsd": 36.7,
+      "pctOfNewYork": 68,
+      "change2016To2026Pct": 39
+    },
+    {
+      "rank": 25,
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "priceUsd": 36.0,
+      "pctOfNewYork": 67,
+      "change2016To2026Pct": 54
+    },
+    {
+      "rank": 26,
+      "city": "Montreal",
+      "country": "Canada",
+      "priceUsd": 34.2,
+      "pctOfNewYork": 63,
+      "change2016To2026Pct": 32
+    },
+    {
+      "rank": 27,
+      "city": "Stockholm",
+      "country": "Sweden",
+      "priceUsd": 28.7,
+      "pctOfNewYork": 53,
+      "change2016To2026Pct": 14
+    },
+    {
+      "rank": 28,
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "priceUsd": 28.6,
+      "pctOfNewYork": 53,
+      "change2016To2026Pct": 20
+    },
+    {
+      "rank": 29,
+      "city": "Berlin",
+      "country": "Germany",
+      "priceUsd": 28.2,
+      "pctOfNewYork": 52,
+      "change2016To2026Pct": 55
+    },
+    {
+      "rank": 30,
+      "city": "Munich",
+      "country": "Germany",
+      "priceUsd": 27.4,
+      "pctOfNewYork": 51,
+      "change2016To2026Pct": 48
+    },
+    {
+      "rank": 31,
+      "city": "Luxembourg",
+      "country": "Luxembourg",
+      "priceUsd": 26.3,
+      "pctOfNewYork": 49,
+      "change2016To2026Pct": 32
+    },
+    {
+      "rank": 32,
+      "city": "Abu Dhabi",
+      "country": "United Arab Emirates",
+      "priceUsd": 26.0,
+      "pctOfNewYork": 48,
+      "change2016To2026Pct": 31
+    },
+    {
+      "rank": 33,
+      "city": "Kuala Lumpur",
+      "country": "Malaysia",
+      "priceUsd": 25.9,
+      "pctOfNewYork": 48,
+      "change2016To2026Pct": 17
+    },
+    {
+      "rank": 34,
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "priceUsd": 25.9,
+      "pctOfNewYork": 48,
+      "change2016To2026Pct": -48
+    },
+    {
+      "rank": 35,
+      "city": "Frankfurt",
+      "country": "Germany",
+      "priceUsd": 25.7,
+      "pctOfNewYork": 48,
+      "change2016To2026Pct": 33
+    },
+    {
+      "rank": 36,
+      "city": "Milan",
+      "country": "Italy",
+      "priceUsd": 24.4,
+      "pctOfNewYork": 45,
+      "change2016To2026Pct": 26
+    },
+    {
+      "rank": 37,
+      "city": "Riyadh",
+      "country": "Saudi Arabia",
+      "priceUsd": 24.1,
+      "pctOfNewYork": 44,
+      "change2016To2026Pct": null
+    },
+    {
+      "rank": 38,
+      "city": "Budapest",
+      "country": "Hungary",
+      "priceUsd": 23.3,
+      "pctOfNewYork": 43,
+      "change2016To2026Pct": 86
+    },
+    {
+      "rank": 39,
+      "city": "Doha",
+      "country": "Qatar",
+      "priceUsd": 23.3,
+      "pctOfNewYork": 43,
+      "change2016To2026Pct": null
+    },
+    {
+      "rank": 40,
+      "city": "Vienna",
+      "country": "Austria",
+      "priceUsd": 22.1,
+      "pctOfNewYork": 41,
+      "change2016To2026Pct": 34
+    },
+    {
+      "rank": 41,
+      "city": "Prague",
+      "country": "Czech Republic",
+      "priceUsd": 22.0,
+      "pctOfNewYork": 41,
+      "change2016To2026Pct": 89
+    },
+    {
+      "rank": 42,
+      "city": "Rome",
+      "country": "Italy",
+      "priceUsd": 21.9,
+      "pctOfNewYork": 40,
+      "change2016To2026Pct": 17
+    },
+    {
+      "rank": 43,
+      "city": "Athens",
+      "country": "Greece",
+      "priceUsd": 21.7,
+      "pctOfNewYork": 40,
+      "change2016To2026Pct": 29
+    },
+    {
+      "rank": 44,
+      "city": "Barcelona",
+      "country": "Spain",
+      "priceUsd": 21.6,
+      "pctOfNewYork": 40,
+      "change2016To2026Pct": 32
+    },
+    {
+      "rank": 45,
+      "city": "Mexico City",
+      "country": "Mexico",
+      "priceUsd": 20.8,
+      "pctOfNewYork": 38,
+      "change2016To2026Pct": 92
+    },
+    {
+      "rank": 46,
+      "city": "Mumbai",
+      "country": "India",
+      "priceUsd": 20.1,
+      "pctOfNewYork": 37,
+      "change2016To2026Pct": 33
+    },
+    {
+      "rank": 47,
+      "city": "Lisbon",
+      "country": "Portugal",
+      "priceUsd": 20.1,
+      "pctOfNewYork": 37,
+      "change2016To2026Pct": 22
+    },
+    {
+      "rank": 48,
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "priceUsd": 20.0,
+      "pctOfNewYork": 37,
+      "change2016To2026Pct": 38
+    },
+    {
+      "rank": 49,
+      "city": "Madrid",
+      "country": "Spain",
+      "priceUsd": 19.9,
+      "pctOfNewYork": 37,
+      "change2016To2026Pct": 22
+    },
+    {
+      "rank": 50,
+      "city": "Warsaw",
+      "country": "Poland",
+      "priceUsd": 19.5,
+      "pctOfNewYork": 36,
+      "change2016To2026Pct": 63
+    },
+    {
+      "rank": 51,
+      "city": "Santiago",
+      "country": "Chile",
+      "priceUsd": 19.5,
+      "pctOfNewYork": 36,
+      "change2016To2026Pct": 28
+    },
+    {
+      "rank": 52,
+      "city": "Delhi",
+      "country": "India",
+      "priceUsd": 18.8,
+      "pctOfNewYork": 35,
+      "change2016To2026Pct": 36
+    },
+    {
+      "rank": 53,
+      "city": "Bangkok",
+      "country": "Thailand",
+      "priceUsd": 18.1,
+      "pctOfNewYork": 34,
+      "change2016To2026Pct": 17
+    },
+    {
+      "rank": 54,
+      "city": "Bangalore",
+      "country": "India",
+      "priceUsd": 18.1,
+      "pctOfNewYork": 34,
+      "change2016To2026Pct": 36
+    },
+    {
+      "rank": 55,
+      "city": "Tokyo",
+      "country": "Japan",
+      "priceUsd": 16.6,
+      "pctOfNewYork": 31,
+      "change2016To2026Pct": -31
+    },
+    {
+      "rank": 56,
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "priceUsd": 16.6,
+      "pctOfNewYork": 31,
+      "change2016To2026Pct": -13
+    },
+    {
+      "rank": 57,
+      "city": "Jakarta",
+      "country": "Indonesia",
+      "priceUsd": 16.4,
+      "pctOfNewYork": 30,
+      "change2016To2026Pct": 10
+    },
+    {
+      "rank": 58,
+      "city": "Johannesburg",
+      "country": "South Africa",
+      "priceUsd": 16.3,
+      "pctOfNewYork": 30,
+      "change2016To2026Pct": 30
+    },
+    {
+      "rank": 59,
+      "city": "Seoul",
+      "country": "South Korea",
+      "priceUsd": 16.3,
+      "pctOfNewYork": 30,
+      "change2016To2026Pct": -10
+    },
+    {
+      "rank": 60,
+      "city": "Taipei",
+      "country": "Taiwan",
+      "priceUsd": 16.0,
+      "pctOfNewYork": 30,
+      "change2016To2026Pct": 23
+    },
+    {
+      "rank": 61,
+      "city": "Bogota",
+      "country": "Colombia",
+      "priceUsd": 15.1,
+      "pctOfNewYork": 28,
+      "change2016To2026Pct": 98
+    },
+    {
+      "rank": 62,
+      "city": "Cape Town",
+      "country": "South Africa",
+      "priceUsd": 13.8,
+      "pctOfNewYork": 26,
+      "change2016To2026Pct": 20
+    },
+    {
+      "rank": 63,
+      "city": "Sao Paulo",
+      "country": "Brazil",
+      "priceUsd": 13.7,
+      "pctOfNewYork": 25,
+      "change2016To2026Pct": 16
+    },
+    {
+      "rank": 64,
+      "city": "Beijing",
+      "country": "China",
+      "priceUsd": 13.0,
+      "pctOfNewYork": 24,
+      "change2016To2026Pct": 23
+    },
+    {
+      "rank": 65,
+      "city": "Manila",
+      "country": "Philippines",
+      "priceUsd": 12.8,
+      "pctOfNewYork": 24,
+      "change2016To2026Pct": 73
+    },
+    {
+      "rank": 66,
+      "city": "Moscow",
+      "country": "Russia",
+      "priceUsd": 12.7,
+      "pctOfNewYork": 23,
+      "change2016To2026Pct": 56
+    },
+    {
+      "rank": 67,
+      "city": "Cairo",
+      "country": "Egypt",
+      "priceUsd": 12.1,
+      "pctOfNewYork": 22,
+      "change2016To2026Pct": -13
+    },
+    {
+      "rank": 68,
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "priceUsd": 11.7,
+      "pctOfNewYork": 22,
+      "change2016To2026Pct": -2
+    },
+    {
+      "rank": 69,
+      "city": "Shanghai",
+      "country": "China",
+      "priceUsd": 10.4,
+      "pctOfNewYork": 19,
+      "change2016To2026Pct": -16
+    }
+  ]
+}
