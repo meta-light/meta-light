@@ -15,7 +15,8 @@
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
     "build:web": "turbo run build --filter=web",
-    "dev:web": "turbo run dev --filter=web"
+    "dev:web": "turbo run dev --filter=web",
+    "skills:sync": "bash skills/sync.sh"
   },
   "devDependencies": {
     "turbo": "^2.3.0"
