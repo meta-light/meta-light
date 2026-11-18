@@ -1,0 +1,739 @@
+{
+  "name": "WatchCharts Rolex Market Index",
+  "description": "Secondary-market performance of Rolex: the average market price (USD) of the top 30 Rolex models, sorted and weighted by transaction value, rebalanced every January 1.",
+  "source": "https://watchcharts.com/watches/brand_index/rolex",
+  "methodology": "https://watchcharts.com/watches/index_methodology",
+  "currency": "USD",
+  "lastUpdated": "2026-11-17",
+  "capturedAt": "2026-11-18",
+  "index": {
+    "valueUsd": 27872,
+    "numberOfWatches": 30,
+    "oneYearRangeUsd": [
+      26612,
+      28250
+    ],
+    "performance": {
+      "1M": {
+        "changePct": 0.0,
+        "aagrPct": 0.9
+      },
+      "3M": {
+        "changePct": -0.7,
+        "aagrPct": -6.6
+      },
+      "6M": {
+        "changePct": 0.4,
+        "aagrPct": 1.3
+      },
+      "1Y": {
+        "changePct": 4.6,
+        "aagrPct": 5.3
+      },
+      "3Y": {
+        "changePct": 2.6,
+        "aagrPct": 1.8
+      },
+      "5Y": {
+        "changePct": -14.1,
+        "aagrPct": -5.6
+      },
+      "Max": {
+        "changePct": 78.3,
+        "aagrPct": 5.5
+      }
+    }
+  },
+  "collections": [
+    {
+      "collection": "Day-Date",
+      "slug": "day-date",
+      "indexValueUsd": 48089,
+      "changePct": {
+        "1M": -0.04,
+        "3M": -0.61,
+        "6M": 1.45,
+        "1Y": 6.97,
+        "3Y": 9.87,
+        "5Y": 1.09,
+        "Max": 80.14
+      }
+    },
+    {
+      "collection": "Daytona",
+      "slug": "daytona",
+      "indexValueUsd": 46001,
+      "changePct": {
+        "1M": -0.17,
+        "3M": 0.1,
+        "6M": 1.31,
+        "1Y": 4.51,
+        "3Y": 0.46,
+        "5Y": -14.86,
+        "Max": 105.59
+      }
+    },
+    {
+      "collection": "Sky-Dweller",
+      "slug": "sky-dweller",
+      "indexValueUsd": 34600,
+      "changePct": {
+        "1M": -1.36,
+        "3M": -1.95,
+        "6M": -2.24,
+        "1Y": 0.15,
+        "3Y": -8.69,
+        "5Y": -19.97,
+        "Max": -4.72
+      }
+    },
+    {
+      "collection": "GMT-Master",
+      "slug": "gmt-master",
+      "indexValueUsd": 33714,
+      "changePct": {
+        "1M": -0.62,
+        "3M": -1.78,
+        "6M": -1.69,
+        "1Y": 4.18,
+        "3Y": 1.16,
+        "5Y": -12.53,
+        "Max": 79.66
+      }
+    },
+    {
+      "collection": "Pearlmaster",
+      "slug": "pearlmaster",
+      "indexValueUsd": 24099,
+      "changePct": {
+        "1M": -0.19,
+        "3M": -1.24,
+        "6M": 1.22,
+        "1Y": 6.18,
+        "3Y": 0.15,
+        "5Y": 5.59,
+        "Max": 10.55
+      }
+    },
+    {
+      "collection": "Submariner",
+      "slug": "submariner",
+      "indexValueUsd": 18697,
+      "changePct": {
+        "1M": -0.59,
+        "3M": -1.26,
+        "6M": 0.04,
+        "1Y": 3.69,
+        "3Y": 1.09,
+        "5Y": -14.39,
+        "Max": 69.31
+      }
+    },
+    {
+      "collection": "Sea-Dweller",
+      "slug": "sea-dweller",
+      "indexValueUsd": 17814,
+      "changePct": {
+        "1M": -0.9,
+        "3M": -0.2,
+        "6M": -1.87,
+        "1Y": 0.06,
+        "3Y": -9.91,
+        "5Y": -21.24,
+        "Max": -2.71
+      }
+    },
+    {
+      "collection": "Yacht-Master",
+      "slug": "yacht-master",
+      "indexValueUsd": 17071,
+      "changePct": {
+        "1M": -0.52,
+        "3M": -1.22,
+        "6M": -0.68,
+        "1Y": 2.08,
+        "3Y": -1.51,
+        "5Y": -11.82,
+        "Max": 27.7
+      }
+    },
+    {
+      "collection": "Lady-Datejust",
+      "slug": "lady-datejust",
+      "indexValueUsd": 14062,
+      "changePct": {
+        "1M": -0.81,
+        "3M": -1.66,
+        "6M": -0.14,
+        "1Y": 5.22,
+        "3Y": 29.02,
+        "5Y": 28.23,
+        "Max": 88.42
+      }
+    },
+    {
+      "collection": "Datejust",
+      "slug": "datejust",
+      "indexValueUsd": 10699,
+      "changePct": {
+        "1M": 0.38,
+        "3M": -0.97,
+        "6M": 0.39,
+        "1Y": 4.39,
+        "3Y": 10.95,
+        "5Y": 6.28,
+        "Max": 73.75
+      }
+    },
+    {
+      "collection": "Cellini",
+      "slug": "cellini",
+      "indexValueUsd": 9420,
+      "changePct": {
+        "1M": 0.84,
+        "3M": 2.84,
+        "6M": 5.43,
+        "1Y": 9.91,
+        "3Y": 19.43,
+        "5Y": 23.33,
+        "Max": 45.11
+      }
+    },
+    {
+      "collection": "Explorer",
+      "slug": "explorer",
+      "indexValueUsd": 9099,
+      "changePct": {
+        "1M": -0.18,
+        "3M": -0.77,
+        "6M": 0.49,
+        "1Y": 5.99,
+        "Max": 2.5
+      }
+    },
+    {
+      "collection": "Oyster Perpetual",
+      "slug": "oyster+perpetual",
+      "indexValueUsd": 8564,
+      "changePct": {
+        "1M": -0.39,
+        "3M": -1.14,
+        "6M": 0.52,
+        "1Y": 3.41,
+        "3Y": 5.1,
+        "5Y": 1.62,
+        "Max": 65.56
+      }
+    },
+    {
+      "collection": "Air-King",
+      "slug": "air-king",
+      "indexValueUsd": 5162,
+      "changePct": {
+        "1M": -1.31,
+        "3M": -2.3,
+        "6M": -1.26,
+        "1Y": 3.21,
+        "3Y": 2.7,
+        "5Y": -9.68,
+        "Max": 28.63
+      }
+    },
+    {
+      "collection": "Date",
+      "slug": "date",
+      "indexValueUsd": 4586,
+      "changePct": {
+        "1M": -0.28,
+        "3M": -1.07,
+        "6M": -0.03,
+        "1Y": 3.11,
+        "3Y": 13.94,
+        "5Y": 5.92,
+        "Max": 72.79
+      }
+    }
+  ],
+  "watches": [
+    {
+      "reference": "126334",
+      "nickname": null,
+      "collection": "Datejust",
+      "inProduction": true,
+      "marketPriceUsd": 14211,
+      "indexWeightPct": 8.08,
+      "listingCount": 10722,
+      "changePct": {
+        "1M": 0.57,
+        "3M": 0.62,
+        "6M": 2.61,
+        "1Y": 6.66
+      },
+      "url": "https://watchcharts.com/watch_model/727-rolex-datejust-41-126334/overview"
+    },
+    {
+      "reference": "126710BLNR",
+      "nickname": "Batgirl",
+      "collection": "GMT-Master",
+      "inProduction": true,
+      "marketPriceUsd": 17222,
+      "indexWeightPct": 5.14,
+      "listingCount": 5617,
+      "changePct": {
+        "1M": -1.19,
+        "3M": -0.51,
+        "6M": 0.19,
+        "1Y": 4.11
+      },
+      "url": "https://watchcharts.com/watch_model/1525-rolex-gmt-master-ii-batgirl-126710blnr/overview"
+    },
+    {
+      "reference": "126710BLRO",
+      "nickname": "Pepsi",
+      "collection": "GMT-Master",
+      "inProduction": false,
+      "marketPriceUsd": 22135,
+      "indexWeightPct": 4.84,
+      "listingCount": 3920,
+      "changePct": {
+        "1M": -0.36,
+        "3M": -2.75,
+        "6M": -4.28,
+        "1Y": 10.37
+      },
+      "url": "https://watchcharts.com/watch_model/733-rolex-gmt-master-ii-pepsi-126710blro/overview"
+    },
+    {
+      "reference": "126300",
+      "nickname": null,
+      "collection": "Datejust",
+      "inProduction": true,
+      "marketPriceUsd": 9921,
+      "indexWeightPct": 4.19,
+      "listingCount": 7080,
+      "changePct": {
+        "1M": 1.54,
+        "3M": 0.68,
+        "6M": 1.73,
+        "1Y": 4.54
+      },
+      "url": "https://watchcharts.com/watch_model/696-rolex-datejust-41-126300/overview"
+    },
+    {
+      "reference": "228235",
+      "nickname": null,
+      "collection": "Day-Date",
+      "inProduction": true,
+      "marketPriceUsd": 53387,
+      "indexWeightPct": 4.18,
+      "listingCount": 1493,
+      "changePct": {
+        "1M": 0.83,
+        "3M": 0.44,
+        "6M": 3.45,
+        "1Y": 9.8
+      },
+      "url": "https://watchcharts.com/watch_model/732-rolex-day-date-40-228235/overview"
+    },
+    {
+      "reference": "126610",
+      "nickname": null,
+      "collection": "Submariner",
+      "inProduction": true,
+      "marketPriceUsd": 13458,
+      "indexWeightPct": 3.79,
+      "listingCount": 5078,
+      "changePct": {
+        "1M": -1.27,
+        "3M": -1.71,
+        "6M": -0.58,
+        "1Y": 2.75
+      },
+      "url": "https://watchcharts.com/watch_model/21817-rolex-submariner-date-126610/overview"
+    },
+    {
+      "reference": "116508",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 60713,
+      "indexWeightPct": 3.77,
+      "listingCount": 932,
+      "changePct": {
+        "1M": -0.55,
+        "3M": -0.73,
+        "6M": 6.23,
+        "1Y": 2.82
+      },
+      "url": "https://watchcharts.com/watch_model/743-rolex-cosmograph-daytona-116508/overview"
+    },
+    {
+      "reference": "228238",
+      "nickname": null,
+      "collection": "Day-Date",
+      "inProduction": true,
+      "marketPriceUsd": 50770,
+      "indexWeightPct": 3.75,
+      "listingCount": 1301,
+      "changePct": {
+        "1M": 2.06,
+        "3M": -0.46,
+        "6M": 2.29,
+        "1Y": 15.09
+      },
+      "url": "https://watchcharts.com/watch_model/659-rolex-day-date-40-228238/overview"
+    },
+    {
+      "reference": "126234",
+      "nickname": null,
+      "collection": "Datejust",
+      "inProduction": true,
+      "marketPriceUsd": 12523,
+      "indexWeightPct": 3.67,
+      "listingCount": 4992,
+      "changePct": {
+        "1M": 0.28,
+        "3M": -1.6,
+        "6M": 2.23,
+        "1Y": 4.58
+      },
+      "url": "https://watchcharts.com/watch_model/15369-rolex-datejust-36-126234/overview"
+    },
+    {
+      "reference": "116506-0001",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 90189,
+      "indexWeightPct": 3.33,
+      "listingCount": 498,
+      "changePct": {
+        "1M": 0.21,
+        "3M": -1.24,
+        "6M": -0.5,
+        "1Y": 3.09
+      },
+      "url": "https://watchcharts.com/watch_variation/151-rolex-cosmograph-daytona-116506-0001/overview"
+    },
+    {
+      "reference": "116505",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 45757,
+      "indexWeightPct": 3.32,
+      "listingCount": 1032,
+      "changePct": {
+        "1M": 2.51,
+        "3M": 1.38,
+        "6M": -1.0,
+        "1Y": 2.27
+      },
+      "url": "https://watchcharts.com/watch_model/1552-rolex-cosmograph-daytona-116505/overview"
+    },
+    {
+      "reference": "116515",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 37953,
+      "indexWeightPct": 3.22,
+      "listingCount": 1267,
+      "changePct": {
+        "1M": -1.43,
+        "3M": 0.15,
+        "6M": 0.06,
+        "1Y": 6.44
+      },
+      "url": "https://watchcharts.com/watch_model/1551-rolex-cosmograph-daytona-116515/overview"
+    },
+    {
+      "reference": "126711CHNR",
+      "nickname": "Root Beer",
+      "collection": "GMT-Master",
+      "inProduction": true,
+      "marketPriceUsd": 18653,
+      "indexWeightPct": 3.21,
+      "listingCount": 2587,
+      "changePct": {
+        "1M": 0.75,
+        "3M": 0.06,
+        "6M": 1.03,
+        "1Y": 3.36
+      },
+      "url": "https://watchcharts.com/watch_model/756-rolex-gmt-master-ii-root-beer-126711chnr/overview"
+    },
+    {
+      "reference": "126610LV",
+      "nickname": "Starbucks",
+      "collection": "Submariner",
+      "inProduction": true,
+      "marketPriceUsd": 14290,
+      "indexWeightPct": 3.16,
+      "listingCount": 3921,
+      "changePct": {
+        "1M": -0.57,
+        "3M": -1.18,
+        "6M": -1.1,
+        "1Y": 1.72
+      },
+      "url": "https://watchcharts.com/watch_model/21814-rolex-submariner-date-starbucks-126610lv/overview"
+    },
+    {
+      "reference": "116500LN-0001",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 29921,
+      "indexWeightPct": 3.02,
+      "listingCount": 1622,
+      "changePct": {
+        "1M": 0.17,
+        "3M": 0.69,
+        "6M": 0.51,
+        "1Y": 4.91
+      },
+      "url": "https://watchcharts.com/watch_variation/155-rolex-cosmograph-daytona-116500ln-0001/overview"
+    },
+    {
+      "reference": "126720",
+      "nickname": "Sprite",
+      "collection": "GMT-Master",
+      "inProduction": true,
+      "marketPriceUsd": 16084,
+      "indexWeightPct": 3.0,
+      "listingCount": 3055,
+      "changePct": {
+        "1M": 0.18,
+        "3M": -2.15,
+        "6M": -2.37,
+        "1Y": -1.36
+      },
+      "url": "https://watchcharts.com/watch_model/36317-rolex-gmt-master-ii-sprite-126720/overview"
+    },
+    {
+      "reference": "126500LN-0001",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": true,
+      "marketPriceUsd": 34992,
+      "indexWeightPct": 3.0,
+      "listingCount": 1960,
+      "changePct": {
+        "1M": 1.52,
+        "3M": 2.0,
+        "6M": 3.19,
+        "1Y": 9.9
+      },
+      "url": "https://watchcharts.com/watch_variation/1456-rolex-cosmograph-daytona-126500ln-0001/overview"
+    },
+    {
+      "reference": "116509",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 39423,
+      "indexWeightPct": 2.98,
+      "listingCount": 1187,
+      "changePct": {
+        "1M": 0.89,
+        "3M": -3.76,
+        "6M": -1.89,
+        "1Y": 2.86
+      },
+      "url": "https://watchcharts.com/watch_model/729-rolex-cosmograph-daytona-116509/overview"
+    },
+    {
+      "reference": "116610LV",
+      "nickname": "Hulk",
+      "collection": "Submariner",
+      "inProduction": false,
+      "marketPriceUsd": 18587,
+      "indexWeightPct": 2.83,
+      "listingCount": 2398,
+      "changePct": {
+        "1M": -1.0,
+        "3M": -1.52,
+        "6M": -1.35,
+        "1Y": 2.6
+      },
+      "url": "https://watchcharts.com/watch_model/639-rolex-submariner-hulk-116610lv/overview"
+    },
+    {
+      "reference": "116518",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 39507,
+      "indexWeightPct": 2.73,
+      "listingCount": 1006,
+      "changePct": {
+        "1M": -4.67,
+        "3M": -1.86,
+        "6M": 2.16,
+        "1Y": 4.95
+      },
+      "url": "https://watchcharts.com/watch_model/734-rolex-cosmograph-daytona-116518/overview"
+    },
+    {
+      "reference": "126333",
+      "nickname": null,
+      "collection": "Datejust",
+      "inProduction": true,
+      "marketPriceUsd": 15399,
+      "indexWeightPct": 2.72,
+      "listingCount": 3408,
+      "changePct": {
+        "1M": 1.67,
+        "3M": -0.03,
+        "6M": -0.81,
+        "1Y": 2.58
+      },
+      "url": "https://watchcharts.com/watch_model/653-rolex-datejust-41-126333/overview"
+    },
+    {
+      "reference": "116519",
+      "nickname": "Ghost",
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 37991,
+      "indexWeightPct": 2.68,
+      "listingCount": 1159,
+      "changePct": {
+        "1M": -2.16,
+        "3M": -4.4,
+        "6M": -1.48,
+        "1Y": 0.89
+      },
+      "url": "https://watchcharts.com/watch_model/1527-rolex-cosmograph-daytona-ghost-116519/overview"
+    },
+    {
+      "reference": "116500LN-0002",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 25539,
+      "indexWeightPct": 2.63,
+      "listingCount": 1360,
+      "changePct": {
+        "1M": -1.71,
+        "3M": -0.56,
+        "6M": -1.34,
+        "1Y": 2.83
+      },
+      "url": "https://watchcharts.com/watch_variation/156-rolex-cosmograph-daytona-116500ln-0002/overview"
+    },
+    {
+      "reference": "16233",
+      "nickname": null,
+      "collection": "Datejust",
+      "inProduction": false,
+      "marketPriceUsd": 6766,
+      "indexWeightPct": 2.51,
+      "listingCount": 6621,
+      "changePct": {
+        "1M": -0.12,
+        "3M": -1.13,
+        "6M": -2.59,
+        "1Y": 3.28
+      },
+      "url": "https://watchcharts.com/watch_model/742-rolex-datejust-16233/overview"
+    },
+    {
+      "reference": "336934",
+      "nickname": null,
+      "collection": "Sky-Dweller",
+      "inProduction": true,
+      "marketPriceUsd": 23191,
+      "indexWeightPct": 2.5,
+      "listingCount": 2153,
+      "changePct": {
+        "1M": -1.06,
+        "3M": -2.79,
+        "6M": -2.25,
+        "1Y": 0.81
+      },
+      "url": "https://watchcharts.com/watch_model/46517-rolex-336934/overview"
+    },
+    {
+      "reference": "126710GRNR",
+      "nickname": "Bruce Wayne",
+      "collection": "GMT-Master",
+      "inProduction": true,
+      "marketPriceUsd": 20313,
+      "indexWeightPct": 2.49,
+      "listingCount": 2989,
+      "changePct": {
+        "1M": -0.1,
+        "3M": -0.49,
+        "6M": 1.26,
+        "1Y": 4.46
+      },
+      "url": "https://watchcharts.com/watch_model/49351-rolex-gmt-master-ii-bruce-wayne-126710grnr/overview"
+    },
+    {
+      "reference": "116503",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 20304,
+      "indexWeightPct": 2.48,
+      "listingCount": 1637,
+      "changePct": {
+        "1M": 1.67,
+        "3M": 0.03,
+        "6M": 0.23,
+        "1Y": 3.05
+      },
+      "url": "https://watchcharts.com/watch_model/1522-rolex-cosmograph-daytona-116503/overview"
+    },
+    {
+      "reference": "116520-0015",
+      "nickname": null,
+      "collection": "Daytona",
+      "inProduction": false,
+      "marketPriceUsd": 20618,
+      "indexWeightPct": 2.48,
+      "listingCount": 1740,
+      "changePct": {
+        "1M": -0.0,
+        "3M": -1.19,
+        "6M": -0.8,
+        "1Y": 4.01
+      },
+      "url": "https://watchcharts.com/watch_variation/153-rolex-daytona-116520-0015/overview"
+    },
+    {
+      "reference": "16610",
+      "nickname": null,
+      "collection": "Submariner",
+      "inProduction": false,
+      "marketPriceUsd": 9263,
+      "indexWeightPct": 2.17,
+      "listingCount": 4469,
+      "changePct": {
+        "1M": -0.23,
+        "3M": 1.75,
+        "6M": 1.26,
+        "1Y": 6.25
+      },
+      "url": "https://watchcharts.com/watch_model/323-rolex-submariner-16610/overview"
+    },
+    {
+      "reference": "126613LB",
+      "nickname": null,
+      "collection": "Submariner",
+      "inProduction": true,
+      "marketPriceUsd": 17075,
+      "indexWeightPct": 2.15,
+      "listingCount": 2130,
+      "changePct": {
+        "1M": 0.43,
+        "3M": 0.4,
+        "6M": 2.34,
+        "1Y": 3.27
+      },
+      "url": "https://watchcharts.com/watch_model/21815-rolex-submariner-date-126613lb/overview"
+    }
+  ]
+}
