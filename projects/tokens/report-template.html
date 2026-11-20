@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inference Token Volume</title>
+<style>
+:root {
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  --other: #b5b3ab;
+  --surface: #fcfcfb; --page: #f9f9f7;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7;
+  --good: #008300; --bad: #d03b3a;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #0ca30c; --s7: #9085e9; --s8: #e66767;
+    --other: #5c5b56;
+    --surface: #1a1a19; --page: #0d0d0d;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835;
+    --good: #3fbf5a; --bad: #e66767;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #0ca30c; --s7: #9085e9; --s8: #e66767;
+  --other: #5c5b56;
+  --surface: #1a1a19; --page: #0d0d0d;
+  --text: #f0efec; --text-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835;
+  --good: #3fbf5a; --bad: #e66767;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 22px; margin: 0 0 4px; font-weight: 650; }
+h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; }
+.sub { color: var(--text-2); margin: 0 0 20px; }
+.errors { color: var(--bad); font-size: 12px; margin: 0 0 16px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin-bottom: 20px; overflow-x: auto; }
+.tabs button {
+  font: inherit; font-weight: 600; color: var(--text-2); background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 8px 14px; margin-bottom: -1px; cursor: pointer; white-space: nowrap;
+}
+.tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--text); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-bottom: 16px; }
+.seg { display: inline-flex; border: 1px solid var(--grid); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; color: var(--text-2); background: none; border: 0; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+.seg button + button { border-left: 1px solid var(--grid); }
+.seg button[aria-pressed="true"] { color: var(--text); background: var(--grid); font-weight: 600; }
+.label { color: var(--muted); font-size: 12px; margin-right: 6px; }
+.card { background: var(--surface); border: 1px solid var(--grid); border-radius: 12px; padding: 20px; margin-bottom: 20px; min-width: 0; }
+.note { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+.chart { position: relative; height: 360px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.multiple { border: 1px solid var(--grid); border-radius: 10px; padding: 12px; min-width: 0; }
+.multiple header { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.multiple .total { margin-left: auto; color: var(--text-2); font-weight: 400; font-variant-numeric: tabular-nums; }
+.multiple .chart { height: 130px; margin-top: 8px; }
+.multiple ul { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12px; color: var(--text-2); }
+.multiple li { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
+.multiple li span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 4px 0 12px; }
+.stat b { display: block; font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: 12px; }
+.swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; display: inline-block; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
+th { color: var(--text-2); font-weight: 600; font-size: 12px; }
+th:first-child, td:first-child { text-align: left; }
+td.l, th.l { text-align: left; }
+.who { display: inline-flex; align-items: center; gap: 8px; }
+.dim { color: var(--muted); }
+.mid { display: block; margin-left: 14px; color: var(--muted); font-size: 11px; }
+.chip { display: inline-block; font-size: 11px; color: var(--text-2); border: 1px solid var(--grid); border-radius: 999px; padding: 0 7px; margin-right: 4px; }
+.up { color: var(--good); }
+.down { color: var(--bad); }
+details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+details .table-wrap { margin-top: 12px; max-height: 520px; overflow-y: auto; }
+details thead th { position: sticky; top: 0; background: var(--surface); }
+input[type="search"] {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--grid); border-radius: 8px;
+  padding: 6px 10px; width: 260px; max-width: 100%;
+}
+tr.total td { font-weight: 600; border-top: 1px solid var(--axis); }
+tr.total + tr.total td { border-top: 0; }
+tr.model { cursor: pointer; }
+tr.model:hover td { background: var(--page); }
+tr.model td:first-child::before { content: "▸"; color: var(--muted); display: inline-block; width: 14px; }
+tr.model[aria-expanded="true"] td:first-child::before { content: "▾"; }
+tr.listings > td { padding: 0 0 12px 24px; background: var(--page); }
+tr.listings table th, tr.listings table td { font-size: 12px; padding: 4px 10px; }
+[hidden] { display: none !important; }
+@media (max-width: 600px) {
+  main { padding-top: 20px; }
+  .chart { height: 280px; }
+  .card { padding: 14px; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Inference token volume</h1>
+  <p class="sub" id="sub"></p>
+  <p class="errors" id="errors" hidden></p>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="marketplaces">Marketplaces</button>
+    <button role="tab" data-tab="providers">Providers</button>
+    <button role="tab" data-tab="labs">Labs</button>
+    <button role="tab" data-tab="models">Models</button>
+    <button role="tab" data-tab="instruments">Instruments</button>
+  </nav>
+
+  <div class="controls">
+    <div><span class="label">Range</span><span class="seg" id="range"></span></div>
+    <div id="channel-wrap"><span class="label">Channel</span><span class="seg" id="channel"></span></div>
+  </div>
+
+  <section role="tabpanel" id="marketplaces">
+    <section class="card">
+      <h2>Marketplaces</h2>
+      <div class="table-wrap"><table id="mkt-table"></table></div>
+      <p class="note">OpenRouter counts only the tracked providers (from their provider pages); the all-traffic row comes from OpenRouter's weekly rankings, so 7d is the last complete week and 30d the last four. Liquid, AntSeed, Surplus and Orbio report all traffic. Yesterday is the latest complete day; Δ compares each window with the one before it. Models in scope = in-scope models with a listing on that marketplace.</p>
+    </section>
+    <section class="card">
+      <h2>Tokens per day, each marketplace on its own scale</h2>
+      <div class="grid" id="mkt-multiples"></div>
+    </section>
+    <section class="card">
+      <h2>AntSeed</h2>
+      <div class="stats" id="ant-stats"></div>
+      <div class="chart"><canvas id="ant-chart" role="img" aria-label="AntSeed paid and free tokens per day"></canvas></div>
+      <p class="note">Paid tokens are settled requests (input + output); free tokens are served without payment.</p>
+      <h2 style="margin-top:20px">Top sellers by 30-day revenue</h2>
+      <div class="table-wrap"><table id="ant-sellers"></table></div>
+      <p class="note">Organic = not in AntSeed's wash-trading registry.</p>
+    </section>
+  </section>
+
+  <section role="tabpanel" id="providers">
+    <section class="card">
+      <h2 id="prov-title">Tokens per day by provider</h2>
+      <div class="chart"><canvas id="prov-chart" role="img" aria-label="Stacked bar chart of tokens per day by provider"></canvas></div>
+      <p class="note" id="prov-note"></p>
+    </section>
+    <section class="card">
+      <h2>Comparison</h2>
+      <div class="table-wrap"><table id="prov-table"></table></div>
+      <p class="note" id="prov-table-note"></p>
+    </section>
+    <section class="card">
+      <h2>Each provider on its own scale</h2>
+      <div class="grid" id="prov-multiples"></div>
+    </section>
+    <section class="card">
+      <details>
+        <summary>Endpoint health</summary>
+        <div class="table-wrap"><table id="prov-health"></table></div>
+        <p class="note">OpenRouter: last 30 minutes. Liquid: uptime and p50 over 3 days; throughput, TTFT and jobs over 7 days.</p>
+      </details>
+    </section>
+  </section>
+
+  <section role="tabpanel" id="labs">
+    <section class="card">
+      <h2>Tokens per day by lab</h2>
+      <div class="chart"><canvas id="lab-chart" role="img" aria-label="Stacked bar chart of tokens per day by lab"></canvas></div>
+      <p class="note" id="lab-note"></p>
+    </section>
+    <section class="card">
+      <h2>Labs</h2>
+      <div class="table-wrap"><table id="lab-table"></table></div>
+      <p class="note">AntSeed reports per-model volume only as a 30-day total, so it has its own column and stays out of the daily chart.</p>
+    </section>
+  </section>
+
+  <section role="tabpanel" id="models">
+    <section class="card">
+      <h2>Tokens per day by model</h2>
+      <div class="chart"><canvas id="model-chart" role="img" aria-label="Stacked bar chart of tokens per day by model"></canvas></div>
+      <p class="note" id="model-note"></p>
+    </section>
+    <section class="card">
+      <div class="controls" style="justify-content:space-between">
+        <h2 style="margin:0">Models and prices</h2>
+        <input type="search" id="model-search" placeholder="Search models, labs, providers" aria-label="Search models">
+      </div>
+      <div class="table-wrap"><table id="model-table"></table></div>
+      <p class="note">Prices are $ per million tokens, input / output. Cheapest is by 3:1 blended price across every paid listing. Click a row for all its listings.</p>
+    </section>
+  </section>
+
+  <section role="tabpanel" id="instruments">
+    <section class="card">
+      <h2>Instruments by class</h2>
+      <div class="table-wrap"><table id="inst-table"></table></div>
+      <p class="note">Spot buys a request now. Quantity is a fixed amount of tokens delivered later. Dollar is a claim on dollars of inference at list price. Access is a stake that admits a seller to a network. Discount is against retail; for Liquid, retail is the median OpenRouter endpoint for the same model.</p>
+    </section>
+    <section class="card">
+      <h2 id="ostr-title">Mercatus OSTR menu vs OpenRouter</h2>
+      <div class="table-wrap"><table id="ostr-table"></table></div>
+      <p class="note">$ per million tokens. Blend = 3:1 input:output. Peak and off-peak are the dearest and cheapest time-of-day tiers. The OpenRouter median is across that model's endpoints; the cheapest is often one promotional or quantized host.</p>
+    </section>
+    <section class="card">
+      <h2>Orbio CREDIT order book</h2>
+      <div class="stats" id="credit-stats"></div>
+      <div class="chart"><canvas id="credit-chart" role="img" aria-label="Orbio CREDIT asks and bids in dollars by discount"></canvas></div>
+      <p class="note">Bars are dollars of credit offered at each discount. Each CREDIT redeems for $1 of Orbio inference, so an ask at 40% sells $1 of inference for $0.60.</p>
+    </section>
+    <section class="card">
+      <h2>Venice DIEM</h2>
+      <div class="stats" id="diem-stats"></div>
+      <div class="chart"><canvas id="diem-chart" role="img" aria-label="DIEM price per day"></canvas></div>
+      <p class="note">Source: venicestats.com. One staked DIEM pays $1 of Venice inference a day with no expiry, so yield = 365 ÷ price.</p>
+    </section>
+    <section class="card">
+      <h2>Context</h2>
+      <div class="stats" id="context-stats"></div>
+      <p class="note" id="context-note"></p>
+    </section>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = /*DATA*/null;
+
+const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+const fmt = (n) => (n ? compact.format(n) : "0");
+const pct = (n) => `${(n * 100).toFixed(n < 0.1 ? 1 : 0)}%`;
+const usd = (n) => (n == null ? "—" : `$${n >= 100 ? Math.round(n).toLocaleString() : n >= 1 ? n.toFixed(2) : +n.toFixed(3)}`);
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const CHANNEL = { openrouter: "OpenRouter", liquid: "Liquid", antseed: "AntSeed", surplus: "Surplus", orbio: "Orbio", direct: "Direct" };
+
+const DAY = 864e5;
+const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
+const last = (n, back = 0) => Array.from({ length: n }, (_, i) => iso(Date.parse(D.through) - (n * (back + 1) - 1 - i) * DAY));
+
+const byId = (xs) => new Map(xs.map((x) => [x.id, x]));
+const models = byId(D.models), labs = byId(D.labs), providers = byId(D.providers), markets = byId(D.marketplaces);
+const tracked = D.providers.filter((p) => p.tracked);
+
+function agg(rows, key) {
+  const out = new Map();
+  for (const r of rows) {
+    const k = key(r);
+    if (k == null) continue;
+    if (!out.has(k)) out.set(k, new Map());
+    const s = out.get(k);
+    s.set(r.date, (s.get(r.date) ?? 0) + r.tokens);
+  }
+  return out;
+}
+const total = (series, dates) => (series ? dates.reduce((a, d) => a + (series.get(d) ?? 0), 0) : 0);
+const rank = (m, dates) => [...m.keys()].sort((a, b) => total(m.get(b), dates) - total(m.get(a), dates));
+
+const slots = (ids, n) => new Map(ids.map((id, i) => [id, i < n ? i : -1]));
+const marketUsage = D.usage.filter((u) => u.channel === "openrouter" || u.channel === "liquid");
+const providerSlot = slots(rank(agg(marketUsage.filter((u) => providers.get(u.provider)?.tracked), (u) => u.provider), last(30)), 8);
+const labOf = (u) => models.get(u.model)?.lab;
+const labSlot = slots(rank(agg(marketUsage.filter((u) => u.model), labOf), last(30)), 7);
+const modelSlot = slots(rank(agg(marketUsage.filter((u) => u.model), (u) => u.model), last(30)), 7);
+const color = (slot) => css(slot >= 0 ? `--s${slot + 1}` : "--other");
+
+const state = { tab: "marketplaces", range: 30, channel: "both" };
+const CHANNELS = {
+  providers: [["both", "OpenRouter + Liquid"], ["openrouter", "OpenRouter"], ["liquid", "Liquid"], ["direct", "Direct"]],
+  labs: [["both", "OpenRouter + Liquid"], ["openrouter", "OpenRouter"], ["liquid", "Liquid"], ["surplus", "Surplus"], ["orbio", "Orbio"]],
+};
+CHANNELS.models = CHANNELS.labs;
+const inChannel = (u) => (state.channel === "both" ? u.channel === "openrouter" || u.channel === "liquid" : u.channel === state.channel);
+
+let charts = [];
+const palette = () => ({ text: css("--text"), text2: css("--text-2"), muted: css("--muted"), grid: css("--grid"), axis: css("--axis"), surface: css("--surface") });
+
+function axes(c, stacked, small) {
+  const ticks = { color: c.muted, font: { size: 11 } };
+  return {
+    x: { stacked, grid: { display: false }, border: { color: c.axis }, ticks: { ...ticks, maxRotation: 0, autoSkipPadding: 16, callback(v) { return this.getLabelForValue(v).slice(5); } } },
+    y: { stacked, beginAtZero: true, grid: { color: c.grid }, border: { display: false }, ticks: { ...ticks, maxTicksLimit: small ? 3 : 6, callback: fmt } },
+  };
+}
+const tooltip = (c) => ({
+  backgroundColor: c.surface, borderColor: c.grid, borderWidth: 1, padding: 10, cornerRadius: 8,
+  titleColor: c.text, bodyColor: c.text2, footerColor: c.text, boxPadding: 4, usePointStyle: true,
+});
+
+function stacked(canvas, dates, series) {
+  const c = palette();
+  const value = (s, i) => s.data.get(dates[i]) ?? 0;
+  const isTop = (ctx) => !series.slice(ctx.datasetIndex + 1).some((s, k) => ctx.chart.isDatasetVisible(ctx.datasetIndex + 1 + k) && value(s, ctx.dataIndex) > 0);
+  charts.push(new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: dates,
+      datasets: series.map((s) => ({
+        label: s.label, data: dates.map((d) => s.data.get(d) ?? 0), backgroundColor: s.color,
+        borderColor: c.surface, borderWidth: { top: 2, left: 0, right: 0, bottom: 0 }, borderSkipped: "start",
+        borderRadius: (ctx) => (isTop(ctx) ? { topLeft: 4, topRight: 4 } : 0),
+        maxBarThickness: 24, categoryPercentage: 0.9, barPercentage: 0.9,
+      })),
+    },
+    options: {
+      maintainAspectRatio: false, animation: false,
+      interaction: { mode: "index", intersect: false },
+      scales: axes(c, true),
+      plugins: {
+        legend: { position: "top", align: "start", labels: { color: c.text2, usePointStyle: true, pointStyle: "rectRounded", boxWidth: 10, boxHeight: 10, padding: 14 } },
+        tooltip: {
+          ...tooltip(c),
+          itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
+          filter: (item) => item.raw > 0,
+          callbacks: {
+            label: (item) => ` ${item.dataset.label}: ${fmt(item.raw)}`,
+            footer: (items) => (items.length > 1 ? `Total: ${fmt(items.reduce((a, i) => a + i.raw, 0))}` : ""),
+          },
+        },
+      },
+    },
+  }));
+}
+
+function single(canvas, dates, label, fill, data) {
+  const c = palette();
+  charts.push(new Chart(canvas, {
+    type: "bar",
+    data: { labels: dates, datasets: [{ label, data: dates.map((d) => data?.get(d) ?? 0), backgroundColor: fill, borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: "start", maxBarThickness: 24 }] },
+    options: {
+      maintainAspectRatio: false, animation: false,
+      interaction: { mode: "index", intersect: false },
+      scales: axes(c, false, true),
+      plugins: { legend: { display: false }, tooltip: { ...tooltip(c), callbacks: { label: (item) => ` ${fmt(item.raw)} tokens` } } },
+    },
+  }));
+}
+
+function slotted(m, slotOf, name, dates) {
+  const named = [...m.keys()].filter((k) => slotOf.get(k) >= 0 && total(m.get(k), dates) > 0).sort((a, b) => slotOf.get(a) - slotOf.get(b));
+  const rest = [...m.keys()].filter((k) => !(slotOf.get(k) >= 0) && total(m.get(k), dates) > 0);
+  const series = named.map((k) => ({ label: name(k), color: color(slotOf.get(k)), data: m.get(k) }));
+  const other = new Map();
+  for (const k of rest) for (const [d, v] of m.get(k)) other.set(d, (other.get(d) ?? 0) + v);
+  if (rest.length) series.push({ label: rest.length === 1 ? name(rest[0]) : `Other (${rest.length})`, color: color(-1), data: other });
+  return series;
+}
+
+function change(now, prev) {
+  if (!prev) return now ? '<span class="dim">new</span>' : "—";
+  const r = now / prev - 1;
+  const size = r >= 9 ? `${compact.format(now / prev)}×` : pct(Math.abs(r));
+  return `<span class="${r >= 0 ? "up" : "down"}">${r >= 0 ? "▲" : "▼"} ${size}</span>`;
+}
+const swatch = (slot) => `<span class="swatch" style="background:${color(slot)}"></span>`;
+function table(id, head, rows) {
+  document.getElementById(id).innerHTML =
+    `<thead><tr>${head.map((h) => (typeof h === "string" ? `<th>${h}</th>` : `<th class="l">${h.l}</th>`)).join("")}</tr></thead><tbody>${rows.join("")}</tbody>`;
+}
+const windows = (s) => ({ y: total(s, last(1)), w: total(s, last(7)), wp: total(s, last(7, 1)), m: total(s, last(30)), mp: total(s, last(30, 1)) });
+const sum = (rows) => agg(rows, () => 0).get(0);
+
+const orWeekly = markets.get("openrouter")?.extra?.weekly ?? [];
+const weekSum = (n, back = 0) => orWeekly.slice(-n * (back + 1), orWeekly.length - n * back || undefined).reduce((a, w) => a + w.tokens, 0);
+const orAll = orWeekly.length >= 8 ? { w: weekSum(1), wp: weekSum(1, 1), m: weekSum(4), mp: weekSum(4, 1) } : null;
+const orAllDates = orWeekly.slice(-4).flatMap((w) => Array.from({ length: 7 }, (_, i) => iso(Date.parse(w.week) + i * DAY)));
+const totalRow = (name, w, rest) => `<tr class="total"><td>${name}</td><td class="l"></td>
+  <td>${w.y == null ? "—" : fmt(w.y)}</td><td>${fmt(w.w)}</td><td>${change(w.w, w.wp)}</td><td>${fmt(w.m)}</td><td>${change(w.m, w.mp)}</td>${rest}</tr>`;
+
+function renderMarketplaces(dates) {
+  const series = Object.fromEntries(D.marketplaces.map((m) => [m.id, sum(D.usage.filter((u) => u.channel === m.id))]));
+  const listed = (id) => new Set(D.listings.filter((l) => l.channel === id).map((l) => l.model)).size;
+  const seen = (id) => new Set([...D.usage, ...D.listings].filter((r) => r.channel === id && r.provider).map((r) => r.provider)).size;
+  const ant = D.usage.filter((u) => u.channel === "antseed");
+  const antDay = ant.at(-1);
+  table("mkt-table", ["Marketplace", { l: "Type" }, { l: "Coverage" }, "Yesterday", "7d", "Δ 7d", "30d", "Δ 30d", "Providers", "Models in scope"],
+    D.marketplaces.map((m, i) => {
+      const w = windows(series[m.id]);
+      const prov = m.id === "antseed" ? `${antDay?.extra?.sellers ?? "—"} <span class="dim">sellers</span>` : seen(m.id) || "—";
+      return `<tr><td><span class="who">${swatch(i)}<a href="${esc(m.url)}" style="color:inherit">${esc(m.name)}</a></span></td>
+        <td class="l">${esc(m.kind)}</td><td class="l">${m.coverage === "all" ? "All traffic" : "Tracked providers"}</td>
+        <td>${fmt(w.y)}</td><td>${fmt(w.w)}</td><td>${change(w.w, w.wp)}</td><td>${fmt(w.m)}</td><td>${change(w.m, w.mp)}</td>
+        <td>${prov}</td><td>${listed(m.id)}</td></tr>`
+        + (m.id === "openrouter" && orAll ? `<tr><td><span class="who"><span class="swatch"></span>OpenRouter, all traffic</span></td><td class="l">${esc(m.kind)}</td>
+        <td class="l">All traffic (weekly)</td><td>—</td><td>${fmt(orAll.w)}</td><td>${change(orAll.w, orAll.wp)}</td><td>${fmt(orAll.m)}</td><td>${change(orAll.m, orAll.mp)}</td>
+        <td>—</td><td>—</td></tr>` : "");
+    }));
+
+  document.getElementById("mkt-multiples").innerHTML = D.marketplaces.map((m, i) => `
+    <div class="multiple">
+      <header>${swatch(i)}${esc(m.name)}<span class="total">${fmt(total(series[m.id], dates))}</span></header>
+      <div class="chart"><canvas id="mkt-${m.id}" role="img" aria-label="${esc(m.name)} tokens per day"></canvas></div>
+      <p class="note">${esc(m.dayBasis)}</p>
+    </div>`).join("");
+  D.marketplaces.forEach((m, i) => single(document.getElementById(`mkt-${m.id}`), dates, m.name, color(i), series[m.id]));
+
+  const in30 = new Set(last(30));
+  const settled = ant.filter((u) => in30.has(u.date)).reduce((a, u) => a + (u.extra?.settled_micro ?? 0), 0) / 1e6;
+  const h = markets.get("antseed").extra.health ?? {};
+  document.getElementById("ant-stats").innerHTML = [
+    [usd(settled), "settled, 30d"],
+    [fmt(antDay?.extra?.buyers ?? 0), `buyers on ${antDay?.date ?? "—"}`],
+    [fmt(antDay?.extra?.sellers ?? 0), "sellers that day"],
+    [`${h.healthy ?? "—"}/${h.services ?? "—"}`, "services healthy now"],
+    [fmt(h.requests_last_hour ?? 0), "requests last hour"],
+  ].map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("");
+  const antIndex = D.marketplaces.findIndex((m) => m.id === "antseed");
+  stacked(document.getElementById("ant-chart"), dates, [
+    { label: "Paid", color: color(antIndex), data: series.antseed ?? new Map() },
+    { label: "Free", color: color(-1), data: new Map(ant.map((u) => [u.date, u.extra?.free_tokens ?? 0])) },
+  ]);
+  const micro = (n) => usd((n ?? 0) / 1e6);
+  const sellers = [...(markets.get("antseed").extra.sellers ?? [])].sort((a, b) => (b.revenue_30d_micro ?? 0) - (a.revenue_30d_micro ?? 0)).slice(0, 15);
+  table("ant-sellers", ["Seller", "Live", "Organic", "Reputation", "Models", "Rev 24h", "Rev 30d", "Δ 30d", "Tokens 30d"],
+    sellers.map((s) => `<tr>
+      <td>${esc(s.name ?? `${s.address.slice(0, 8)}…`)}</td><td>${s.live ? "✓" : ""}</td><td>${s.organic ? "✓" : '<span class="dim">wash</span>'}</td>
+      <td>${Math.round(s.reputation ?? 0)}</td><td>${s.models ?? "—"}</td><td>${micro(s.revenue_24h_micro)}</td><td>${micro(s.revenue_30d_micro)}</td>
+      <td>${change(s.revenue_30d_micro, s.revenue_prev_30d_micro)}</td><td>${fmt(s.tokens_30d)}</td></tr>`));
+}
+
+function renderProviders(dates) {
+  const rows = D.usage.filter((u) => inChannel(u) && providers.get(u.provider)?.tracked);
+  const byProvider = agg(rows, (u) => u.provider);
+  const label = CHANNELS.providers.find(([v]) => v === state.channel)[1];
+  document.getElementById("prov-title").textContent = `Tokens per day by provider · ${label}`;
+  document.getElementById("prov-note").textContent = state.channel === "direct"
+    ? "Direct = the provider's own platform. Chutes publishes daily tokens for all its traffic, which may include requests routed through marketplaces; Venice publishes prices but no volume."
+    : "OpenRouter: complete UTC days from each provider's page. Liquid: days differenced from rolling hourly windows. Akash is one operator on both (akashml on OpenRouter).";
+  stacked(document.getElementById("prov-chart"), dates, slotted(byProvider, providerSlot, (id) => providers.get(id).name, dates));
+
+  const all30 = tracked.reduce((a, p) => a + total(byProvider.get(p.id), last(30)), 0);
+  const modelsOf = (id) => new Set(D.listings.filter((l) => l.provider === id).map((l) => l.model)).size;
+  const topModel = (id) => {
+    const top = rank(agg(rows.filter((u) => u.provider === id && u.model), (u) => u.model), last(30))[0];
+    return top ? models.get(top)?.name ?? top : "—";
+  };
+  const order = [...tracked].sort((a, b) => total(byProvider.get(b.id), last(30)) - total(byProvider.get(a.id), last(30)));
+  table("prov-table", ["Provider", { l: "Channels" }, "Yesterday", "7d", "Δ 7d", "30d", "Δ 30d", "Share 30d", "Models", { l: "Top model 30d" }],
+    order.map((p) => {
+      const w = windows(byProvider.get(p.id));
+      return `<tr><td><span class="who">${swatch(providerSlot.get(p.id) ?? -1)}${esc(p.name)}</span></td>
+        <td class="l">${p.channels.map((c) => `<span class="chip">${CHANNEL[c]}</span>`).join("")}</td>
+        <td>${fmt(w.y)}</td><td>${fmt(w.w)}</td><td>${change(w.w, w.wp)}</td><td>${fmt(w.m)}</td><td>${change(w.m, w.mp)}</td>
+        <td>${all30 ? pct(w.m / all30) : "—"}</td><td>${modelsOf(p.id)}</td><td class="l">${esc(topModel(p.id))}</td></tr>`;
+    }).concat(
+      totalRow("Tracked providers", windows(sum(rows)), `<td>${all30 ? "100%" : "—"}</td><td></td><td></td>`),
+      orAll && (state.channel === "both" || state.channel === "openrouter")
+        ? totalRow("OpenRouter, all traffic", orAll, `<td>${pct(total(sum(rows.filter((u) => u.channel === "openrouter")), orAllDates) / orAll.m)} <span class="dim">tracked</span></td><td></td><td></td>`)
+        : [],
+    ));
+  document.getElementById("prov-table-note").textContent = `Models = in-scope models the provider lists on any channel. Share is of the selected channel's 30-day total across tracked providers.${
+    orAll && (state.channel === "both" || state.channel === "openrouter") ? " OpenRouter, all traffic comes from its weekly rankings: 7d is the last complete week, 30d the last four, and its share is the tracked providers' OpenRouter tokens over those same four weeks." : ""}`;
+
+  const perChannel = (id) => ["openrouter", "liquid", "direct"]
+    .map((c) => [c, total(sum(D.usage.filter((u) => u.channel === c && u.provider === id)), last(30))])
+    .filter(([, v]) => v);
+  document.getElementById("prov-multiples").innerHTML = order.map((p, i) => `
+    <div class="multiple">
+      <header>${swatch(providerSlot.get(p.id) ?? -1)}${esc(p.name)}<span class="total">${fmt(total(byProvider.get(p.id), dates))}</span></header>
+      <div class="chart"><canvas id="pm${i}" role="img" aria-label="${esc(p.name)} tokens per day"></canvas></div>
+      <ul>${perChannel(p.id).map(([c, v]) => `<li><span>${CHANNEL[c]}${c === "direct" ? " (all traffic)" : ""}, 30d</span><span>${fmt(v)}</span></li>`).join("") || '<li><span class="dim">No volume published</span></li>'}</ul>
+    </div>`).join("");
+  order.forEach((p, i) => single(document.getElementById(`pm${i}`), dates, p.name, color(providerSlot.get(p.id) ?? -1), byProvider.get(p.id)));
+
+  const n = (v, f = (x) => Math.round(x).toLocaleString()) => (v == null ? "—" : f(v));
+  table("prov-health", ["Provider", { l: "Channel" }, { l: "Model" }, { l: "Variant" }, "Window", "Uptime", "p50 ms", "tok/s", "TTFT ms", "Requests"],
+    D.health.filter((h) => providers.get(h.provider)?.tracked)
+      .sort((a, b) => a.provider.localeCompare(b.provider) || a.channel.localeCompare(b.channel) || (b.requests ?? 0) - (a.requests ?? 0))
+      .map((h) => `<tr><td>${esc(providers.get(h.provider).name)}</td><td class="l">${CHANNEL[h.channel]}</td>
+        <td class="l">${esc(models.get(h.model)?.name ?? h.model ?? "—")}</td><td class="l dim">${esc(h.variant ?? "")}</td><td>${h.window}</td>
+        <td>${n(h.uptime, (x) => `${x.toFixed(1)}%`)}</td><td>${n(h.p50LatencyMs)}</td><td>${n(h.p50TokensPerSec)}</td><td>${n(h.ttftMs)}</td><td>${n(h.requests)}</td></tr>`));
+}
+
+const antseedByModel = new Map();
+for (const t of D.totals) if (t.model) antseedByModel.set(t.model, (antseedByModel.get(t.model) ?? 0) + t.tokens);
+
+function attributionNote(id, rows) {
+  const in30 = new Set(last(30));
+  const all = rows.reduce((a, u) => a + (in30.has(u.date) ? u.tokens : 0), 0);
+  const known = rows.reduce((a, u) => a + (u.model && in30.has(u.date) ? u.tokens : 0), 0);
+  document.getElementById(id).textContent =
+    `${pct(all ? known / all : 0)} of the channel's 30-day tokens are attributed to an in-scope model. OpenRouter charts only each provider's top models (the rest is "Others"), and Liquid models outside the scope are left out.`;
+}
+
+function renderLabs(dates) {
+  const rows = D.usage.filter(inChannel);
+  const byLab = agg(rows.filter((u) => u.model), labOf);
+  stacked(document.getElementById("lab-chart"), dates, slotted(byLab, labSlot, (id) => labs.get(id)?.name ?? id, dates));
+  attributionNote("lab-note", rows);
+  const all30 = [...byLab.values()].reduce((a, s) => a + total(s, last(30)), 0);
+  const ant = new Map();
+  for (const [m, v] of antseedByModel) ant.set(models.get(m).lab, (ant.get(models.get(m).lab) ?? 0) + v);
+  const ids = D.labs.map((l) => l.id).sort((a, b) => total(byLab.get(b), last(30)) - total(byLab.get(a), last(30)) || (ant.get(b) ?? 0) - (ant.get(a) ?? 0));
+  table("lab-table", ["Lab", "Models", "Yesterday", "7d", "Δ 7d", "30d", "Δ 30d", "Share 30d", "AntSeed 30d", { l: "Top model 30d" }],
+    ids.map((id) => {
+      const w = windows(byLab.get(id));
+      const top = rank(agg(rows.filter((u) => u.model && labOf(u) === id), (u) => u.model), last(30))[0];
+      return `<tr><td><span class="who">${swatch(labSlot.get(id) ?? -1)}${esc(labs.get(id)?.name ?? id)}</span></td>
+        <td>${D.models.filter((m) => m.lab === id).length}</td>
+        <td>${fmt(w.y)}</td><td>${fmt(w.w)}</td><td>${change(w.w, w.wp)}</td><td>${fmt(w.m)}</td><td>${change(w.m, w.mp)}</td>
+        <td>${all30 ? pct(w.m / all30) : "—"}</td><td>${ant.get(id) ? fmt(ant.get(id)) : "—"}</td><td class="l">${esc(top ? models.get(top).name : "—")}</td></tr>`;
+    }));
+}
+
+const blended = (p) => (3 * p.prompt + p.completion) / 4;
+const priced = (l) => l.price && l.price.prompt >= 0 && l.price.completion >= 0 && l.price.prompt + l.price.completion > 0;
+const listingsBy = new Map();
+for (const l of D.listings) if (l.model) (listingsBy.get(l.model) ?? listingsBy.set(l.model, []).get(l.model)).push(l);
+const where = (l) => (l.provider ? `${providers.get(l.provider)?.name ?? l.provider}${l.channel === "openrouter" ? "" : ` (${CHANNEL[l.channel]})`}` : CHANNEL[l.channel]);
+const priceText = (p) => (p ? `${usd(p.prompt)} / ${usd(p.completion)}` : "—");
+
+function renderModels(dates) {
+  const rows = D.usage.filter(inChannel);
+  const byModel = agg(rows.filter((u) => u.model), (u) => u.model);
+  stacked(document.getElementById("model-chart"), dates, slotted(byModel, modelSlot, (id) => models.get(id)?.name ?? id, dates));
+  attributionNote("model-note", rows);
+
+  const ch = (c) => agg(D.usage.filter((u) => u.channel === c && u.model), (u) => u.model);
+  const [or, lq, sp, ob] = [ch("openrouter"), ch("liquid"), ch("surplus"), ch("orbio")];
+  const q = document.getElementById("model-search").value.trim().toLowerCase();
+  const list = D.models
+    .map((m) => {
+      const ls = listingsBy.get(m.id) ?? [];
+      const trackedHere = [...new Set(ls.filter((l) => providers.get(l.provider)?.tracked).map((l) => providers.get(l.provider).name))];
+      const t30 = (s) => total(s.get(m.id), last(30));
+      return { m, ls, trackedHere, or: t30(or), lq: t30(lq), sp: t30(sp), ob: t30(ob), ant: antseedByModel.get(m.id) ?? 0 };
+    })
+    .filter(({ m, trackedHere }) => !q || [m.name, m.id, labs.get(m.lab)?.name, ...trackedHere].some((s) => String(s ?? "").toLowerCase().includes(q)))
+    .sort((a, b) => b.or + b.lq + b.ant + b.sp + b.ob - (a.or + a.lq + a.ant + a.sp + a.ob) || a.m.name.localeCompare(b.m.name));
+
+  table("model-table", ["Model", { l: "Lab" }, "Context", "Listings", "Cheapest in / out", { l: "Cheapest at" }, { l: "Tracked providers" }, "OpenRouter 30d", "Liquid 30d", "AntSeed 30d", "Surplus 30d", "Orbio 30d"],
+    list.map(({ m, ls, trackedHere, or, lq, ant, sp, ob }) => {
+      const best = ls.filter(priced).sort((a, b) => blended(a.price) - blended(b.price))[0];
+      return `<tr class="model" data-id="${esc(m.id)}" aria-expanded="false" tabindex="0">
+        <td><span class="who">${modelSlot.get(m.id) >= 0 ? swatch(modelSlot.get(m.id)) : ""}${esc(m.name)}</span> <span class="mid">${esc(m.id)}</span></td>
+        <td class="l">${esc(labs.get(m.lab)?.name ?? m.lab)}</td><td>${m.context ? fmt(m.context) : "—"}</td><td>${ls.length}</td>
+        <td>${best ? priceText(best.price) : "—"}</td><td class="l">${best ? esc(where(best)) : "—"}</td>
+        <td class="l">${trackedHere.map((n) => `<span class="chip">${esc(n)}</span>`).join("")}</td>
+        <td>${or ? fmt(or) : "—"}</td><td>${lq ? fmt(lq) : "—"}</td><td>${ant ? fmt(ant) : "—"}</td><td>${sp ? fmt(sp) : "—"}</td><td>${ob ? fmt(ob) : "—"}</td></tr>`;
+    }));
+}
+
+function toggleListings(tr) {
+  const open = tr.getAttribute("aria-expanded") === "true";
+  tr.setAttribute("aria-expanded", String(!open));
+  if (open) {
+    if (tr.nextElementSibling?.classList.contains("listings")) tr.nextElementSibling.remove();
+    return;
+  }
+  const ls = [...(listingsBy.get(tr.dataset.id) ?? [])].sort((a, b) => priced(b) - priced(a) || (priced(a) ? blended(a.price) - blended(b.price) : 0));
+  const sub = document.createElement("tr");
+  sub.className = "listings";
+  sub.innerHTML = `<td colspan="12"><table><thead><tr><th>Provider</th><th class="l">Channel</th><th class="l">Variant</th><th>In</th><th>Out</th><th>Cache read</th><th>Max in / out</th><th>Context</th><th class="l">Status</th></tr></thead><tbody>${
+    ls.map((l) => `<tr><td>${esc(l.provider ? providers.get(l.provider)?.name ?? l.provider : "Cheapest seller")}${providers.get(l.provider)?.tracked ? " ●" : ""}</td>
+      <td class="l">${CHANNEL[l.channel]}</td><td class="l dim">${esc(l.variant ?? "")}</td><td>${usd(l.price?.prompt)}</td><td>${usd(l.price?.completion)}</td>
+      <td>${usd(l.price?.cacheRead)}</td><td>${l.priceMax ? priceText(l.priceMax) : "—"}</td><td>${l.context ? fmt(l.context) : "—"}</td><td class="l dim">${esc(l.status ?? "")}</td></tr>`).join("")
+  }</tbody></table><p class="note">● tracked provider. AntSeed quotes the cheapest and dearest seller rather than one provider.</p></td>`;
+  tr.after(sub);
+}
+const modelTable = document.getElementById("model-table");
+modelTable.addEventListener("click", (e) => { const tr = e.target.closest("tr.model"); if (tr) toggleListings(tr); });
+modelTable.addEventListener("keydown", (e) => {
+  const tr = e.target.closest("tr.model");
+  if (tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggleListings(tr); }
+});
+let searchTimer;
+document.getElementById("model-search").addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(render, 150); });
+
+const CLASS = { spot: "Spot", quantity: "Quantity", dollar: "Dollar", access: "Access" };
+const pct1 = (n) => `${+(n * 100).toFixed(1)}%`;
+const signed = (r) => (r == null ? "—" : `${r > 0 ? "+" : r < 0 ? "−" : ""}${pct(Math.abs(r))}`);
+const stats = (id, items) => (document.getElementById(id).innerHTML = items.map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join(""));
+
+function chartOptions(c, x, y) {
+  const a = axes(c, false);
+  a.x.ticks.callback = function (v) { return x(this.getLabelForValue(v)); };
+  a.y.ticks.callback = y;
+  return a;
+}
+
+function renderInstruments(dates) {
+  const inst = D.instruments ?? [];
+  const order = Object.keys(CLASS);
+  table("inst-table", ["Instrument", { l: "Class" }, { l: "Claim" }, "Price", "Face", "Discount", "Yield", "Size", "Expiry", { l: "Source" }],
+    [...inst].sort((a, b) => order.indexOf(a.class) - order.indexOf(b.class)).map((i) => {
+      const range = i.extra?.discountRange;
+      const size = i.size ? `${i.size.unit === "usd" ? usd(i.size.value) : fmt(i.size.value)}<br><span class="dim">${esc(i.size.label)}</span>`
+        : i.supply ? `${fmt(i.supply)}<br><span class="dim">supply</span>` : "—";
+      return `<tr><td>${i.url ? `<a href="${esc(i.url)}" style="color:inherit">${esc(i.name)}</a>` : esc(i.name)}<br><span class="dim">${esc(i.issuer)}</span></td>
+        <td class="l"><span class="chip">${CLASS[i.class]}</span></td>
+        <td class="l" style="white-space:normal;min-width:220px">${esc(i.claim)}${i.notes ? `<br><span class="dim">${esc(i.notes)}</span>` : ""}</td>
+        <td>${usd(i.price)}</td><td>${usd(i.face)}</td><td>${range ? `${pct(range[0])}–${pct(range[1])}` : i.discount == null ? "—" : pct1(i.discount)}</td>
+        <td>${i.yield == null ? "—" : pct(i.yield)}</td><td>${size}</td><td>${esc(i.expiry ?? "—")}</td>
+        <td class="l">${i.source === "live" ? "Live" : `<span class="dim">Report<br>${esc(i.asOf)}</span>`}</td></tr>`;
+    }));
+
+  const ostr = inst.find((i) => i.menu);
+  if (ostr) document.getElementById("ostr-title").textContent = `Mercatus ${ostr.name} menu vs OpenRouter`;
+  table("ostr-table", ["Model", "Peak in / out", "Off-peak in / out", "Peak blend", "Off-peak blend", "OpenRouter median", "Peak vs median", "OpenRouter cheapest"],
+    (ostr?.menu ?? []).map((l) => {
+      const r = l.extra.ref;
+      return `<tr><td>${esc(models.get(l.model)?.name ?? l.rawModel ?? l.model)}</td><td>${priceText(l.price)}</td><td>${priceText(l.extra.offPeak)}</td>
+        <td>${usd(r.blend)}</td><td>${usd(r.offPeakBlend)}</td><td>${usd(r.median)}</td><td>${r.median ? signed(r.blend / r.median - 1) : "—"}</td><td>${usd(r.cheapest)}</td></tr>`;
+    }));
+
+  const c = palette();
+  const credit = inst.find((i) => i.id === "orbio-credit");
+  if (credit) {
+    const { asks, bids } = credit.extra;
+    stats("credit-stats", [
+      [pct1(credit.discount), "best ask discount"], [usd(credit.price), "price per $1 credit"],
+      [usd(credit.size.value), "total ask depth"], [bids.length ? usd(bids.reduce((a, b) => a + b.usd, 0)) : "None", "bid depth"],
+      [fmt(credit.extra.stakers ?? 0), "stakers"],
+    ]);
+    const levels = [...new Set([...asks, ...bids].map((x) => x.discount))].sort((a, b) => a - b);
+    const at = (side) => levels.map((d) => side.find((x) => x.discount === d)?.usd ?? 0);
+    const bar = (label, fill, data) => ({ label, data, backgroundColor: fill, borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: "start", maxBarThickness: 24, categoryPercentage: 0.9, barPercentage: 0.9 });
+    charts.push(new Chart(document.getElementById("credit-chart"), {
+      type: "bar",
+      data: { labels: levels, datasets: [bar("Asks", css("--s2"), at(asks)), ...(bids.length ? [bar("Bids", css("--s1"), at(bids))] : [])] },
+      options: {
+        maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
+        scales: chartOptions(c, (d) => pct1(d), (v) => usd(v)),
+        plugins: {
+          legend: { display: bids.length > 0, position: "top", align: "start", labels: { color: c.text2, usePointStyle: true, pointStyle: "rectRounded", boxWidth: 10, boxHeight: 10, padding: 14 } },
+          tooltip: { ...tooltip(c), filter: (item) => item.raw > 0, callbacks: { title: (items) => `${pct1(items[0].label)} discount`, label: (item) => ` ${item.dataset.label}: ${usd(item.raw)}` } },
+        },
+      },
+    }));
+  }
+
+  const diem = inst.find((i) => i.id === "venice-diem");
+  if (diem) {
+    stats("diem-stats", [
+      [usd(diem.price), "price"], [pct(diem.yield), "inference yield"],
+      [`${fmt(diem.supply)} / ${fmt(diem.extra.targetSupply)}`, "supply / target"], [fmt(diem.extra.staked), "staked"],
+      [diem.extra.utilization?.avg7d ? `${diem.extra.utilization.avg7d.utilizationPct.toFixed(0)}%` : "—", "staked credit used, 7d avg"],
+    ]);
+    const inRange = new Set(dates);
+    const points = (diem.history?.[0]?.points ?? []).filter((p) => inRange.has(p.date));
+    charts.push(new Chart(document.getElementById("diem-chart"), {
+      type: "line",
+      data: { labels: points.map((p) => p.date), datasets: [{ label: "DIEM price", data: points.map((p) => p.value), borderColor: css("--s1"), borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0 }] },
+      options: {
+        maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
+        scales: { ...chartOptions(c, (d) => d.slice(5), (v) => usd(v)), y: { ...chartOptions(c, (d) => d, (v) => usd(v)).y, beginAtZero: false } },
+        plugins: { legend: { display: false }, tooltip: { ...tooltip(c), callbacks: { label: (item) => ` ${usd(item.raw)}` } } },
+      },
+    }));
+  }
+
+  stats("context-stats", [["5.5%", "OpenRouter take rate"], ["500B+", "Venice tokens a day"], ["$150M+", "Venice ARR"], ["Jan 8, 2027", "CFTC decision on CME / ICE inference futures"]]);
+  document.getElementById("context-note").textContent =
+    "Ornn publishes the OCPI and OTPI price indices. Figures in this card and the rows marked Report come from the Inference Bonds report, not live sources.";
+}
+
+function segmented(el, options, key) {
+  el.innerHTML = options.map(([v, label]) => `<button type="button" data-v="${v}" aria-pressed="${String(v) === String(state[key])}">${esc(label)}</button>`).join("");
+  el.onclick = (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    state[key] = key === "range" ? Number(b.dataset.v) : b.dataset.v;
+    render();
+  };
+}
+
+function render() {
+  charts.splice(0).forEach((ch) => ch.destroy());
+  document.querySelectorAll("[role=tab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === state.tab)));
+  document.querySelectorAll("[role=tabpanel]").forEach((p) => (p.hidden = p.id !== state.tab));
+  const options = CHANNELS[state.tab];
+  document.getElementById("channel-wrap").hidden = !options;
+  if (options && !options.some(([v]) => v === state.channel)) state.channel = "both";
+  if (options) segmented(document.getElementById("channel"), options, "channel");
+  segmented(document.getElementById("range"), [[30, "30d"], [60, "60d"], [90, "90d"]], "range");
+  ({ marketplaces: renderMarketplaces, providers: renderProviders, labs: renderLabs, models: renderModels, instruments: renderInstruments })[state.tab](last(state.range));
+}
+
+document.querySelector(".tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("[role=tab]");
+  if (!b) return;
+  state.tab = b.dataset.tab;
+  history.replaceState(null, "", `#${state.tab}`);
+  render();
+});
+const fromHash = location.hash.slice(1);
+if (document.getElementById(fromHash)?.getAttribute("role") === "tabpanel") state.tab = fromHash;
+addEventListener("load", () => scrollTo(0, 0));
+
+document.getElementById("sub").textContent =
+  `${D.marketplaces.length} marketplaces, ${tracked.length} tracked providers, ${D.labs.length} labs and ${D.models.length} models. Complete days through ${D.through} (UTC); generated ${D.generated.slice(0, 16).replace("T", " ")} UTC.`;
+if (D.errors.length) {
+  const el = document.getElementById("errors");
+  el.hidden = false;
+  el.textContent = `Some sources failed: ${D.errors.join("; ")}`;
+}
+render();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+</script>
+</body>
+</html>

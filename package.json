@@ -5,9 +5,10 @@
   "packageManager": "bun@1.2.21",
   "workspaces": [
     "apps/web",
-
     "apps/backend",
-    "packages/*"
+    "packages/*",
+    "projects/*",
+    "skills/*"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -19,6 +20,7 @@
     "skills:sync": "bash skills/sync.sh"
   },
   "devDependencies": {
+    "@types/bun": "^1.4.4",
     "turbo": "^2.3.0"
   },
   "overrides": {
@@ -26,5 +28,8 @@
     "csv-parse": "4.16.3",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0"
+  },
+  "dependencies": {
+    "@types/node": "^26.6.6"
   }
 }
