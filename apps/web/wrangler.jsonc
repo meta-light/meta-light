@@ -19,9 +19,6 @@
   "observability": {
     "enabled": true
   },
-  "build": {
-    "command": "bunx opennextjs-cloudflare build"
-  },
   "previews": {
     "services": [
       {
