@@ -1,14 +1,12 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import Link from "next/link";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import html from "remark-html";
+import source from "@/lib/venture-framework/framework.md";
 
 export const dynamic = "force-static";
 
 export default async function FrameworkPage() {
-  const source = await readFile(path.join(process.cwd(), "src/lib/venture-framework/framework.md"), "utf8");
   const body = String(await remark().use(remarkGfm).use(html).process(source));
   return (
     <main>
