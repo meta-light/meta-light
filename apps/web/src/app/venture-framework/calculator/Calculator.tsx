@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
 import * as rubric from "@/lib/venture-framework/rubric";
 
 const STORAGE_KEY = "venture-rubric:v1";
@@ -37,6 +37,7 @@ function NumberInput(props: {
   value: number | null;
   onChange: (v: number | null) => void;
   label: string;
+  id?: string;
   scale?: number;
   min?: number;
   max?: number;
@@ -49,6 +50,7 @@ function NumberInput(props: {
     <input
       type="text"
       inputMode="decimal"
+      id={props.id}
       className={props.className ?? "numin"}
       aria-label={props.label}
       aria-invalid={bad}
@@ -72,10 +74,11 @@ function Select(props: {
   value: string;
   onChange: (v: string) => void;
   label: string;
+  id?: string;
   className?: string;
 }) {
   return (
-    <select aria-label={props.label} className={props.className} value={props.value} onChange={(e) => props.onChange(e.target.value)}>
+    <select id={props.id} aria-label={props.label} className={props.className} value={props.value} onChange={(e) => props.onChange(e.target.value)}>
       <option value="" />
       {props.options.map((o) => (
         <option key={o} value={o}>
@@ -86,59 +89,66 @@ function Select(props: {
   );
 }
 
-function TextInput(props: { value: string; onChange: (v: string) => void; label: string; type?: string }) {
-  return <input type={props.type ?? "text"} aria-label={props.label} value={props.value} onChange={(e) => props.onChange(e.target.value)} />;
+function TextInput(props: { value: string; onChange: (v: string) => void; label: string; id?: string; type?: string }) {
+  return <input id={props.id} type={props.type ?? "text"} aria-label={props.label} value={props.value} onChange={(e) => props.onChange(e.target.value)} />;
 }
 
-function Kv({ rows }: { rows: [ReactNode, ReactNode][] }) {
+function Field({ label, children }: { label: string; children: (id: string) => ReactNode }) {
+  const id = useId();
   return (
-    <div className="kv">
-      {rows.map(([k, v], i) => (
-        <KvRow key={i} k={k} v={v} />
-      ))}
-    </div>
+    <>
+      <label htmlFor={id}>{label}</label>
+      {children(id)}
+    </>
   );
 }
 
-function KvRow({ k, v }: { k: ReactNode; v: ReactNode }) {
+function Stat({ label, children }: { label: string; children: ReactNode }) {
   return (
     <>
-      {typeof k === "string" ? <span className="k">{k}</span> : k}
-      {v}
+      <span className="k">{label}</span>
+      {children}
     </>
   );
 }
 
 function DealSection({ s, r, update }: { s: State; r: rubric.Results; update: Update }) {
   const i = s.inputs;
-  const label = (text: string) => <label>{text}</label>;
   return (
     <div className="grid2">
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Deal</h2>
-        <Kv
-          rows={[
-            [label("Company"), <TextInput label="Company" value={i.company} onChange={(v) => update((d) => void (d.inputs.company = v))} />],
-            [label("Date reviewed"), <TextInput label="Date reviewed" type="date" value={i.dateReviewed} onChange={(v) => update((d) => void (d.inputs.dateReviewed = v))} />],
-            [label("Stage"), <Select label="Stage" options={rubric.STAGES} value={i.stage} onChange={(v) => update((d) => void (d.inputs.stage = v))} />],
-            [label("Vertical"), <Select label="Vertical" options={rubric.VERTICALS} value={i.vertical} onChange={(v) => update((d) => void (d.inputs.vertical = v))} />],
-            [label("Instrument"), <Select label="Instrument" options={rubric.INSTRUMENTS} value={i.instrument} onChange={(v) => update((d) => void (d.inputs.instrument = v))} />],
-            [label("Reviewer"), <TextInput label="Reviewer" value={i.reviewer} onChange={(v) => update((d) => void (d.inputs.reviewer = v))} />],
-          ]}
-        />
+        <div className="kv">
+          <Field label="Company">
+            {(id) => <TextInput id={id} label="Company" value={i.company} onChange={(v) => update((d) => void (d.inputs.company = v))} />}
+          </Field>
+          <Field label="Date reviewed">
+            {(id) => <TextInput id={id} label="Date reviewed" type="date" value={i.dateReviewed} onChange={(v) => update((d) => void (d.inputs.dateReviewed = v))} />}
+          </Field>
+          <Field label="Stage">
+            {(id) => <Select id={id} label="Stage" options={rubric.STAGES} value={i.stage} onChange={(v) => update((d) => void (d.inputs.stage = v))} />}
+          </Field>
+          <Field label="Vertical">
+            {(id) => <Select id={id} label="Vertical" options={rubric.VERTICALS} value={i.vertical} onChange={(v) => update((d) => void (d.inputs.vertical = v))} />}
+          </Field>
+          <Field label="Instrument">
+            {(id) => <Select id={id} label="Instrument" options={rubric.INSTRUMENTS} value={i.instrument} onChange={(v) => update((d) => void (d.inputs.instrument = v))} />}
+          </Field>
+          <Field label="Reviewer">
+            {(id) => <TextInput id={id} label="Reviewer" value={i.reviewer} onChange={(v) => update((d) => void (d.inputs.reviewer = v))} />}
+          </Field>
+        </div>
       </div>
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Result</h2>
-        <Kv
-          rows={[
-            ["Fundamentals filter", <Out text={r.filter} tone={filterTone(r.filter)} />],
-            ["Weighted score (0-100)", <Out text={rubric.fmt.num1(r.weightedScore)} />],
-            ["Verdict", <Out text={r.verdict} tone={verdictTone(r.verdict)} />],
-            ["Expected multiple", <Out text={rubric.fmt.mult1(r.expectedMultiple)} />],
-            ["Meets target multiple?", <Out text={r.meetsTarget ?? ""} tone={yesNoTone(r.meetsTarget)} />],
-            ["Weakest category", <Out text={r.weakestCategory ?? ""} />],
-          ]}
-        />
+        <div className="kv">
+          <Stat label="Fundamentals filter"><Out text={r.filter} tone={filterTone(r.filter)} /></Stat>
+          <Stat label="Weighted score (0-100)"><Out text={rubric.fmt.num1(r.weightedScore)} /></Stat>
+          <Stat label="Verdict"><Out text={r.verdict} tone={verdictTone(r.verdict)} /></Stat>
+          <Stat label="Expected multiple"><Out text={rubric.fmt.mult1(r.expectedMultiple)} /></Stat>
+          <Stat label="Meets target multiple?"><Out text={r.meetsTarget ?? ""} tone={yesNoTone(r.meetsTarget)} /></Stat>
+          <Stat label="Weakest category"><Out text={r.weakestCategory ?? ""} /></Stat>
+        </div>
       </div>
     </div>
   );
@@ -228,8 +238,9 @@ function ScoringSection({ s, update }: { s: State; update: Update }) {
     </tr>,
   );
   lenses.forEach((lens, i) => {
+    const row = rubric.CRITERIA.length + i;
     const name = <span className={lens ? "" : "empty-check"}>{lens?.check ?? "No check for this vertical"}</span>;
-    rows.push(<ScoreRow key={`v-${i}`} s={s} row={rubric.CRITERIA.length + i} name={name} five={lens?.five ?? ""} update={update} />);
+    rows.push(<ScoreRow key={row} s={s} row={row} name={name} five={lens?.five ?? ""} update={update} />);
   });
   return (
     <>
@@ -291,49 +302,48 @@ function CategorySection({ r }: { r: rubric.Results }) {
 }
 
 function ValuationSection({ s, r, update }: { s: State; r: rubric.Results; update: Update }) {
-  const money = (label: string, key: MoneyKey): [ReactNode, ReactNode] => [
-    <label>{label}</label>,
-    <NumberInput label={label} value={s.inputs[key]} onChange={(v) => update((d) => void (d.inputs[key] = v))} />,
-  ];
+  const money = (label: string, key: MoneyKey) => (
+    <Field label={label}>
+      {(id) => <NumberInput id={id} label={label} value={s.inputs[key]} onChange={(v) => update((d) => void (d.inputs[key] = v))} />}
+    </Field>
+  );
   const dilution = "Expected dilution to exit (%)";
   return (
     <>
       <h2>4. Valuation and return math</h2>
       <div className="grid2">
         <div className="card">
-          <Kv
-            rows={[
-              money("Fund size ($)", "fundSize"),
-              money("Check size ($)", "checkSize"),
-              money("Entry post-money valuation or FDV ($)", "entryValuation"),
-              money("Forward annual revenue, mixed-activity scenario ($)", "forwardRevenue"),
-              money("Treasury cash ($)", "treasuryCash"),
-              money("Monthly burn ($)", "monthlyBurn"),
-              [
-                <label>{dilution}</label>,
+          <div className="kv">
+            {money("Fund size ($)", "fundSize")}
+            {money("Check size ($)", "checkSize")}
+            {money("Entry post-money valuation or FDV ($)", "entryValuation")}
+            {money("Forward annual revenue, mixed-activity scenario ($)", "forwardRevenue")}
+            {money("Treasury cash ($)", "treasuryCash")}
+            {money("Monthly burn ($)", "monthlyBurn")}
+            <Field label={dilution}>
+              {(id) => (
                 <NumberInput
+                  id={id}
                   label={dilution}
                   scale={100}
                   min={0}
                   max={rubric.MAX_DILUTION}
                   value={s.inputs.dilution}
                   onChange={(v) => update((d) => void (d.inputs.dilution = v))}
-                />,
-              ],
-            ]}
-          />
+                />
+              )}
+            </Field>
+          </div>
         </div>
         <div className="card">
-          <Kv
-            rows={[
-              ["Ownership at entry", <Out text={rubric.fmt.pct2(r.ownershipAtEntry)} />],
-              ["Ownership at exit", <Out text={rubric.fmt.pct2(r.ownershipAtExit)} />],
-              ["Exit value needed to return the fund ($)", <Out text={rubric.fmt.money(r.exitValueToReturnFund)} />],
-              ["Required multiple on entry valuation", <Out text={rubric.fmt.mult1(r.requiredMultiple)} />],
-              ["Entry price-to-sales", <Out text={rubric.fmt.mult1(r.entryPriceToSales)} />],
-              ["Runway (months)", <Out text={rubric.fmt.num1(r.runwayMonths)} />],
-            ]}
-          />
+          <div className="kv">
+            <Stat label="Ownership at entry"><Out text={rubric.fmt.pct2(r.ownershipAtEntry)} /></Stat>
+            <Stat label="Ownership at exit"><Out text={rubric.fmt.pct2(r.ownershipAtExit)} /></Stat>
+            <Stat label="Exit value needed to return the fund ($)"><Out text={rubric.fmt.money(r.exitValueToReturnFund)} /></Stat>
+            <Stat label="Required multiple on entry valuation"><Out text={rubric.fmt.mult1(r.requiredMultiple)} /></Stat>
+            <Stat label="Entry price-to-sales"><Out text={rubric.fmt.mult1(r.entryPriceToSales)} /></Stat>
+            <Stat label="Runway (months)"><Out text={rubric.fmt.num1(r.runwayMonths)} /></Stat>
+          </div>
         </div>
       </div>
     </>
