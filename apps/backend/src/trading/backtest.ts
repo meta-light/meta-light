@@ -15,6 +15,7 @@ import {
 import { REGISTRY, type StrategyEntry } from './engine/registry';
 import { type FetchBars, periodsPerYear, type RunOptions, runStrategy } from './engine/run';
 import type { BacktestResult, DataBar } from './strategies/engine/index';
+import { defaultRiskModel, MaRegimeGate, RiskModelChain } from './strategies/engine/risk/index';
 import { toMs } from './strategies/engine/metrics/series';
 
 export const UNIVERSE = ['BTC-USD', 'ETH-USD', 'SOL-USD'];
@@ -255,9 +256,13 @@ async function runFull(
   flags: Flags,
   notes: FetchNote[],
 ): Promise<{ summary: Summary; result: BacktestResult; closes: (a: string) => Map<string, number> | undefined }> {
-  const src = source(flags);
+  // Strategies pinned to a bar source (the long-history coinmetrics ones) default to it and to their own start.
+  const own = str(flags, 'source') === undefined && SOURCES.includes(e.config.source as Source);
+  const src = own ? (e.config.source as Source) : source(flags);
   const interval = str(flags, 'interval') ?? e.config.granularity ?? '1d';
-  const { start, end } = defaultWindow(interval, flags, src);
+  const window = defaultWindow(interval, flags, src);
+  const start = own && str(flags, 'start') === undefined ? e.config.backtestPeriod.start : window.start;
+  const end = window.end;
   const seen = new Map<string, Map<string, number>>();
   const fetchBars = recordingFetch(
     createFetchBars({ source: src, onFetch: (n) => notes.push(n) }),
@@ -272,9 +277,22 @@ async function runFull(
     capital: Number(str(flags, 'capital') ?? 100_000),
     fetchBars,
     ...(flags['template-costs'] ? {} : { costs: CRYPTO_COSTS }),
+    ...regimeGate(e, flags),
   });
   const closes = (a: string) => seen.get(`${a}|${interval}`);
   return { summary: summarize(e.id, assets, interval, result, closes, result.warnings), result, closes };
+}
+
+/** `--regime 1400:1` drops long exposure while price is more than 100% above its 1400-bar SMA. */
+function regimeGate(e: StrategyEntry, flags: Flags): Pick<RunOptions, 'backtester'> {
+  const spec = str(flags, 'regime');
+  if (spec === undefined) return {};
+  const [period, premium] = spec.split(':').map(Number);
+  if (!Number.isInteger(period) || !Number.isFinite(premium))
+    throw new Error('--regime takes <period>:<premium>, e.g. 1400:1');
+  const gate = new MaRegimeGate({ period: period!, maxPremium: premium! });
+  const base = defaultRiskModel(e.config);
+  return { backtester: { riskModel: base ? new RiskModelChain([base, gate]) : gate } };
 }
 
 const pct = (x: number | null): string => (x === null || !Number.isFinite(x) ? '—' : `${(x * 100).toFixed(1)}%`);

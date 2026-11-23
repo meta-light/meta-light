@@ -1,5 +1,5 @@
 import { DurableObject } from 'cloudflare:workers';
-import { FAST_JOBS, HOURLY_JOBS, runJobs } from './src/collect/collectors';
+import { DAILY_JOBS, FAST_JOBS, HOURLY_JOBS, runJobs } from './src/collect/collectors';
 import { ensureRecorder } from './src/database/recorder';
 import type { Sql } from './src/database/sql';
 
@@ -15,6 +15,8 @@ interface Env {
 const FAST_CRON = '*/5 * * * *';
 const HOURLY_CRON = '7 * * * *';
 const PAPER_CRON = '30 12 * * *';
+const DAILY_CRON = '0 14 * * *';
+const CRON_JOBS = { [FAST_CRON]: FAST_JOBS, [HOURLY_CRON]: HOURLY_JOBS, [DAILY_CRON]: DAILY_JOBS };
 
 function d1Sql(db: D1Database): Sql {
   return {
@@ -96,7 +98,7 @@ export default {
     }
     const sql = d1Sql(env.DB);
     await ensureRecorder(sql);
-    const jobs = controller.cron === HOURLY_CRON ? HOURLY_JOBS : controller.cron === FAST_CRON ? FAST_JOBS : {};
+    const jobs = CRON_JOBS[controller.cron] ?? {};
     const results = await runJobs(sql, jobs, controller.scheduledTime);
     for (const r of results) console.log(`${r.ok ? 'ok' : 'FAIL'} ${r.job} ${r.rows} rows ${r.ms}ms ${r.error ?? ''}`);
   },

@@ -57,6 +57,7 @@ export type RiskModel =
     }
   | { type: 'risk_parity'; lookback: number }
   | { type: 'position_limit'; maxWeight: number }
+  | { type: 'ma_regime'; period: number; maxPremium: number }
   | { type: 'chain'; models: RiskModel[] };
 
 export type ExecutionMode = 'weights' | 'orders';
@@ -76,6 +77,8 @@ export interface StrategyConfig {
   rebalancePolicy?: RebalancePolicy;
   riskModel?: RiskModel;
   indicators: IndicatorSpec[];
+  /** External daily series (see trading/cycle/series.ts), exposed as features of the same name. */
+  series?: string[];
   slippage?: SlippageModel;
   commission?: CommissionScheme;
 }

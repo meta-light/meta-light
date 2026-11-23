@@ -2,6 +2,7 @@ import { scrape as antseedScrape } from "./antseed";
 import { Catalog, providerId, Providers, splitVariant } from "./catalog";
 import { chutesPlatform } from "./chutes";
 import { ambientModels, primeIntellectModels } from "./direct";
+import { engy, engyPrice } from "./engy";
 import { modelEndpoints, openRouterCatalog, openRouterWeekly, PROVIDERS as OR_TRACKED, scrapeProvider as openRouterProvider } from "./index";
 import { buildInstruments } from "./instruments";
 import { LIQUID_TRACKED, liquidBook, liquidDaily, scrapeProvider as liquidProvider, usageWindows } from "./liquid";
@@ -21,7 +22,7 @@ export async function collect(days = 90): Promise<Snapshot> {
   const errors: string[] = [];
   const settle = <T>(name: string, p: Promise<T>) => p.catch((err) => (errors.push(`${name}: ${(err as Error).message}`), undefined));
 
-  const [orCatalog, orPages, lqDaily, lqBook, lqWindows, lqProviders, antseed, chutes, venice, sp, ob, ostrSeries, ambient, prime, diemData, orWeekly] = await Promise.all([
+  const [orCatalog, orPages, lqDaily, lqBook, lqWindows, lqProviders, antseed, chutes, venice, sp, ob, ostrSeries, ambient, prime, diemData, orWeekly, en] = await Promise.all([
     settle("openrouter catalog", openRouterCatalog()),
     Promise.all(OR_TRACKED.map((slug) => settle(`openrouter ${slug}`, openRouterProvider(slug)))),
     settle("liquid daily", liquidDaily(days)),
@@ -38,6 +39,7 @@ export async function collect(days = 90): Promise<Snapshot> {
     settle("prime intellect direct", primeIntellectModels()),
     settle("venicestats diem", diem()),
     settle("openrouter weekly", openRouterWeekly()),
+    settle("engy", engy()),
   ]);
 
   const through = isoDay(Date.parse(isoDay(Date.now())) - DAY);
@@ -52,6 +54,7 @@ export async function collect(days = 90): Promise<Snapshot> {
   for (const p of lqProviders.flatMap((x) => (x ? [x] : [])))
     providers.add(p.slug, p.name ?? p.slug, true, { channel: "liquid", externalId: p.id, extra: { admittedAt: p.admittedAt } });
   if (chutes) providers.add("chutes", "Chutes", true, { channel: "direct", externalId: "https://chutes.ai", extra: { overview: chutes.overview, users: chutes.users } });
+  if (en) providers.add("engy", "Engy", true, { channel: "direct", externalId: "https://engy.ai", extra: { population: en.population } });
   if (venice) providers.add("venice", "Venice", true, { channel: "direct", externalId: "https://api.venice.ai", extra: {} });
   const direct = [
     { id: "ambient", name: "Ambient", api: "https://api.ambient.xyz", models: ambient },
@@ -74,6 +77,10 @@ export async function collect(days = 90): Promise<Snapshot> {
   for (const d of ob?.daily.slice(-30) ?? []) for (const m of d.models) if (m.model !== "other") obTokens.set(m.model, (obTokens.get(m.model) ?? 0) + Number(m.tokens));
   for (const [raw] of [...obTokens].sort((a, b) => b[1] - a[1]).slice(0, 10))
     catalog.add({ channel: "orbio", raw }, { name: ob?.models.find((m) => m.id === raw)?.name.split(": ").pop() });
+  const enPriced = (en?.models ?? []).filter((m) => engyPrice(m));
+  for (const m of enPriced)
+    catalog.add({ channel: "direct", provider: "engy", raw: m.id }, { keys: [m.facts?.checkpoint?.value], lab: m.facts?.developer?.value, context: m.context.value });
+  for (const raw of new Set(en?.daily.flatMap((d) => d.models.map((m) => m.model)))) catalog.add({ channel: "direct", provider: "engy", raw });
   for (const p of orPageList) {
     const byPermaslug = new Map(p.models.map((m) => [m.permaslug, m.slug]));
     const provider = providerId(p.slug);
@@ -241,6 +248,14 @@ export async function collect(days = 90): Promise<Snapshot> {
       price: { prompt: Number(m.pricing.prompt) * 1e6, completion: Number(m.pricing.completion) * 1e6, cacheRead: m.pricing.input_cache_read == null ? undefined : Number(m.pricing.input_cache_read) * 1e6 },
     });
   }
+  for (const d of en?.daily ?? [])
+    for (const m of d.models)
+      if (m.tokens && d.date <= through) usage.push({ channel: "direct", provider: "engy", model: catalog.find("direct", m.model), date: d.date, tokens: m.tokens });
+  for (const m of enPriced)
+    listings.push({
+      channel: "direct", provider: "engy", model: catalog.find("direct", m.id)!, rawModel: m.id, price: engyPrice(m), context: m.context.value,
+      status: m.success24h.value == null ? undefined : `${(m.success24h.value * 100).toFixed(1)}% success 24h`, extra: m,
+    });
   const weekly = (orWeekly ?? []).filter((w) => Date.parse(w.week) + 7 * DAY <= Date.parse(through) + DAY);
   return {
     generated: new Date().toISOString(),

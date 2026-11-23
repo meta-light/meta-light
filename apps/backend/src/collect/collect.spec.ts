@@ -2,6 +2,7 @@ import { insertRows, MAX_PARAMS, type Sql, upsert } from '../database/sql';
 import { recorderStatements } from '../database/recorder';
 import { sqlStore } from '../trading/store';
 import { runJobs } from './collectors';
+import { type MergeMining, saveNock } from './nock';
 import { bucketRow, metarTempC, toMarketEvent, type EventRow } from './records';
 
 function fakeSql(answers: Record<string, unknown[]> = {}): Sql & { calls: { query: string; params: unknown[] }[] } {
@@ -49,7 +50,7 @@ describe('insertRows', () => {
 describe('recorder schema', () => {
   it('splits into idempotent statements', () => {
     const s = recorderStatements();
-    expect(s.length).toBe(10);
+    expect(s.length).toBe(12);
     for (const q of s) expect(q).toMatch(/^CREATE (TABLE|INDEX) IF NOT EXISTS/);
   });
 });
@@ -132,6 +133,39 @@ describe('metarTempC', () => {
   it('falls back to the whole-degree temp', () => {
     expect(metarTempC('KLAX 151753Z 25010KT 10SM CLR 21/12 A2995 RMK AO2', 21)).toBe(21);
     expect(metarTempC('KLAX 151753Z AUTO', null)).toBeNull();
+  });
+});
+
+describe('saveNock', () => {
+  const payload: MergeMining = {
+    tipHeight: 188161,
+    pearlWindows: {
+      h24: { pearlBlocks: 424, tagged: 174, matched: 48, share: 0.41 },
+      d7: { pearlBlocks: 3219, tagged: 1379, matched: 433, share: 0.428 },
+    },
+    miners: [
+      { address: 'A', declared24h: 188, landed24h: 0, declared7d: 1124, landed7d: 2 },
+      { address: 'B', declared24h: 99, landed24h: 24, declared7d: 706, landed7d: 215 },
+    ],
+    declared: { totalAi: 6987, declaredAi: 6987, share: 1 },
+    window2016: { totalAi: 1410, declaredAi: 1410, share: 1 },
+    pearl: { taggedBlocks: 19718, matchedPairs: 11028 },
+  };
+
+  it('upserts the day summary and replaces that day of miners', async () => {
+    const sql = fakeSql();
+    const t = Date.parse('2026-11-23T14:00:00Z');
+    expect(await saveNock(sql, payload, t)).toBe(3);
+    const [summary, del, miners] = sql.calls;
+    expect(summary!.query).toMatch(/^INSERT INTO nock_merge_mining .* ON CONFLICT \(day\) DO UPDATE SET t = excluded\.t/);
+    expect(summary!.params).toEqual([
+      '2026-11-23', t, 188161, 424, 174, 48, 0.41, 3219, 1379, 433, 0.428, 6987, 6987, 1, 1410, 1410, 1, 19718, 11028, 2,
+    ]);
+    expect(del).toEqual({ query: 'DELETE FROM nock_merge_miners WHERE day = ?', params: ['2026-11-23'] });
+    expect(miners!.params).toEqual([
+      '2026-11-23', 'A', t, 188161, 188, 0, 1124, 2,
+      '2026-11-23', 'B', t, 188161, 99, 24, 706, 215,
+    ]);
   });
 });
 

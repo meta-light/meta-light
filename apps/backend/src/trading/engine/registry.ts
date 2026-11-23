@@ -4,6 +4,7 @@ import * as bollingerBands from '../strategies/weights/bollinger-bands';
 import * as bollingerReversion from '../strategies/weights/bollinger-reversion';
 import * as combinedMomentum from '../strategies/weights/combined-momentum';
 import * as continuousFuturesTrend from '../strategies/weights/continuous-futures-trend';
+import * as cycleConfluence from '../strategies/weights/cycle-confluence';
 import * as crossSectionalMomentum from '../strategies/weights/cross-sectional-momentum';
 import * as crossSectionalReversal from '../strategies/weights/cross-sectional-reversal';
 import * as dailyPartialDrift from '../strategies/weights/daily-partial-drift';
@@ -17,6 +18,7 @@ import * as liquidityBased from '../strategies/weights/liquidity-based';
 import * as macdSignal from '../strategies/weights/macd-signal';
 import * as macdTrend from '../strategies/weights/macd-trend';
 import * as meanReversion from '../strategies/weights/mean-reversion';
+import * as mvrvAccumulation from '../strategies/weights/mvrv-accumulation';
 import * as monthlyCircuitBreaker from '../strategies/weights/monthly-circuit-breaker';
 import * as monthlyDriftEtf from '../strategies/weights/monthly-drift-etf';
 import * as monthlyInverseVol from '../strategies/weights/monthly-inverse-vol';
@@ -36,6 +38,7 @@ import * as stochasticOscillator from '../strategies/weights/stochastic-oscillat
 import * as volTargetMomentum from '../strategies/weights/vol-target-momentum';
 import * as volTargetTrend from '../strategies/weights/vol-target-trend';
 import * as weeklyRsiReversion from '../strategies/weights/weekly-rsi-reversion';
+import * as wmaAccumulation from '../strategies/weights/wma-accumulation';
 import * as bracketRsiReversion from '../strategies/orders/bracket-rsi-reversion';
 import * as bracketTrend from '../strategies/orders/bracket-trend';
 import * as futuresDonchianContracts from '../strategies/orders/futures-donchian-contracts';
@@ -94,8 +97,12 @@ function def(
 
 const PAIR = { minAssets: 2, maxAssets: 2 };
 const PORTFOLIO = { minAssets: 2 };
+const BTC_ONLY = { fixedUniverse: true, maxAssets: 1 };
 
 const ENTRIES: StrategyEntry[] = [
+  def('wma-accumulation', 'weights', wmaAccumulation, wmaAccumulation.WMAAccumulation, BTC_ONLY),
+  def('mvrv-accumulation', 'weights', mvrvAccumulation, mvrvAccumulation.MVRVAccumulation, BTC_ONLY),
+  def('cycle-confluence', 'weights', cycleConfluence, cycleConfluence.CycleConfluence, BTC_ONLY),
   def('adx-trend', 'weights', adxTrend, adxTrend.ADXTrend),
   def(
     'bollinger-bands',

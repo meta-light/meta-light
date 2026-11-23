@@ -1,4 +1,4 @@
-import type { DataBar } from '../strategies/engine/index';
+import type { DataBar, SeriesPoint } from '../strategies/engine/index';
 import { REGISTRY, type StrategyEntry } from './registry';
 import { type BarRequest, runStrategy } from './run';
 
@@ -47,6 +47,10 @@ function assetsFor(entry: StrategyEntry): string[] {
   return GENERIC.slice(0, entry.minAssets);
 }
 
+// Offline stand-in for every external series: one point a day, cycling through a wide range.
+const fetchSeries = async (): Promise<SeriesPoint[]> =>
+  syntheticBars(7).map((b, i) => [b.timestamp, 0.5 + (i % 50) / 10]);
+
 function barsFor(assets: string[]): Record<string, DataBar[]> {
   return Object.fromEntries(assets.map((a, i) => [a, syntheticBars(i + 1)]));
 }
@@ -54,10 +58,10 @@ function barsFor(assets: string[]): Record<string, DataBar[]> {
 describe('registry', () => {
   it('lists every weights and orders template once', () => {
     const ids = [...REGISTRY.keys()];
-    expect(ids).toHaveLength(57);
+    expect(ids).toHaveLength(60);
     expect(
       ids.filter((id) => REGISTRY.get(id)!.mode === 'weights'),
-    ).toHaveLength(37);
+    ).toHaveLength(40);
     for (const id of [
       'sma-crossover',
       'signal-confluence',
@@ -88,6 +92,7 @@ describe('runStrategy on synthetic bars', () => {
       end: '2030-01-01',
       capital: 50_000,
       bars: barsFor(assets),
+      fetchSeries,
     });
 
     expect(config.instruments).toEqual(assets);
