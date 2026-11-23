@@ -436,7 +436,7 @@ function renderProviders(dates) {
   const label = CHANNELS.providers.find(([v]) => v === state.channel)[1];
   document.getElementById("prov-title").textContent = `Tokens per day by provider · ${label}`;
   document.getElementById("prov-note").textContent = state.channel === "direct"
-    ? "Direct = the provider's own platform. Chutes publishes daily tokens for all its traffic, which may include requests routed through marketplaces; Venice publishes prices but no volume."
+    ? "Direct = the provider's own platform. Chutes publishes daily tokens for all its traffic, which may include requests routed through marketplaces; Engy publishes daily tokens for buyer traffic on its own API; Venice publishes prices but no volume."
     : "OpenRouter: complete UTC days from each provider's page. Liquid: days differenced from rolling hourly windows. Akash is one operator on both (akashml on OpenRouter).";
   stacked(document.getElementById("prov-chart"), dates, slotted(byProvider, providerSlot, (id) => providers.get(id).name, dates));
 

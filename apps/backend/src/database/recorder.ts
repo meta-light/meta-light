@@ -70,6 +70,41 @@ CREATE TABLE IF NOT EXISTS collector_runs (
   PRIMARY KEY (job, t)
 );
 
+CREATE TABLE IF NOT EXISTS nock_merge_mining (
+  day text PRIMARY KEY,
+  t integer NOT NULL,
+  tip_height integer NOT NULL,
+  h24_pearl_blocks integer NOT NULL,
+  h24_tagged integer NOT NULL,
+  h24_matched integer NOT NULL,
+  h24_share real NOT NULL,
+  d7_pearl_blocks integer NOT NULL,
+  d7_tagged integer NOT NULL,
+  d7_matched integer NOT NULL,
+  d7_share real NOT NULL,
+  declared_total_ai integer NOT NULL,
+  declared_declared_ai integer NOT NULL,
+  declared_share real NOT NULL,
+  window2016_total_ai integer NOT NULL,
+  window2016_declared_ai integer NOT NULL,
+  window2016_share real NOT NULL,
+  pearl_tagged_blocks integer NOT NULL,
+  pearl_matched_pairs integer NOT NULL,
+  miner_count integer NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS nock_merge_miners (
+  day text NOT NULL,
+  address text NOT NULL,
+  t integer NOT NULL,
+  tip_height integer NOT NULL,
+  declared_24h integer NOT NULL,
+  landed_24h integer NOT NULL,
+  declared_7d integer NOT NULL,
+  landed_7d integer NOT NULL,
+  PRIMARY KEY (day, address)
+);
+
 CREATE TABLE IF NOT EXISTS paper_weather_trades (
   strategy text NOT NULL,
   venue text NOT NULL,

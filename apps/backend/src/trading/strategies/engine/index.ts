@@ -5,7 +5,7 @@ export {
   type BacktestResult,
   type WeightExecution,
 } from './backtester';
-export { BarData, type BarFetcher, type DataBar } from './data';
+export { alignAsOf, BarData, type BarFetcher, type DataBar, type SeriesPoint } from './data';
 export {
   FoldRunner,
   WalkForwardEngine,

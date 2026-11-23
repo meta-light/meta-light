@@ -4,8 +4,13 @@ const API = "https://router.inference.ai.exchange/v1/exchange";
 const PROVIDERS = ["73449c7f-17dd-4dd7-a03b-3e7ba923ce2d", "2249261a-b9e8-449c-8c79-abf2dc02dd91"];
 const HEALTH_DAYS = 3;
 
-async function get<T>(path: string): Promise<T> {
+async function get<T>(path: string, attempt = 0): Promise<T> {
   const res = await fetch(API + path);
+  if (res.status === 429 && attempt < 5) {
+    const wait = Number(res.headers.get("retry-after")) * 1000 || 1000 * 2 ** attempt;
+    await Bun.sleep(wait);
+    return get(path, attempt + 1);
+  }
   if (!res.ok) throw new Error(`${res.status} ${path}`);
   return res.json() as Promise<T>;
 }

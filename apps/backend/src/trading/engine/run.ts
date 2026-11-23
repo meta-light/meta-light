@@ -13,6 +13,7 @@ import {
 } from '../strategies/engine/index';
 import { getContractSpec } from '../strategies/engine/execution/contract-spec';
 import { toMs } from '../strategies/engine/metrics/series';
+import { createFetchSeries, type FetchSeries } from '../cycle/series';
 import { getStrategy, type StrategyEntry } from './registry';
 
 export interface BarRequest {
@@ -33,6 +34,7 @@ export interface RunOptions {
   capital?: number;
   bars?: Record<string, readonly DataBar[]>;
   fetchBars?: FetchBars;
+  fetchSeries?: FetchSeries;
   costs?: { commission?: CommissionScheme; slippage?: SlippageModel };
   backtester?: BacktesterOptions;
 }
@@ -52,6 +54,7 @@ export async function runStrategy(options: RunOptions): Promise<RunResult> {
 
   const loaded = await loadBars(assets, { start, end, interval }, options);
   const data = new BarData(loaded.bars, config.indicators);
+  await addSeries(data, config, interval, options.fetchSeries);
 
   const benchmark = data.getFeature('adj_close').col(assets[0]!);
   const backtester = new Backtester(entry.create(config), data, {
@@ -63,8 +66,30 @@ export async function runStrategy(options: RunOptions): Promise<RunResult> {
   result.warnings.unshift(
     ...assetClassWarnings(entry, assets),
     ...loaded.warnings,
+    ...warmupWarnings(config, data.dates.length),
   );
   return { strategy: entry.id, config, result };
+}
+
+async function addSeries(
+  data: BarData,
+  config: StrategyConfig,
+  interval: string,
+  fetchSeries?: FetchSeries,
+): Promise<void> {
+  if (!config.series?.length) return;
+  // Series are stamped by day; on intraday bars an as-of join would leak a value before it was published.
+  if (/^\d+(m|h)$/i.test(interval.trim()))
+    throw new Error(`Series ${config.series.join(', ')} need daily bars, got ${interval}`);
+  const fetch = fetchSeries ?? createFetchSeries();
+  for (const name of config.series) data.addSeries(name, await fetch(name));
+}
+
+function warmupWarnings(config: StrategyConfig, bars: number): string[] {
+  const longest = Math.max(0, ...(config.indicators ?? []).flatMap((s) => s.params.periods));
+  return longest >= bars
+    ? [`Longest indicator window (${longest}) is not shorter than the ${bars} loaded bars; its signals never form`]
+    : [];
 }
 
 function resolveAssets(entry: StrategyEntry, requested?: string[]): string[] {

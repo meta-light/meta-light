@@ -3,16 +3,18 @@ import { toMs } from '../strategies/engine/metrics/series';
 import { fetchBinance } from './binance';
 import { type RangeFetcher, withMonthCache } from './cache';
 import { fetchCoinbase } from './coinbase';
+import { fetchCoinmetrics } from './coinmetrics';
 import { fetchCoingecko } from './coingecko';
 import { intervalMs, type Row, toBar } from './interval';
 
-export type Source = 'binance' | 'coinbase' | 'coingecko';
-export const SOURCES: readonly Source[] = ['binance', 'coinbase', 'coingecko'];
+export type Source = 'binance' | 'coinbase' | 'coingecko' | 'coinmetrics';
+export const SOURCES: readonly Source[] = ['binance', 'coinbase', 'coingecko', 'coinmetrics'];
 
 const FETCHERS: Record<Source, RangeFetcher> = {
   binance: fetchBinance,
   coinbase: fetchCoinbase,
   coingecko: fetchCoingecko,
+  coinmetrics: fetchCoinmetrics,
 };
 
 export interface FetchNote {
@@ -45,7 +47,7 @@ export function createFetchBars(options: CreateFetchBarsOptions = {}): FetchBars
       source,
       bars: rows.length,
       filled,
-      synthesizedOhlc: source === 'coingecko',
+      synthesizedOhlc: source === 'coingecko' || source === 'coinmetrics',
     });
     return rows.map((r) => toBar(r, interval));
   };

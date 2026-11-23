@@ -1,12 +1,14 @@
 import type { RiskModel as RiskModelSpec, StrategyConfig } from '../../core/index';
 import { type RiskModel, RiskModelChain } from './base';
 import { InverseVolModel } from './inverse-vol';
+import { MaRegimeGate } from './ma-regime';
 import { PositionLimitModel } from './position-limit';
 import { RiskParityModel } from './risk-parity';
 import { VolTargetModel } from './vol-target';
 
 export * from './base';
 export * from './inverse-vol';
+export * from './ma-regime';
 export * from './position-limit';
 export * from './pre-trade';
 export * from './risk-parity';
@@ -57,6 +59,8 @@ export function buildRiskModel(
       return new PositionLimitModel(spec);
     case 'inverse_vol':
       return new InverseVolModel(spec);
+    case 'ma_regime':
+      return new MaRegimeGate(spec);
     case 'chain':
       return new RiskModelChain(spec.models.map(buildRiskModel));
     default: {

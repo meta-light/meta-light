@@ -13,6 +13,7 @@ import {
   SERIES_IDS,
   strikeRange,
 } from '../trading/weather/markets';
+import { nockMergeMining } from './nock';
 import { type BookTop, bucketRow, type BucketRow, metarTempC } from './records';
 
 export const CRYPTO_ASSETS = ['BTC-USD', 'ETH-USD', 'SOL-USD'] as const;
@@ -304,6 +305,10 @@ export const FAST_JOBS: Record<string, Job> = {
 export const HOURLY_JOBS: Record<string, Job> = {
   'weather:forecasts': forecasts,
   'weather:settle': settle,
+};
+
+export const DAILY_JOBS: Record<string, Job> = {
+  'nock:merge-mining': nockMergeMining,
 };
 
 export interface JobResult {

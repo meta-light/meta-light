@@ -10,6 +10,19 @@ export type DataBar = Bar & { adjClose?: number };
 
 export type BarFetcher = (instrument: string) => Promise<DataBar[]>;
 
+/** `day` is the first date the value may be acted on at that bar's close. */
+export type SeriesPoint = [day: string, value: number];
+
+export function alignAsOf(dates: readonly string[], points: readonly SeriesPoint[]): number[] {
+  const pts = points.map(([d, v]) => [toMs(d), v] as const).sort((a, b) => a[0] - b[0]);
+  let k = -1;
+  return dates.map((d) => {
+    const t = toMs(d);
+    while (k + 1 < pts.length && pts[k + 1]![0] <= t) k++;
+    return k < 0 ? NaN : pts[k]![1];
+  });
+}
+
 const PRICE_FIELDS = [
   'open',
   'high',
@@ -189,6 +202,14 @@ export class BarData implements InstrumentData {
     return new BarData(
       Object.fromEntries(instruments.map((inst, i) => [inst, lists[i]!])),
       indicators,
+    );
+  }
+
+  addSeries(name: string, points: readonly SeriesPoint[]): void {
+    const values = alignAsOf(this.dates, points);
+    this.features.set(
+      name,
+      new Frame(this.dates, this.instruments, values.map((v) => this.instruments.map(() => v))),
     );
   }
 
