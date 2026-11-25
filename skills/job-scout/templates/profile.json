@@ -1,0 +1,17 @@
+{
+  "_comment": "Copy to data/profile.json during first-run setup. data/ is gitignored. Keys here overlay config.json.",
+  "background": "your-name-background.md",
+  "applied_companies": [],
+  "qualification": {
+    "max_years": 6,
+    "max_years_pm": 4,
+    "max_travel_pct": 25
+  },
+  "location": {
+    "local_markers": []
+  },
+  "notion": {
+    "data_source_id": "",
+    "name": ""
+  }
+}

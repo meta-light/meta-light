@@ -1,0 +1,2 @@
+# One public Telegram channel per line. t.me/c/ and t.me/+ are private: reported, not scraped.
+# https://t.me/examplechannel

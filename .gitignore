@@ -36,3 +36,10 @@ next-env.d.ts
 /repos
 .turbo/
 tasks/
+skills/job-scout/config.json
+skills/job-scout/context/*
+!skills/job-scout/context/.gitkeep
+skills/job-scout/data/*
+!skills/job-scout/data/.gitkeep
+skills/job-scout/scripts/__pycache__/
+*.pyc
