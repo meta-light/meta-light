@@ -1,0 +1,4 @@
+# One board URL per line. Lines that do not start with http are ignored.
+# https://jobs.ashbyhq.com/example
+# https://job-boards.greenhouse.io/example
+# https://jobs.lever.co/example

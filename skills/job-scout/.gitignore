@@ -1,0 +1,6 @@
+/config.json
+scripts/__pycache__/
+data/*
+!data/.gitkeep
+context/*
+!context/.gitkeep
